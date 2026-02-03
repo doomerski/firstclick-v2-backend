@@ -20,9 +20,14 @@ node_modules/
 # Runtime directories
 # ===========================================================================
 uploads/
-storage/
 tmp/
 temp/
+
+# Storage - ignore data files but keep code
+backend/storage/*.jsonl
+backend/storage/*.json
+backend/storage/*.db
+!backend/storage/*.js
 
 # ===========================================================================
 # Logs
