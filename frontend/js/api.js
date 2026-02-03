@@ -2,7 +2,10 @@
  * API Wrapper - Fetch Utility for Backend Communication
  */
 
-const API_BASE_URL = 'http://localhost:3000/api';
+// Use local API when running on localhost; otherwise hit the same origin via /api (nginx proxy)
+const API_BASE_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000/api'
+  : '/api';
 
 const api = {
   async _parseResponse(response) {

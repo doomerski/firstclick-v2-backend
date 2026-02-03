@@ -479,7 +479,16 @@ app.post('/api/auth/admin/login', async (req, res) => {
       }
     }
     
-    const role = admin.role || 'admin';
+    const normalizedRole = (() => {
+      const raw = (admin.role || '').toLowerCase();
+      if (raw === 'superadmin' || raw === 'super_admin') return 'super_admin';
+      return raw || 'admin';
+    })();
+
+    // If env SUPERADMIN_EMAIL matches, force super_admin role
+    const role = (ENV.superadminEmail && admin.email && admin.email.toLowerCase() === ENV.superadminEmail.toLowerCase())
+      ? 'super_admin'
+      : normalizedRole;
     const { token } = await issueToken(admin, role);
     res.json({
       token,
