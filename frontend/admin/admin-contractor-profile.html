@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Profile - FirstClick Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --amber-500: #f59e0b;
+      --red-500: #ef4444;
+      --blue-500: #3b82f6;
+      --border-radius: 10px;
+      --shadow-md: 0 10px 20px rgba(15, 23, 42, 0.2);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--slate-950), var(--slate-900));
+      color: var(--slate-100);
+      font-family: var(--font-display);
+    }
+
+    .container {
+      max-width: 1400px;
+    }
+
+    .header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      padding: 35px 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .dashboard {
+      padding: 2.5rem 0 4rem;
+    }
+
+    .hero-title {
+      color: var(--slate-100);
+      margin-bottom: 1.25rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 1.25rem 0 0.75rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--slate-100);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-label {
+      font-size: 0.75rem;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-family: var(--font-mono);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--slate-100);
+      margin-top: 0.5rem;
+    }
+
+    .section-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 999px;
+      color: var(--slate-200);
+      border: 1px solid var(--slate-700);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .panel {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+    }
+
+    .profile-header {
+      background: rgba(30, 41, 59, 0.85);
+      color: var(--slate-100);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      border: 1px solid var(--slate-700);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .profile-status {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .profile-info h2 {
+      margin: 0 0 1rem 0;
+      font-size: 1.75rem;
+    }
+
+    .info-row {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .profile-header .info-row {
+      justify-content: flex-start;
+      gap: 0.5rem;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: var(--slate-400);
+    }
+
+    .info-value {
+      font-weight: 500;
+    }
+
+    .status-section {
+      background: rgba(15, 23, 42, 0.7);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--slate-700);
+    }
+
+    .decision-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .decision-btn {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-approve {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-approve:hover {
+      background: #059669;
+    }
+
+    .btn-needs-info {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-needs-info:hover {
+      background: #2563eb;
+    }
+
+    .btn-reject {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #dc2626;
+    }
+
+    .btn-suspend {
+      background: #8b5cf6;
+      color: white;
+    }
+
+    .btn-suspend:hover {
+      background: #7c3aed;
+    }
+
+    .section {
+      background: rgba(30, 41, 59, 0.85);
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--slate-700);
+      box-shadow: var(--shadow-md);
+    }
+
+    .section h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.25rem;
+      color: var(--slate-100);
+      border-bottom: 1px solid var(--slate-700);
+      padding-bottom: 0.5rem;
+    }
+
+    .doc-item {
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 0.5rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--slate-700);
+    }
+
+    .doc-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .doc-status {
+      font-size: 0.85rem;
+      color: var(--slate-400);
+    }
+
+    .doc-status.received {
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .doc-status.missing {
+      color: #ef4444;
+      font-weight: 600;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .skill-badge {
+      background: rgba(59, 130, 246, 0.15);
+      color: #bfdbfe;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.4rem;
+      font-size: 0.9rem;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+
+    .audit-log {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .audit-item {
+      padding: 1rem;
+      border-left: 3px solid var(--slate-700);
+      margin-bottom: 1rem;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 0.25rem;
+    }
+
+    .audit-item.approved {
+      border-left-color: #10b981;
+    }
+
+    .audit-item.rejected {
+      border-left-color: #ef4444;
+    }
+
+    .audit-item.submitted {
+      border-left-color: #3b82f6;
+    }
+
+    .audit-date {
+      font-weight: 600;
+      color: var(--slate-100);
+      font-size: 0.9rem;
+    }
+
+    .audit-action {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: rgba(30, 41, 59, 0.9);
+      border-radius: 0.25rem;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      font-weight: 600;
+      color: var(--slate-100);
+    }
+
+    .audit-notes {
+      color: var(--slate-400);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--slate-400);
+    }
+
+    .notes-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--slate-700);
+      border-radius: 0.5rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 100px;
+      background: #0f172a;
+      color: var(--slate-100);
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        padding: 1.5rem 0 3rem;
+      }
+
+      .section-header {
+        margin: 1rem 0 0.6rem;
+      }
+    }
+
+    html:not(.theme-dark) body {
+      background: linear-gradient(to bottom right, #fffbeb, #fed7aa, #fecaca);
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .header {
+      background: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) .section-title {
+      color: #111827;
+    }
+
+    html:not(.theme-dark) .section-badge {
+      background: #f3f4f6;
+      color: #6b7280;
+      border-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .kpi-card {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    html:not(.theme-dark) .kpi-label {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) .kpi-value {
+      color: #111827;
+    }
+
+    html:not(.theme-dark) .profile-header,
+    html:not(.theme-dark) .section,
+    html:not(.theme-dark) .panel {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      color: #0f172a;
+    }
+
+    html:not(.theme-dark) .info-label,
+    html:not(.theme-dark) .audit-notes,
+    html:not(.theme-dark) .doc-status {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) .profile-header .info-value,
+    html:not(.theme-dark) .profile-header .profile-status {
+      color: #0f172a;
+    }
+
+    html:not(.theme-dark) .section h3,
+    html:not(.theme-dark) .audit-date {
+      color: #1f2937;
+      border-bottom-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .doc-item,
+    html:not(.theme-dark) .audit-item {
+      background: #f9fafb;
+      border-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .skill-badge {
+      background: #e0e7ff;
+      color: #4f46e5;
+      border-color: #c7d2fe;
+    }
+
+    html:not(.theme-dark) .notes-textarea {
+      background: white;
+      color: #111827;
+      border-color: #e5e7eb;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 2.5rem 0 2rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: #2dd4bf;
+      margin: 0 0 0.75rem;
+    }
+
+    .super-header h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: #9aa6c1;
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+  </style>
+  <script src="../js/notifications.js"></script>
+</head>
+<body class="compact-header profile-control">
+  <div class="container admin-header-shell">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Admin Command Center</p>
+        <h1>Contractor Profile</h1>
+        <p class="subtext">Detailed profile, vetting status, and documents.</p>
+      </div>
+      <div class="header-actions">
+        <a href="admin-dashboard.html" class="btn btn-secondary btn-small">← Back to Admin</a>
+        <select class="admin-page-select" aria-label="Admin pages">
+          <option value="">Admin Pages</option>
+          <option value="admin-dashboard.html">Dashboard</option>
+          <option value="admin-jobs.html">Jobs</option>
+          <option value="admin-contractors.html">Contractors</option>
+          <option value="admin-revenue.html">Finance Overview</option>
+          <option value="admin-payouts.html">Payouts</option>
+          <option value="admin-payments-history.html">Payments History</option>
+          <option value="admin-contractor-profile.html">Contractor Profile</option>
+          <option value="admin-login.html">Admin Login</option>
+        </select>
+        <button onclick="logout()" class="btn btn-small">Logout</button>
+      </div>
+    </header>
+  </div>
+
+  <section class="dashboard">
+    <div class="container">
+      <div id="loading" class="loading">Loading contractor profile...</div>
+
+      <div id="content" style="display: none;">
+        <div class="section-header">
+          <div class="section-title">
+            <span id="profileTitle">Contractor Profile</span>
+            <span class="section-badge" id="profileStatusBadge">Loading…</span>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Account Status</div>
+            <div class="kpi-value" id="kpiStatus">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Primary Trade</div>
+            <div class="kpi-value" id="kpiPrimaryTrade">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Experience</div>
+            <div class="kpi-value" id="kpiExperience">—</div>
+          </div>
+        </div>
+        <!-- Identity Section -->
+        <div class="section">
+          <h3>Identity & Contact</h3>
+          <div class="info-row">
+            <div>
+              <div class="info-label">Legal Name</div>
+              <div id="legalName"></div>
+            </div>
+            <div>
+              <div class="info-label">Business Name</div>
+              <div id="businessName"></div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div>
+              <div class="info-label">Email</div>
+              <div id="email"></div>
+            </div>
+            <div>
+              <div class="info-label">Phone</div>
+              <div id="phone"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Work Section -->
+        <div class="section">
+          <h3>Work & Experience</h3>
+          <div class="info-row">
+            <div>
+              <div class="info-label">Primary Trade</div>
+              <div id="primaryTrade" style="text-transform: capitalize;"></div>
+            </div>
+            <div>
+              <div class="info-label">Years of Experience</div>
+              <div id="experienceYears"></div>
+            </div>
+          </div>
+          <div style="margin-top: 1rem;">
+            <div class="info-label" style="margin-bottom: 0.5rem;">Secondary Trades</div>
+            <div class="skills-list" id="secondaryTradesList"></div>
+          </div>
+          <div>
+            <div class="info-label" style="margin-bottom: 0.5rem;">Skills</div>
+            <div class="skills-list" id="skillsList"></div>
+          </div>
+        </div>
+
+        <!-- Documents Section -->
+        <div class="section">
+          <h3>Documents & Verification</h3>
+          <div id="documentsContainer"></div>
+        </div>
+
+        <!-- Jobs Section -->
+        <div class="section">
+          <h3>Jobs & Status</h3>
+          <div id="jobsContainer" class="jobs-list"></div>
+          <div id="noJobs" class="empty-state" style="display: none;">
+            <p>No jobs assigned to this contractor yet.</p>
+          </div>
+        </div>
+
+        <!-- Status & Decision Section -->
+        <div class="section">
+          <h3>Vetting Status & Decision</h3>
+          <div style="margin-bottom: 1.5rem;">
+            <div class="info-label">Current Status</div>
+            <div id="currentStatus" style="margin-top: 0.5rem;"></div>
+          </div>
+          <div style="margin-bottom: 1.5rem;">
+            <div class="info-label">Contractor Tier</div>
+            <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem;">
+              <select id="contractorTier" class="input" style="max-width: 220px;">
+                <option value="bronze">Bronze</option>
+                <option value="silver">Silver</option>
+                <option value="gold">Gold</option>
+              </select>
+              <button onclick="saveTier()" class="btn btn-secondary">Save Tier</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="info-label" style="margin-bottom: 0.75rem;">Admin Notes</div>
+            <textarea id="adminNotes" class="notes-textarea" placeholder="Add internal notes about this contractor..."></textarea>
+            <button onclick="saveNotes()" class="btn btn-secondary" style="margin-top: 0.75rem;">Save Notes</button>
+          </div>
+
+          <div class="decision-buttons">
+            <button class="decision-btn btn-approve" onclick="makeDecision('approved')">✓ Approve</button>
+            <button class="decision-btn btn-needs-info" onclick="makeDecision('needs_info')">❔ Needs Info</button>
+            <button class="decision-btn btn-reject" onclick="makeDecision('rejected')">✕ Reject</button>
+            <button class="decision-btn btn-suspend" onclick="makeDecision('suspended')">⚠️ Suspend</button>
+          </div>
+        </div>
+
+        <!-- Payouts Section -->
+        <div class="section">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3>Payouts Summary</h3>
+            <button class="btn btn-primary btn-sm" onclick="goToPayoutsProfile()" style="padding: 0.5rem 1rem;">View Full Payouts →</button>
+          </div>
+          <div id="payouts-summary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="background: rgba(30, 41, 59, 0.7); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--slate-700);">
+              <div style="font-size: 0.75rem; color: var(--slate-400); font-weight: 600; margin-bottom: 0.5rem;">Total Pending</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--slate-100);" id="payout-pending">$0.00</div>
+              <div style="font-size: 0.85rem; color: var(--slate-400); margin-top: 0.5rem;" id="payout-pending-count">0 jobs</div>
+            </div>
+            <div style="background: rgba(30, 41, 59, 0.7); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--slate-700);">
+              <div style="font-size: 0.75rem; color: var(--slate-400); font-weight: 600; margin-bottom: 0.5rem;">Total Paid</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #10b981;" id="payout-paid">$0.00</div>
+              <div style="font-size: 0.85rem; color: var(--slate-400); margin-top: 0.5rem;" id="payout-paid-count">0 completed</div>
+            </div>
+            <div style="background: rgba(30, 41, 59, 0.7); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--slate-700);">
+              <div style="font-size: 0.75rem; color: var(--slate-400); font-weight: 600; margin-bottom: 0.5rem;">Ready to Pay</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--slate-100);" id="payout-ready">0</div>
+              <div style="font-size: 0.85rem; color: var(--slate-400); margin-top: 0.5rem;">jobs ready</div>
+            </div>
+          </div>
+          <div style="background: rgba(30, 41, 59, 0.7); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--slate-700); overflow-x: auto;">
+            <table style="width: 100%; font-size: 0.9rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--slate-700);">
+                  <th style="padding: 0.75rem; text-align: left; color: var(--slate-400); font-weight: 600;">Job ID</th>
+                  <th style="padding: 0.75rem; text-align: left; color: var(--slate-400); font-weight: 600;">Category</th>
+                  <th style="padding: 0.75rem; text-align: left; color: var(--slate-400); font-weight: 600;">Payout</th>
+                  <th style="padding: 0.75rem; text-align: left; color: var(--slate-400); font-weight: 600;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="payouts-table-preview">
+                <tr><td colspan="4" style="padding: 1rem; text-align: center; color: var(--slate-400);">Loading payouts...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Audit Log Section -->
+        <div class="section">
+          <h3>Audit Log</h3>
+          <div class="audit-log" id="auditLog"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let contractor = null;
+    let serviceTypeMap = {};
+    let contractorJobs = [];
+    let jobsPage = 1;
+    const jobsPageSize = 2;
+    const tradeLabels = {
+      plumbing: 'Plumbing',
+      electrical: 'Electrical',
+      hvac: 'HVAC',
+      'appliance-repair': 'Appliance Repair',
+      'construction-renovation': 'Construction & Renovation',
+      'roofing-exterior': 'Roofing & Exterior',
+      'outdoor-property': 'Outdoor & Property Services',
+      'security-smart': 'Security & Smart Systems',
+      'cleaning-restoration': 'Cleaning & Restoration',
+      'pest-wildlife': 'Pest & Wildlife Control',
+      'moving-junk': 'Moving & Junk Removal',
+      'handyman-specialty': 'Handyman & Specialty',
+      handyman: 'Handyman'
+    };
+    const params = new URLSearchParams(window.location.search);
+    let contractorId = params.get('id') || params.get('contractor_id') || params.get('contractorId');
+    
+    // IMPORTANT: Always use URL parameter if provided, don't fall back to localStorage
+    if (!contractorId) {
+      // Only use localStorage as a true fallback if no URL parameter
+      contractorId = localStorage.getItem('admin_last_contractor_id');
+    }
+    
+    // Update localStorage with current ID for future reference
+    if (contractorId) {
+      localStorage.setItem('admin_last_contractor_id', contractorId);
+      console.log('✅ Loading contractor profile for ID:', contractorId);
+    }
+
+    // Check admin auth
+    const user = getUser();
+    if (!user || user.role !== 'admin') {
+      window.location.href = 'admin-login.html';
+    }
+
+    const adminNameEl = document.getElementById('adminName');
+    if (adminNameEl) {
+      adminNameEl.textContent = user?.full_name || user?.email || 'Admin';
+    }
+
+    // Load contractor profile
+    async function loadProfile() {
+      console.log('📍 loadProfile() called with contractorId:', contractorId);
+      
+      if (!contractorId) {
+        console.error('❌ No contractor ID found');
+        notify.error('No contractor ID provided');
+        window.location.href = 'admin-contractors.html';
+        return;
+      }
+
+      try {
+        console.log('📞 Fetching contractor data for ID:', contractorId);
+        const response = await api.get(`/admin/contractors/${contractorId}`);
+        contractor = response.contractor;
+        
+        if (contractor) {
+          console.log('✅ Loaded contractor:', contractor.legal_name || contractor.business_name);
+        } else {
+          console.error('❌ No contractor data in response');
+        }
+        
+        await loadServiceTypes();
+        await loadContractorJobs();
+        renderProfile();
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        document.getElementById('loading').innerHTML = `<p>Error loading profile: ${error.message}</p>`;
+      }
+    }
+
+    async function loadServiceTypes() {
+      if (Object.keys(serviceTypeMap).length > 0) return;
+      try {
+        const response = await api.get('/services/types');
+        const types = response.types || [];
+        serviceTypeMap = types.reduce((acc, type) => {
+          acc[type.id] = type.name;
+          return acc;
+        }, {});
+      } catch (error) {
+        console.error('Error loading service types:', error);
+        serviceTypeMap = {};
+      }
+    }
+
+    async function loadContractorJobs() {
+      try {
+        const response = await api.get('/admin/jobs');
+        const jobs = response.jobs || [];
+      contractorJobs = jobs
+        .filter(job => job.contractor_id === contractorId)
+        .sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0));
+      jobsPage = 1;
+      } catch (error) {
+        console.error('Error loading contractor jobs:', error);
+        contractorJobs = [];
+      }
+    }
+
+    // Render profile
+    function renderProfile() {
+      if (!contractor) return;
+      const statusInfo = getStatusInfo(contractor);
+
+      // Header
+      const primaryTrade = contractor.primary_trade || contractor.primaryTrade || '';
+      const experienceYears = contractor.experience_years ?? contractor.experienceYears ?? 0;
+      const statusEl = document.getElementById('kpiStatus');
+      const tradeEl = document.getElementById('kpiPrimaryTrade');
+      const expEl = document.getElementById('kpiExperience');
+      if (statusEl) statusEl.textContent = statusInfo.label;
+      if (tradeEl) tradeEl.textContent = primaryTrade || '—';
+      if (expEl) expEl.textContent = `${experienceYears} yrs`;
+      const profileTitleEl = document.getElementById('profileTitle');
+      if (profileTitleEl) {
+        const companyName = contractor.business_name || contractor.businessName || 'Unknown Company';
+        const legalName = contractor.legal_name || contractor.legalName || 'Unknown Name';
+        const contractorCode = contractor.id || contractor.contractor_id || contractor.contractorId || 'Unknown ID';
+        profileTitleEl.textContent = `${companyName} • ${legalName} • ${contractorCode}`;
+      }
+      const badge = document.getElementById('profileStatusBadge');
+      if (badge) {
+        badge.textContent = statusInfo.label;
+      }
+
+      // Identity
+      document.getElementById('legalName').textContent = contractor.legal_name || contractor.legalName || 'N/A';
+      document.getElementById('businessName').textContent = contractor.business_name || contractor.businessName || 'N/A';
+      document.getElementById('email').textContent = contractor.email || 'N/A';
+      document.getElementById('phone').textContent = contractor.phone || 'N/A';
+
+      // Work
+      document.getElementById('primaryTrade').textContent = primaryTrade || 'N/A';
+      document.getElementById('experienceYears').textContent = `${experienceYears} years`;
+
+      let secondaryTrades = []
+        .concat(contractor.secondary_trades || [])
+        .concat(contractor.secondaryTrades || [])
+        .filter(Boolean);
+      if (typeof secondaryTrades === 'string') {
+        try {
+          secondaryTrades = JSON.parse(secondaryTrades);
+        } catch (error) {
+          secondaryTrades = secondaryTrades.split(',').map(value => value.trim()).filter(Boolean);
+        }
+      }
+      const secondaryList = document.getElementById('secondaryTradesList');
+      if (Array.isArray(secondaryTrades) && secondaryTrades.length > 0) {
+        const uniqueTrades = Array.from(new Set(secondaryTrades));
+        secondaryList.innerHTML = uniqueTrades.map(trade => {
+          const label = tradeLabels[trade] || String(trade).replace(/-/g, ' ');
+          return `<div class="skill-badge">${label}</div>`;
+        }).join('');
+      } else if (typeof secondaryTrades === 'string' && secondaryTrades.trim()) {
+        const uniqueTrades = Array.from(new Set(secondaryTrades.split(',').map(value => value.trim()).filter(Boolean)));
+        secondaryList.innerHTML = uniqueTrades.map(trade => {
+          const label = tradeLabels[trade] || String(trade).replace(/-/g, ' ');
+          return `<div class="skill-badge">${label}</div>`;
+        }).join('');
+      } else {
+        secondaryList.innerHTML = secondaryTrades.map(trade => {
+          const label = tradeLabels[trade] || trade.replace(/-/g, ' ');
+          return `<div class="skill-badge">${label}</div>`;
+        }).join('');
+      }
+      if (!secondaryList.innerHTML.trim()) {
+        secondaryList.innerHTML = '<div style="color: #6b7280;">No secondary trades listed</div>';
+      }
+
+      // Skills / Service Types
+      const skillsList = document.getElementById('skillsList');
+      let serviceTypeIds = contractor.service_types || contractor.serviceTypes || contractor.skills || contractor.specialties || [];
+      if (typeof serviceTypeIds === 'string') {
+        try {
+          serviceTypeIds = JSON.parse(serviceTypeIds);
+        } catch (error) {
+          serviceTypeIds = serviceTypeIds.split(',').map(value => value.trim()).filter(Boolean);
+        }
+      }
+      if (Array.isArray(serviceTypeIds) && serviceTypeIds.length > 0) {
+        skillsList.innerHTML = serviceTypeIds.map(typeId => {
+          const normalizedId = Number.isNaN(Number(typeId)) ? typeId : Number(typeId);
+          const label = serviceTypeMap[normalizedId] || serviceTypeMap[typeId] || `Service Type #${typeId}`;
+          return `<div class="skill-badge">${label}</div>`;
+        }).join('');
+      } else {
+        skillsList.innerHTML = '<div style="color: #6b7280;">No skills listed yet</div>';
+      }
+
+      // Documents
+      const docs = contractor.documents || {};
+      const docsHtml = ['license', 'insurance', 'governmentId'].map(docType => {
+        const doc = docs[docType];
+        const received = doc !== null && doc !== undefined;
+        const filename = doc && doc.filename ? doc.filename : null;
+        const viewLink = doc && doc.path
+          ? `<button class="btn btn-secondary" onclick="viewDocument('${docType}')">View</button>`
+          : '';
+        return `
+          <div class="doc-item">
+            <div>
+              <div class="doc-name">${formatDocName(docType)}</div>
+              <div class="doc-status ${received ? 'received' : 'missing'}">
+                ${received ? `✓ Received on ${doc.receivedAt}` : '✕ Missing'}
+              </div>
+              ${filename ? `<div style="font-size: 0.8rem; color: #6b7280;">${filename}</div>` : ''}
+            </div>
+            ${received ? `
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem;">
+                <div style="font-size: 0.8rem; color: #6b7280;">${(doc.size / 1000).toFixed(0)} KB</div>
+                ${viewLink || '<div style="font-size: 0.8rem; color: #9ca3af;">No preview</div>'}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+      document.getElementById('documentsContainer').innerHTML = docsHtml;
+
+      renderJobs();
+
+      // Status
+      const statusBadgeClass = `status-${statusInfo.status}`;
+      document.getElementById('currentStatus').innerHTML = 
+        `<span class="status-badge ${statusBadgeClass}">${statusInfo.label}</span>`;
+      const tierSelect = document.getElementById('contractorTier');
+      if (tierSelect) {
+        tierSelect.value = contractor.contractor_tier || contractor.contractorTier || 'bronze';
+      }
+
+      // Admin Notes
+      document.getElementById('adminNotes').value = contractor.adminNotes || '';
+
+      // Audit Log
+      const auditHtml = (contractor.auditLog || []).map(entry => `
+        <div class="audit-item ${entry.action.toLowerCase()}">
+          <div class="audit-date">${new Date(entry.at).toLocaleString()}</div>
+          <div class="audit-action">${entry.action}</div>
+          <div class="audit-notes">${entry.details || ''}</div>
+        </div>
+      `).join('');
+      document.getElementById('auditLog').innerHTML = auditHtml || '<div style="color: #6b7280;">No audit entries yet</div>';
+    }
+
+    function renderJobs() {
+      const container = document.getElementById('jobsContainer');
+      const emptyState = document.getElementById('noJobs');
+      if (!container || !emptyState) return;
+
+      if (!contractorJobs || contractorJobs.length === 0) {
+        container.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      const totalPages = Math.max(1, Math.ceil(contractorJobs.length / jobsPageSize));
+      if (jobsPage > totalPages) jobsPage = totalPages;
+      const startIndex = (jobsPage - 1) * jobsPageSize;
+      const pageJobs = contractorJobs.slice(startIndex, startIndex + jobsPageSize);
+      container.innerHTML = pageJobs.map(job => {
+        const completion = job.completion_report || {};
+        const payment = completion.payment || {};
+        const hasPayout = job.status === 'completed';
+        const payoutHtml = hasPayout ? `
+          <div class="job-details" style="margin-top: 0.5rem;">
+            <div class="detail-item">
+              <span class="detail-label">Final Price:</span>
+              <span class="detail-value">${formatCurrency(payment.final_price)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Materials:</span>
+              <span class="detail-value">${formatCurrency(payment.materials_cost)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Net:</span>
+              <span class="detail-value">${formatCurrency(payment.net_amount)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Contractor (90%):</span>
+              <span class="detail-value">${formatCurrency(payment.amount)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Company (10%):</span>
+              <span class="detail-value">${formatCurrency(payment.company_amount)}</span>
+            </div>
+          </div>
+        ` : '';
+
+        return `
+          <div class="job-card">
+            <div class="job-header">
+              <div>
+                <h3 class="job-title">${job.category_name || 'Service'} - ${job.type_name || 'Job'}</h3>
+                <p class="job-meta">${job.city || '—'}, ${job.province || ''}</p>
+              </div>
+              <span class="status-badge status-${job.status}">${formatStatus(job.status)}</span>
+            </div>
+            <p class="job-description">${job.description || ''}</p>
+            <div class="job-details">
+              <div class="detail-item">
+                <span class="detail-label">Updated:</span>
+                <span class="detail-value">${new Date(job.updated_at || job.created_at).toLocaleString()}</span>
+              </div>
+            </div>
+            ${payoutHtml}
+          </div>
+        `;
+      }).join('') + renderJobsPagination(totalPages);
+    }
+
+    function renderJobsPagination(totalPages) {
+      if (contractorJobs.length <= jobsPageSize) return '';
+      return `
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+          <button class="btn btn-secondary btn-small" type="button" ${jobsPage === 1 ? 'disabled' : ''} onclick="setJobsPage(${jobsPage - 1})">Previous</button>
+          <button class="btn btn-secondary btn-small" type="button" ${jobsPage >= totalPages ? 'disabled' : ''} onclick="setJobsPage(${jobsPage + 1})">Next</button>
+        </div>
+      `;
+    }
+
+    function setJobsPage(page) {
+      const totalPages = Math.max(1, Math.ceil(contractorJobs.length / jobsPageSize));
+      jobsPage = Math.min(Math.max(1, page), totalPages);
+      renderJobs();
+    }
+
+    function formatCurrency(amount) {
+      if (amount === null || amount === undefined || Number.isNaN(Number(amount))) return 'N/A';
+      return `$${Number(amount).toLocaleString()}`;
+    }
+
+    function formatStatus(status) {
+      const map = {
+        submitted: 'Submitted',
+        confirmed: 'Confirmed',
+        ready_to_assign: 'Ready to Assign',
+        assigned: 'Assigned',
+        en_route: 'En Route',
+        on_site: 'On Site',
+        in_progress: 'In Progress',
+        completed: 'Completed',
+        completed_pending_review: 'Pending Review',
+        cancelled: 'Cancelled'
+      };
+      return map[status] || status;
+    }
+
+    function formatDocName(type) {
+      const names = {
+        license: '📜 License',
+        insurance: '🛡️ Insurance',
+        governmentId: '🪪 Government ID'
+      };
+      return names[type] || type;
+    }
+
+    function getStatusEmoji(status) {
+      const emojis = {
+        approved: '✅',
+        pending_review: '⏳',
+        needs_info: '❔',
+        rejected: '❌',
+        suspended: '⚠️'
+      };
+      return emojis[status] || '•';
+    }
+
+    async function viewDocument(docType) {
+      try {
+        const admin = getUser();
+        const response = await fetch(`http://localhost:3000/api/admin/contractors/${contractorId}/documents/${docType}`, {
+          headers: {
+            'x-admin-id': admin?.id || 'admin-001'
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Unable to load document');
+        }
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank', 'noopener');
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      } catch (error) {
+        notify.error('Error viewing document: ' + error.message);
+      }
+    }
+
+    function getStatusInfo(contractor) {
+      const rawStatus = contractor.status || contractor.vetting_status || 'unknown';
+      const normalized = String(rawStatus).toLowerCase();
+      const status = (() => {
+        if (['approved', 'approved_active'].includes(normalized)) return 'approved';
+        if (['pending_review', 'applied', 'under_review', 'pending_documents'].includes(normalized)) return 'pending_review';
+        if (['needs_info'].includes(normalized)) return 'needs_info';
+        if (['rejected'].includes(normalized)) return 'rejected';
+        if (['suspended'].includes(normalized)) return 'suspended';
+        return 'pending_review';
+      })();
+      const label = status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      return { status, label };
+    }
+
+    // Save notes
+    async function saveNotes() {
+      const notes = document.getElementById('adminNotes').value;
+      try {
+        await api.post(`/admin/contractors/${contractorId}/notes`, { note: notes });
+        notify.success('Notes saved!');
+      } catch (error) {
+        notify.error('Error saving notes: ' + error.message);
+      }
+    }
+
+    async function saveTier() {
+      const tierSelect = document.getElementById('contractorTier');
+      if (!tierSelect) return;
+      const tier = tierSelect.value;
+      try {
+        await api.patch(`/admin/contractors/${contractorId}/tier`, { contractor_tier: tier });
+        notify.success('Tier updated!');
+        loadProfile();
+      } catch (error) {
+        notify.error('Error updating tier: ' + error.message);
+      }
+    }
+
+    // Make decision
+    async function makeDecision(decision) {
+      const reasons = {
+        approved: 'All documents verified and contractor approved',
+        needs_info: 'Please provide missing documents',
+        rejected: 'Application does not meet requirements',
+        suspended: 'Account suspended'
+      };
+
+      const notes = prompt(`${decision.toUpperCase()}\n\nNotes:`, reasons[decision]);
+      if (notes === null) return;
+
+      try {
+        await api.post(`/admin/contractors/${contractorId}/status`, {
+          status: decision,
+          reason: notes
+        });
+        notify.success('Decision recorded!');
+        loadProfile();
+      } catch (error) {
+        notify.error('Error: ' + error.message);
+      }
+    }
+
+    // Load payouts data
+    async function loadPayoutsData() {
+      try {
+        const response = await fetch(`/api/admin/contractors/${contractorId}/payouts`);
+        if (!response.ok) throw new Error('Failed to fetch payouts');
+        
+        const data = await response.json();
+        renderPayoutsSection(data);
+      } catch (error) {
+        console.error('Error loading payouts:', error);
+        document.getElementById('payouts-summary').innerHTML = '<div style="grid-column: 1/-1; color: red;">Error loading payouts</div>';
+      }
+    }
+
+    function renderPayoutsSection(data) {
+      const pending = data.pending_payouts || [];
+      const history = data.paid_payouts || [];
+      
+      const totalPending = pending.reduce((sum, job) => sum + (job.contractor_payout || 0), 0);
+      const totalPaid = history.reduce((sum, job) => sum + (job.contractor_payout || 0), 0);
+      const readyToPayCount = pending.filter(job => job.status === 'ready').length;
+      
+      // Update KPI cards
+      document.getElementById('payout-pending').textContent = formatCurrency(totalPending);
+      document.getElementById('payout-pending-count').textContent = pending.length + ' jobs';
+      document.getElementById('payout-paid').textContent = formatCurrency(totalPaid);
+      document.getElementById('payout-paid-count').textContent = history.length + ' completed';
+      document.getElementById('payout-ready').textContent = readyToPayCount;
+      
+      // Update preview table (last 5 pending payouts)
+      const previewRows = pending.slice(0, 5).map(job => `
+        <tr style="border-bottom: 1px solid var(--slate-700);">
+          <td style="padding: 0.75rem;">#${job.job_id}</td>
+          <td style="padding: 0.75rem;">${job.category || 'N/A'}</td>
+          <td style="padding: 0.75rem;">${formatCurrency(job.contractor_payout || 0)}</td>
+          <td style="padding: 0.75rem;">
+            <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.8rem; font-weight: 600; background: ${getStatusColor(job.status)};">${job.status || 'pending'}</span>
+          </td>
+        </tr>
+      `).join('');
+      
+      document.getElementById('payouts-table-preview').innerHTML = previewRows || '<tr><td colspan="4" style="padding: 1rem; text-align: center; color: var(--slate-400);">No pending payouts</td></tr>';
+    }
+
+    function getStatusColor(status) {
+      const colors = {
+        'ready': 'rgba(16, 185, 129, 0.2)',
+        'processing': 'rgba(59, 130, 246, 0.2)',
+        'paid': 'rgba(16, 185, 129, 0.2)',
+        'pending': 'rgba(107, 114, 128, 0.2)'
+      };
+      return colors[status] || 'rgba(107, 114, 128, 0.2)';
+    }
+
+    function goToPayoutsProfile() {
+      window.location.href = `../contractor/contractor-payouts-profile.html?id=${contractorId}`;
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-CA', {
+        style: 'currency',
+        currency: 'CAD'
+      }).format(amount || 0);
+    }
+
+    // Load on page load
+    loadProfile();
+    loadPayoutsData();
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'admin_contractors_updated') {
+        loadProfile();
+        loadPayoutsData();
+      }
+    });
+  </script>
+  <script src="../js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

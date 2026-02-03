@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments History | FirstClick Admin</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --border-radius: 10px;
+      --shadow-lg: 0 18px 30px rgba(15, 23, 42, 0.25);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h1: clamp(22px, 5vw, 40px);
+      --text-h2: clamp(18px, 4vw, 30px);
+      --text-h3: clamp(16px, 3.5vw, 24px);
+      --text-body: clamp(14px, 2.5vw, 16px);
+      --text-small: clamp(12px, 2vw, 14px);
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--slate-950), var(--slate-900));
+      color: var(--slate-100);
+      min-height: 100vh;
+      line-height: 1.6;
+      font-size: var(--text-body);
+    }
+
+    .admin-header {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      padding: 35px 2rem 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: slideDown 0.4s ease-out;
+      font-family: 'Space Grotesk', var(--font-display);
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .header-content {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      padding: 0.625rem 1.5rem;
+      border-radius: 999px;
+      background: var(--slate-800);
+      color: var(--slate-100);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid var(--slate-700);
+      transition: 0.2s ease;
+    }
+
+    .nav-link:hover {
+      border-color: var(--emerald-500);
+      color: var(--slate-50);
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: var(--shadow-lg);
+    }
+
+    h1 {
+      font-size: var(--text-h1);
+      font-weight: 800;
+      color: var(--slate-50);
+      letter-spacing: -0.025em;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: var(--text-h2);
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: var(--text-h3);
+      line-height: 1.25;
+    }
+
+    .small {
+      font-size: var(--text-small);
+    }
+
+    .header-meta {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--slate-400);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.25rem;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 2rem;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-title {
+      font-size: var(--text-h2);
+      font-weight: 700;
+      color: var(--slate-50);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: var(--slate-800);
+      border-radius: 4px;
+      color: var(--slate-300);
+      font-weight: 500;
+    }
+
+    .finance-nav {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin: 1rem 0 2rem;
+    }
+
+    .finance-nav a {
+      text-decoration: none;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--slate-700);
+      color: var(--slate-200);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .finance-nav a.active {
+      background: var(--emerald-600);
+      border-color: var(--emerald-600);
+      color: white;
+    }
+
+    .payouts-panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .payouts-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .payout-metric {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 8px;
+      padding: 1rem;
+      border: 1px solid var(--slate-700);
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--slate-400);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--slate-100);
+    }
+
+    .table-container {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--slate-700);
+      font-size: 0.875rem;
+    }
+
+    th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--slate-400);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border: 1px solid transparent;
+    }
+
+    .status-paid { background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.35); }
+    .status-processed { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-color: rgba(59, 130, 246, 0.35); }
+    .status-completed { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.35); }
+
+    .tier-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    @media (max-width: 768px) {
+      .admin-header { padding: 1rem 1.25rem; }
+      .header-content { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      .header-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; gap: 0.5rem; }
+      .header-actions .btn { padding: 0.5rem 0.75rem; font-size: 0.8rem; border-radius: 0.6rem; }
+      h1 { font-size: 1.35rem; }
+      .container { padding: 1rem; }
+    }
+
+    html:not(.theme-dark) body {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    html:not(.theme-dark) .admin-header {
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    html:not(.theme-dark) .header-meta {
+      color: #64748b;
+    }
+
+    html:not(.theme-dark) .nav-link {
+      background: white;
+      color: #111827;
+      border-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .nav-link:hover {
+      border-color: #059669;
+      color: #111827;
+    }
+
+    html:not(.theme-dark) .payouts-panel,
+    html:not(.theme-dark) .table-container {
+      background: #ffffff;
+      border-color: #e2e8f0;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    html:not(.theme-dark) .payout-metric {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    html:not(.theme-dark) .finance-nav a {
+      border-color: #e5e7eb;
+      color: #1f2937;
+      background: white;
+    }
+
+    html:not(.theme-dark) .finance-nav a.active {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+
+    html:not(.theme-dark) th {
+      background: #f8fafc;
+      color: #64748b;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 2.5rem 0 2rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: #2dd4bf;
+      margin: 0 0 0.75rem;
+    }
+
+    .super-header h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: #9aa6c1;
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    @media (max-width: 960px) {
+      .container {
+        padding: 1.5rem;
+      }
+      th, td {
+        padding: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body class="compact-header">
+  <div class="container admin-header-shell">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Admin Command Center</p>
+        <h1>Payments History</h1>
+        <p class="subtext">Total records: <span id="history-total-header">0</span></p>
+      </div>
+      <div class="header-actions">
+        <a href="admin-dashboard.html" class="btn btn-secondary btn-small">← Back to Admin</a>
+        <select class="admin-page-select" aria-label="Admin pages">
+          <option value="">Admin Pages</option>
+          <option value="admin-dashboard.html">Dashboard</option>
+          <option value="admin-jobs.html">Jobs</option>
+          <option value="admin-contractors.html">Contractors</option>
+          <option value="admin-revenue.html">Finance Overview</option>
+          <option value="admin-payouts.html">Payouts</option>
+          <option value="admin-payments-history.html">Payments History</option>
+          <option value="admin-contractor-profile.html">Contractor Profile</option>
+          <option value="admin-login.html">Admin Login</option>
+        </select>
+        <button onclick="logout()" class="btn btn-small">Logout</button>
+      </div>
+    </header>
+  </div>
+
+  <main class="container">
+    <nav class="finance-nav" aria-label="Finance">
+      <a href="admin-revenue.html">Overview</a>
+      <a href="admin-payouts.html">Payouts</a>
+      <a href="admin-payments-history.html" class="active">Payments History</a>
+    </nav>
+    <section>
+      <div class="section-header">
+        <div class="section-title">
+          Payments History
+          <span class="section-badge" id="history-badge">LOADING...</span>
+        </div>
+      </div>
+
+      <div class="payouts-panel">
+        <div class="payouts-metrics" id="history-metrics">
+          <div class="loading">
+            <div class="spinner"></div>
+            <div>Loading payments...</div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Job ID</th>
+                <th>Contractor</th>
+                <th>Tier</th>
+                <th>City / Category</th>
+                <th>Final Price</th>
+                <th>Materials</th>
+                <th>Platform Fee</th>
+                <th>Contractor Payout</th>
+                <th>Completed</th>
+                <th>Payout Status</th>
+              </tr>
+            </thead>
+            <tbody id="history-table">
+              <tr>
+                <td colspan="10" class="loading">
+                  <div class="spinner"></div>
+                  <div>Loading payments history...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/admin-payments-history.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

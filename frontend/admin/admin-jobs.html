@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobs Queue - Admin - FirstClick</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --blue-500: #3b82f6;
+      --border-radius: 10px;
+      --shadow-md: 0 10px 20px rgba(15, 23, 42, 0.2);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--slate-950), var(--slate-900));
+      color: var(--slate-100);
+    }
+
+    .container {
+      max-width: 1400px;
+    }
+
+    .header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      padding: 35px 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: slideDown 0.4s ease-out;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 2.5rem 0 2rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: #2dd4bf;
+      margin: 0 0 0.75rem;
+    }
+
+    .super-header h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: #9aa6c1;
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 999px;
+      color: var(--slate-200);
+      border: 1px solid var(--slate-700);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .section-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .admin-hero {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .admin-hero-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #ffffff;
+      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.35);
+    }
+
+    .admin-hero h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .header-meta {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--slate-400);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      color: #22c55e;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    }
+
+    [data-theme="light"] .admin-hero {
+      background: #ffffff;
+      border-color: #e2e8f0;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+      color: #0f172a;
+    }
+
+    [data-theme="light"] .header-meta {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .header-icon {
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .panel {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+    }
+
+    .filters-panel {
+      background: rgba(30, 41, 59, 0.85);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--slate-700);
+      box-shadow: var(--shadow-md);
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .filter-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--slate-300);
+    }
+
+    .filter-input {
+      padding: 0.625rem;
+      border: 1px solid var(--slate-700);
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      background: #0f172a;
+      color: var(--slate-100);
+    }
+
+    .jobs-table {
+      background: rgba(30, 41, 59, 0.85);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      border: 1px solid var(--slate-700);
+      box-shadow: var(--shadow-md);
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 80px 1fr 120px 150px 120px 120px 150px;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: rgba(15, 23, 42, 0.7);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--slate-400);
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--slate-700);
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 120px 150px 120px 120px 150px;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--slate-700);
+      align-items: center;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .table-row:hover {
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .job-code {
+      font-weight: 700;
+      color: var(--blue-500);
+      font-size: 0.875rem;
+    }
+
+    .job-service {
+      font-weight: 600;
+      color: var(--slate-100);
+      font-size: 0.875rem;
+    }
+
+    .job-description {
+      color: var(--slate-400);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .urgency-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .urgency-emergency {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .urgency-same-day {
+      background: #fed7aa;
+      color: #9a3412;
+    }
+
+    .urgency-next-day {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .urgency-scheduled {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .quick-filters {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .quick-filter-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--slate-700);
+      background: var(--slate-800);
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--slate-200);
+    }
+
+    .quick-filter-btn:hover {
+      border-color: var(--blue-500);
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .quick-filter-btn.active {
+      border-color: var(--blue-500);
+      background: var(--blue-500);
+      color: white;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem;
+      color: var(--slate-400);
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 2rem;
+      padding: 1rem 1.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 0.75rem;
+      border: 1px solid var(--slate-700);
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--slate-100);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--slate-400);
+      text-transform: uppercase;
+    }
+
+    html:not(.theme-dark) body {
+      background: linear-gradient(to bottom right, #fffbeb, #fed7aa, #fecaca);
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .header {
+      background: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) .panel,
+    html:not(.theme-dark) .filters-panel,
+    html:not(.theme-dark) .jobs-table {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    html:not(.theme-dark) .table-header {
+      background: #f9fafb;
+      color: #6b7280;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) .table-row {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) .job-service {
+      color: #111827;
+    }
+
+    html:not(.theme-dark) .job-description,
+    html:not(.theme-dark) .stat-label,
+    html:not(.theme-dark) .filter-label {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) .filter-input {
+      background: white;
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+
+    html:not(.theme-dark) .quick-filter-btn {
+      background: white;
+      border: 2px solid #e5e7eb;
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .quick-filter-btn:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    html:not(.theme-dark) .stats-bar {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) .stat-value {
+      color: #111827;
+    }
+  </style>
+  <link rel="stylesheet" href="../css/admin-unified.css">
+  <script src="../js/notifications.js"></script>
+</head>
+<body class="compact-header admin-theme">
+  <div class="container admin-header-shell">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Admin Command Center</p>
+        <h1>Jobs Queue</h1>
+        <p class="subtext">Track all jobs in the pipeline. Total: <strong id="jobsTotalHeader">0</strong></p>
+      </div>
+      <div class="header-actions">
+        <a href="admin-dashboard.html" class="btn btn-secondary btn-small">← Back to Admin</a>
+        <select class="admin-page-select" aria-label="Admin pages">
+          <option value="">Admin Pages</option>
+          <option value="admin-dashboard.html">Dashboard</option>
+          <option value="admin-jobs.html">Jobs</option>
+          <option value="admin-contractors.html">Contractors</option>
+          <option value="admin-revenue.html">Finance Overview</option>
+          <option value="admin-payouts.html">Payouts</option>
+          <option value="admin-payments-history.html">Payments History</option>
+          <option value="admin-contractor-profile.html">Contractor Profile</option>
+          <option value="admin-login.html">Admin Login</option>
+        </select>
+        <button onclick="logout()" class="btn btn-small">Logout</button>
+      </div>
+    </header>
+  </div>
+
+  <section class="dashboard">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="section-badge" id="jobsCountBadge">Loading…</span>
+        </div>
+        <div class="section-actions">
+          <button onclick="exportJobs()" class="btn btn-secondary btn-small">📥 Export</button>
+          <button onclick="loadJobs()" class="btn btn-primary btn-small">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-value" id="totalJobs">0</div>
+          <div class="stat-label">Total Jobs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="activeJobs">0</div>
+          <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="unassignedJobs">0</div>
+          <div class="stat-label">Unassigned</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="completedJobs">0</div>
+          <div class="stat-label">Completed</div>
+        </div>
+      </div>
+
+      <!-- Quick Filters -->
+      <div class="quick-filters">
+        <button class="quick-filter-btn" onclick="quickFilter('all')">All Jobs</button>
+        <button class="quick-filter-btn" onclick="quickFilter('unassigned')">⚠️ Unassigned</button>
+        <button class="quick-filter-btn" onclick="quickFilter('active')">🔥 Active</button>
+        <button class="quick-filter-btn" onclick="quickFilter('pending_review')">⏳ Pending Review</button>
+        <button class="quick-filter-btn" onclick="quickFilter('completed')">✅ Completed</button>
+        <button class="quick-filter-btn" onclick="quickFilter('emergency')">🚨 Emergency</button>
+      </div>
+
+      <!-- Filters Panel -->
+      <div class="filters-panel">
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <select id="filterStatus" class="filter-input" onchange="applyFilters()">
+              <option value="">All Statuses</option>
+              <option value="submitted">Submitted</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="ready_to_assign">Ready to Assign</option>
+              <option value="assigned">Assigned</option>
+              <option value="en_route">En Route</option>
+              <option value="on_site">On Site</option>
+              <option value="completed">Completed</option>
+              <option value="completed_pending_review">Pending Review</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Urgency</label>
+            <select id="filterUrgency" class="filter-input" onchange="applyFilters()">
+              <option value="">All Urgency Levels</option>
+              <option value="emergency">Emergency</option>
+              <option value="same-day">Same-day</option>
+              <option value="next-day">Next-day</option>
+              <option value="scheduled">Scheduled</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Service Category</label>
+            <select id="filterCategory" class="filter-input" onchange="applyFilters()">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Assigned</label>
+            <select id="filterAssigned" class="filter-input" onchange="applyFilters()">
+              <option value="">All</option>
+              <option value="yes">Assigned</option>
+              <option value="no">Unassigned</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Search Location</label>
+            <input type="text" id="filterLocation" class="filter-input" placeholder="City or postal code" onkeyup="applyFilters()">
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Has Dispute</label>
+            <select id="filterDispute" class="filter-input" onchange="applyFilters()">
+              <option value="">All</option>
+              <option value="yes">With Dispute</option>
+              <option value="no">No Dispute</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <button onclick="applyFilters()" class="btn btn-primary btn-small">Apply Filters</button>
+          <button onclick="clearFilters()" class="btn btn-secondary btn-small">Clear All</button>
+        </div>
+      </div>
+
+      <!-- Jobs Table -->
+      <div class="jobs-table">
+        <div class="table-header">
+          <div>ID</div>
+          <div>Service & Description</div>
+          <div>Urgency</div>
+          <div>Location</div>
+          <div>Status</div>
+          <div>Contractor</div>
+          <div>Actions</div>
+        </div>
+
+        <div id="jobsTableBody">
+          <div class="loading" style="padding: 3rem; text-align: center;">Loading jobs...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Job Detail Modal -->
+  <div id="jobModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 800px;">
+      <span class="modal-close" onclick="closeJobModal()">&times;</span>
+      <div id="jobModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Assign Contractor Modal -->
+  <div id="assignModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeAssignModal()">&times;</span>
+      <div id="assignModalContent"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-nav.js"></script>
+  <script>
+    let allJobs = [];
+    let filteredJobs = [];
+    let allContractors = [];
+    let allCategories = [];
+    let selectedJobId = null;
+
+    // Check admin auth
+    const user = getUser();
+    if (!user || user.role !== 'admin') {
+      window.location.href = 'admin-login.html';
+    }
+    const adminNameEl = document.getElementById('adminName');
+    if (adminNameEl) adminNameEl.textContent = user.full_name;
+
+    // Load initial data
+    async function initialize() {
+      await loadCategories();
+      await loadContractors();
+      await loadJobs();
+      
+      // Check URL params for pre-filtering
+      const urlParams = new URLSearchParams(window.location.search);
+      const statusFilter = urlParams.get('status');
+      if (statusFilter) {
+        document.getElementById('filterStatus').value = statusFilter;
+        applyFilters();
+      }
+    }
+
+    async function loadCategories() {
+      try {
+        const response = await api.get('/services/categories');
+        allCategories = response.categories || [];
+        
+        const select = document.getElementById('filterCategory');
+        select.innerHTML = '<option value="">All Categories</option>' +
+          allCategories.map(cat => `<option value="${cat.id}">${cat.name}</option>`).join('');
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    }
+
+    async function loadContractors() {
+      try {
+        const response = await api.get('/admin/contractors');
+        allContractors = response.contractors || [];
+      } catch (error) {
+        console.error('Error loading contractors:', error);
+      }
+    }
+
+    async function loadJobs() {
+      try {
+        const response = await api.get('/admin/jobs');
+        allJobs = response.jobs || [];
+        filteredJobs = [...allJobs];
+        
+        updateStats();
+        renderJobs();
+      } catch (error) {
+        console.error('Error loading jobs:', error);
+        document.getElementById('jobsTableBody').innerHTML = 
+          '<div class="empty-state"><p style="color: red;">Error loading jobs. Please try again.</p></div>';
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('totalJobs').textContent = allJobs.length;
+      document.getElementById('activeJobs').textContent = 
+        allJobs.filter(j => ['assigned', 'en_route', 'on_site'].includes(j.status)).length;
+      document.getElementById('unassignedJobs').textContent = 
+        allJobs.filter(j => ['submitted', 'confirmed', 'ready_to_assign'].includes(j.status)).length;
+      document.getElementById('completedJobs').textContent = 
+        allJobs.filter(j => j.status === 'completed').length;
+    }
+
+    function renderJobs() {
+      const tbody = document.getElementById('jobsTableBody');
+      const badge = document.getElementById('jobsCountBadge');
+      const headerTotal = document.getElementById('jobsTotalHeader');
+      if (badge) {
+        badge.textContent = `${filteredJobs.length} Total`;
+      }
+      if (headerTotal) {
+        headerTotal.textContent = filteredJobs.length;
+      }
+      
+      if (filteredJobs.length === 0) {
+        tbody.innerHTML = '<div class="empty-state"><p>No jobs match the current filters</p></div>';
+        return;
+      }
+
+      tbody.innerHTML = filteredJobs.map(job => `
+        <div class="table-row" onclick="viewJobDetail('${job.id}')">
+          <div class="job-code">#${job.id.substring(0, 8)}</div>
+          <div>
+            <div class="job-service">${job.category_name || 'N/A'} - ${job.type_name || 'N/A'}</div>
+            <div class="job-description">${(job.description || '').substring(0, 60)}${job.description?.length > 60 ? '...' : ''}</div>
+          </div>
+          <div>
+            <span class="urgency-pill urgency-${job.urgency}">${formatUrgency(job.urgency)}</span>
+          </div>
+          <div style="font-size: 0.875rem; color: #6b7280;">
+            ${job.city || 'N/A'}, ${job.province || 'N/A'}
+          </div>
+          <div>
+            <span class="status-badge status-${job.status}">${formatStatus(job.status)}</span>
+          </div>
+          <div style="font-size: 0.875rem; color: #6b7280;">
+            ${job.contractor_name || 'Unassigned'}
+          </div>
+          <div class="action-buttons" onclick="event.stopPropagation()">
+            ${!job.contractor_id && ['submitted', 'confirmed', 'ready_to_assign'].includes(job.status) ? `
+              <button onclick="showAssignModal('${job.id}')" class="btn btn-primary btn-small">Assign</button>
+            ` : ''}
+            ${job.status === 'assigned' ? `
+              <button onclick="updateJobStatus('${job.id}', 'en_route')" class="btn btn-secondary btn-small">En Route</button>
+            ` : ''}
+            ${job.status === 'en_route' ? `
+              <button onclick="updateJobStatus('${job.id}', 'on_site')" class="btn btn-secondary btn-small">On Site</button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function quickFilter(type) {
+      // Update active button
+      document.querySelectorAll('.quick-filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      clearFilters();
+
+      switch(type) {
+        case 'all':
+          break;
+        case 'unassigned':
+          document.getElementById('filterStatus').value = 'submitted';
+          document.getElementById('filterAssigned').value = 'no';
+          break;
+        case 'active':
+          filteredJobs = allJobs.filter(j => ['assigned', 'en_route', 'on_site'].includes(j.status));
+          renderJobs();
+          return;
+        case 'pending_review':
+          document.getElementById('filterStatus').value = 'completed_pending_review';
+          break;
+        case 'completed':
+          document.getElementById('filterStatus').value = 'completed';
+          break;
+        case 'emergency':
+          document.getElementById('filterUrgency').value = 'emergency';
+          break;
+      }
+      
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const status = document.getElementById('filterStatus').value;
+      const urgency = document.getElementById('filterUrgency').value;
+      const category = document.getElementById('filterCategory').value;
+      const assigned = document.getElementById('filterAssigned').value;
+      const location = document.getElementById('filterLocation').value.toLowerCase();
+      const dispute = document.getElementById('filterDispute').value;
+
+      filteredJobs = allJobs.filter(job => {
+        if (status && job.status !== status) return false;
+        if (urgency && job.urgency !== urgency) return false;
+        if (category && job.service_category_id !== parseInt(category)) return false;
+        if (assigned === 'yes' && !job.contractor_id) return false;
+        if (assigned === 'no' && job.contractor_id) return false;
+        if (location && !(job.city?.toLowerCase().includes(location) || job.province?.toLowerCase().includes(location))) return false;
+        if (dispute === 'yes' && !job.has_dispute) return false;
+        if (dispute === 'no' && job.has_dispute) return false;
+        
+        return true;
+      });
+
+      renderJobs();
+    }
+
+    function clearFilters() {
+      document.getElementById('filterStatus').value = '';
+      document.getElementById('filterUrgency').value = '';
+      document.getElementById('filterCategory').value = '';
+      document.getElementById('filterAssigned').value = '';
+      document.getElementById('filterLocation').value = '';
+      document.getElementById('filterDispute').value = '';
+      
+      filteredJobs = [...allJobs];
+      renderJobs();
+    }
+
+    function showAssignModal(jobId) {
+      selectedJobId = jobId;
+      const job = allJobs.find(j => j.id === jobId);
+      
+      const approvedContractors = allContractors.filter(c => c.vetting_status === 'APPROVED_ACTIVE');
+      
+      const modal = document.getElementById('assignModal');
+      const content = document.getElementById('assignModalContent');
+      
+      content.innerHTML = `
+        <h2>Assign Contractor to Job</h2>
+        <p><strong>Job:</strong> ${job.category_name} - ${job.type_name}</p>
+        <p><strong>Location:</strong> ${job.address_line1}, ${job.city}</p>
+        <p><strong>Urgency:</strong> ${formatUrgency(job.urgency)}</p>
+        
+        <div class="form-group" style="margin-top: 1.5rem;">
+          <label class="label">Select Contractor:</label>
+          <select id="assignContractorSelect" class="input">
+            <option value="">Choose a contractor...</option>
+            ${approvedContractors.map(c => `
+              <option value="${c.id}">${c.business_name || c.legal_name} (${c.email})</option>
+            `).join('')}
+          </select>
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+          <button onclick="assignContractor()" class="btn btn-primary">Assign Contractor</button>
+          <button onclick="closeAssignModal()" class="btn btn-secondary">Cancel</button>
+        </div>
+      `;
+      
+      modal.style.display = 'flex';
+    }
+
+    async function assignContractor() {
+      const contractorId = document.getElementById('assignContractorSelect').value;
+      
+      if (!contractorId) {
+        notify.warning('Please select a contractor');
+        return;
+      }
+      
+      try {
+        await api.post(`/admin/jobs/${selectedJobId}/assign`, { contractor_id: contractorId });
+        notify.info('Contractor assigned successfully!');
+        closeAssignModal();
+        await loadJobs();
+      } catch (error) {
+        notify.info('Error assigning contractor: ' + error.message);
+      }
+    }
+
+    function closeAssignModal() {
+      document.getElementById('assignModal').style.display = 'none';
+      selectedJobId = null;
+    }
+
+    async function updateJobStatus(jobId, newStatus) {
+      if (!confirm(`Update job status to "${formatStatus(newStatus)}"?`)) return;
+      
+      try {
+        await api.patch(`/jobs/${jobId}/status`, { status: newStatus });
+        notify.info('Job status updated!');
+        await loadJobs();
+      } catch (error) {
+        notify.info('Error updating status: ' + error.message);
+      }
+    }
+
+    function viewJobDetail(jobId) {
+      const job = allJobs.find(j => j.id === jobId);
+      const modal = document.getElementById('jobModal');
+      const content = document.getElementById('jobModalContent');
+      
+      content.innerHTML = `
+        <h2>Job Details</h2>
+        
+        <div class="job-details" style="grid-template-columns: 1fr;">
+          <div class="detail-item">
+            <span class="detail-label">Job ID:</span>
+            <span class="detail-value">${job.id}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Service:</span>
+            <span class="detail-value">${job.category_name} - ${job.type_name}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Status:</span>
+            <span class="detail-value"><span class="status-badge status-${job.status}">${formatStatus(job.status)}</span></span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Urgency:</span>
+            <span class="detail-value"><span class="urgency-pill urgency-${job.urgency}">${formatUrgency(job.urgency)}</span></span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Customer:</span>
+            <span class="detail-value">${job.customer_email || 'N/A'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Address:</span>
+            <span class="detail-value">${job.address_line1}, ${job.city}, ${job.province}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Description:</span>
+            <span class="detail-value">${job.description || 'N/A'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Time Window:</span>
+            <span class="detail-value">${formatTimeWindow(job.time_window)}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Created:</span>
+            <span class="detail-value">${new Date(job.created_at).toLocaleString()}</span>
+          </div>
+          ${job.contractor_name ? `
+            <div class="detail-item">
+              <span class="detail-label">Assigned Contractor:</span>
+              <span class="detail-value">${job.contractor_name}</span>
+            </div>
+          ` : ''}
+          ${job.is_quote_only ? `
+            <div class="detail-item">
+              <span class="detail-label">Quote Required:</span>
+              <span class="detail-value">✅ Yes</span>
+            </div>
+          ` : ''}
+        </div>
+        
+        <button onclick="closeJobModal()" class="btn btn-secondary" style="margin-top: 1.5rem;">Close</button>
+      `;
+      
+      modal.style.display = 'flex';
+    }
+
+    function closeJobModal() {
+      document.getElementById('jobModal').style.display = 'none';
+    }
+
+    function exportJobs() {
+      const csv = [
+        ['ID', 'Service', 'Status', 'Urgency', 'Location', 'Contractor', 'Created'].join(','),
+        ...filteredJobs.map(j => [
+          j.id.substring(0, 8),
+          `${j.category_name} - ${j.type_name}`,
+          j.status,
+          j.urgency,
+          `${j.city} ${j.province}`,
+          j.contractor_name || 'Unassigned',
+          new Date(j.created_at).toLocaleDateString()
+        ].join(','))
+      ].join('\n');
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `jobs-export-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+    }
+
+    function formatStatus(status) {
+      const map = {
+        'submitted': 'Submitted',
+        'confirmed': 'Confirmed',
+        'ready_to_assign': 'Ready to Assign',
+        'assigned': 'Assigned',
+        'en_route': 'En Route',
+        'on_site': 'On Site',
+        'completed': 'Completed',
+        'completed_pending_review': 'Pending Review',
+        'cancelled': 'Cancelled'
+      };
+      return map[status] || status;
+    }
+
+    function formatUrgency(urgency) {
+      const map = {
+        'emergency': '🚨 Emergency',
+        'same-day': '⚡ Same-day',
+        'next-day': '📅 Next-day',
+        'scheduled': '🗓️ Scheduled'
+      };
+      return map[urgency] || urgency;
+    }
+
+    function formatTimeWindow(window) {
+      const map = {
+        'morning': 'Morning (8am-12pm)',
+        'afternoon': 'Afternoon (12pm-5pm)',
+        'evening': 'Evening (5pm-8pm)',
+        'flexible': 'Flexible'
+      };
+      return map[window] || window;
+    }
+
+    // Initialize
+    initialize();
+  </script>
+  <script src="../js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

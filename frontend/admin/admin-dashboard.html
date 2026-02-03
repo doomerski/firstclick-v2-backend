@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - FirstClick</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .kpi-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s;
+      border-left: 4px solid #2563eb;
+    }
+
+    html.theme-dark body {
+      background: #0b1016;
+      color: #e2e8f0;
+    }
+
+    html.theme-dark .kpi-card {
+      background: rgba(21, 29, 41, 0.92);
+      border: 1px solid #334155;
+      color: #e2e8f0;
+    }
+
+    html.theme-dark .kpi-label,
+    html.theme-dark .kpi-subtitle {
+      color: #94a3b8;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .kpi-card.warning {
+      border-left-color: #f59e0b;
+    }
+    
+    .kpi-card.danger {
+      border-left-color: #ef4444;
+    }
+    
+    .kpi-card.success {
+      border-left-color: #10b981;
+    }
+    
+    .kpi-value {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(to right, #f97316, #dc2626);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    
+    .kpi-label {
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .kpi-subtitle {
+      color: #9ca3af;
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .admin-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .admin-nav-card {
+      display: block;
+      padding: 1.2rem 1.4rem;
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      text-decoration: none;
+      color: #111827;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    html.theme-dark .admin-nav-card {
+      background: rgba(30, 41, 59, 0.85);
+      border-color: #334155;
+      color: #e2e8f0;
+    }
+
+    .admin-nav-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+      border-color: #d1d5db;
+    }
+
+    html.theme-dark .admin-nav-card:hover {
+      border-color: #475569;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    .admin-nav-title {
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .admin-nav-meta {
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+
+    html.theme-dark .admin-nav-meta {
+      color: #94a3b8;
+    }
+
+    .status-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .status-pill.success { background: #d1fae5; color: #065f46; }
+    .status-pill.warning { background: #fef3c7; color: #92400e; }
+    .status-pill.danger { background: #fee2e2; color: #991b1b; }
+
+    html.theme-dark .status-pill {
+      background: #334155;
+      color: #cbd5e1;
+    }
+
+    html.theme-dark .status-pill.success { background: rgba(16, 185, 129, 0.2); color: #86efac; }
+    html.theme-dark .status-pill.warning { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+    html.theme-dark .status-pill.danger { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+
+    .data-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    html.theme-dark .data-card {
+      background: rgba(21, 29, 41, 0.92);
+      border: 1px solid #334155;
+      color: #e2e8f0;
+    }
+
+    .data-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .data-table {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .data-row {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr auto;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 0.75rem;
+      border: 1px solid #e5e7eb;
+      align-items: center;
+    }
+
+    html.theme-dark .data-row {
+      background: rgba(15, 22, 33, 0.9);
+      border-color: #334155;
+    }
+
+    .data-row .title {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    html.theme-dark .data-row .title {
+      color: #e2e8f0;
+    }
+
+    .data-row .meta {
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+
+    html.theme-dark .data-row .meta {
+      color: #94a3b8;
+    }
+
+    .tab-btn {
+      border: 1px solid #e5e7eb;
+      background: white;
+      color: #111827;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    html.theme-dark .tab-btn {
+      background: rgba(30, 41, 59, 0.85);
+      border-color: #334155;
+      color: #e2e8f0;
+    }
+
+    html.theme-dark .tab-btn:hover {
+      border-color: #475569;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(to right, #f97316, #dc2626);
+      color: white;
+      border-color: transparent;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .admin-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 2.5rem 0 2rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: #2dd4bf;
+      margin: 0 0 0.75rem;
+    }
+
+    .super-header h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: #9aa6c1;
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    .admin-page-select {
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.6rem;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #111827;
+      font-weight: 600;
+      font-size: 0.85rem;
+      min-width: 180px;
+    }
+
+    html.theme-dark .admin-page-select {
+      background: rgba(21, 29, 41, 0.9);
+      border-color: #334155;
+      color: #e2e8f0;
+    }
+
+    @media (max-width: 900px) {
+      .data-row {
+        grid-template-columns: 1fr;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body class="compact-header">
+  <div class="container">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Admin Command Center</p>
+        <h1>Admin Dashboard</h1>
+        <p class="subtext">Operational overview of customers, jobs, and payments.</p>
+      </div>
+      <div class="header-actions">
+        <select class="admin-page-select" aria-label="Admin pages" onchange="if(this.value) window.location.href=this.value">
+          <option value="">Admin Pages</option>
+          <option value="admin-dashboard.html">Dashboard</option>
+          <option value="admin-jobs.html">Jobs</option>
+          <option value="admin-contractors.html">Contractors</option>
+          <option value="admin-revenue.html">Finance Overview</option>
+          <option value="admin-payouts.html">Payouts</option>
+          <option value="admin-payments-history.html">Payments History</option>
+        </select>
+        <button onclick="logout()" class="btn btn-small">Logout</button>
+      </div>
+    </header>
+  </div>
+
+  <section class="dashboard">
+    <div class="container">
+      <div class="admin-tabs">
+        <button class="tab-btn active" data-tab="stats">Stats</button>
+        <button class="tab-btn" data-tab="customers">Customers</button>
+        <button class="tab-btn" data-tab="jobs">Jobs</button>
+        <button class="tab-btn" data-tab="payments">Payments</button>
+      </div>
+
+      <div class="tab-content active" id="tab-stats">
+        <div class="kpi-grid">
+          <div class="kpi-card success" role="button" tabindex="0" data-tab="customers">
+            <div class="kpi-value" id="statCustomers">0</div>
+            <div class="kpi-label">Customers</div>
+            <div class="kpi-subtitle">Total registered</div>
+          </div>
+          <div class="kpi-card" role="button" tabindex="0" data-link="admin-jobs.html">
+            <div class="kpi-value" id="statJobs">0</div>
+            <div class="kpi-label">Jobs</div>
+            <div class="kpi-subtitle">All statuses</div>
+          </div>
+          <div class="kpi-card warning" role="button" tabindex="0" data-link="admin-jobs.html">
+            <div class="kpi-value" id="statActiveJobs">0</div>
+            <div class="kpi-label">Active Jobs</div>
+            <div class="kpi-subtitle">Assigned or in progress</div>
+          </div>
+          <div class="kpi-card success" role="button" tabindex="0" data-link="admin-revenue.html">
+            <div class="kpi-value" id="statRevenue">$0</div>
+            <div class="kpi-label">Revenue</div>
+            <div class="kpi-subtitle">Paid payments</div>
+          </div>
+          <div class="kpi-card" role="button" tabindex="0" data-link="admin-payments-history.html">
+            <div class="kpi-value" id="statPayments">0</div>
+            <div class="kpi-label">Payments</div>
+            <div class="kpi-subtitle">Total records</div>
+          </div>
+          <div class="kpi-card danger" role="button" tabindex="0" data-link="admin-payments-history.html">
+            <div class="kpi-value" id="statFailedPayments">0</div>
+            <div class="kpi-label">Failed Payments</div>
+            <div class="kpi-subtitle">Need attention</div>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-header">
+            <div>
+              <h2 class="section-title">Admin Navigation</h2>
+              <p class="page-subtitle">Jump directly to detailed admin pages.</p>
+            </div>
+          </div>
+          <div class="admin-nav-grid">
+            <a class="admin-nav-card" href="admin-jobs.html">
+              <div class="admin-nav-title">Jobs</div>
+              <div class="admin-nav-meta">Manage all jobs and statuses.</div>
+            </a>
+            <a class="admin-nav-card" href="admin-contractors.html">
+              <div class="admin-nav-title">Contractors</div>
+              <div class="admin-nav-meta">Review contractor pipeline.</div>
+            </a>
+            <a class="admin-nav-card" href="admin-revenue.html">
+              <div class="admin-nav-title">Finance Overview</div>
+              <div class="admin-nav-meta">Revenue breakdowns and trends.</div>
+            </a>
+            <a class="admin-nav-card" href="admin-payouts.html">
+              <div class="admin-nav-title">Payouts</div>
+              <div class="admin-nav-meta">Contractor payout tracking.</div>
+            </a>
+            <a class="admin-nav-card" href="admin-payments-history.html">
+              <div class="admin-nav-title">Payments History</div>
+              <div class="admin-nav-meta">All payment records.</div>
+            </a>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-header">
+            <div>
+              <h2 class="section-title">Live Overview</h2>
+              <p class="page-subtitle">Key metrics snapshot.</p>
+            </div>
+          </div>
+          <div id="statsSummary" class="data-table"></div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-customers">
+        <div class="data-card">
+          <div class="data-header">
+            <div>
+              <h2 class="section-title">Customer Management</h2>
+              <p class="page-subtitle">Search customers and view their activity.</p>
+            </div>
+            <input type="search" id="customerSearch" class="input" placeholder="Search by email or name">
+          </div>
+          <div id="customersTable" class="data-table"></div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-jobs">
+        <div class="data-card">
+          <div class="data-header">
+            <div>
+              <h2 class="section-title">Job Tracking</h2>
+              <p class="page-subtitle">All jobs across customers.</p>
+            </div>
+            <select id="jobStatusFilter" class="input" style="max-width: 200px;">
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="assigned">Assigned</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div id="jobsTable" class="data-table"></div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-payments">
+        <div class="data-card">
+          <div class="data-header">
+            <div>
+              <h2 class="section-title">Payment Records</h2>
+              <p class="page-subtitle">Manage and track all payments.</p>
+            </div>
+            <select id="paymentStatusFilter" class="input" style="max-width: 200px;">
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+            </select>
+          </div>
+          <div id="paymentsTable" class="data-table"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/theme.js"></script>
+  <script>
+    let allCustomers = [];
+    let allJobs = [];
+    let allPayments = [];
+
+    const user = getUser();
+    if (!user || user.role !== 'admin') {
+      window.location.href = 'admin-login.html';
+    }
+
+    function setActiveTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+      });
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.toggle('active', tab.id === `tab-${tabId}`);
+      });
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => setActiveTab(btn.dataset.tab));
+    });
+
+    document.querySelectorAll('.kpi-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const targetTab = card.dataset.tab;
+        const targetLink = card.dataset.link;
+        if (targetTab) {
+          setActiveTab(targetTab);
+          return;
+        }
+        if (targetLink) {
+          window.location.href = targetLink;
+        }
+      });
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          card.click();
+        }
+      });
+    });
+
+    async function loadStats() {
+      try {
+        const response = await api.get('/admin/dashboard');
+        const stats = response.stats;
+        document.getElementById('statCustomers').textContent = stats.customers || 0;
+        document.getElementById('statJobs').textContent = stats.jobs?.total || 0;
+        document.getElementById('statActiveJobs').textContent = stats.jobs?.active || 0;
+        document.getElementById('statPayments').textContent = stats.payments?.total || 0;
+        document.getElementById('statFailedPayments').textContent = stats.payments?.failed || 0;
+        document.getElementById('statRevenue').textContent = `$${(stats.revenue?.total || 0).toLocaleString()}`;
+
+        const summary = document.getElementById('statsSummary');
+        summary.innerHTML = `
+          <div class="data-row">
+            <div>
+              <div class="title">Jobs</div>
+              <div class="meta">Pending: ${stats.jobs?.pending || 0} • Completed: ${stats.jobs?.completed || 0}</div>
+            </div>
+            <div>
+              <div class="title">Payments</div>
+              <div class="meta">Completed: ${stats.payments?.completed || 0} • Pending: ${stats.payments?.pending || 0}</div>
+            </div>
+            <div>
+              <div class="title">Revenue</div>
+              <div class="meta">Total paid revenue</div>
+            </div>
+            <div class="data-actions">
+              <span class="status-pill success">$${(stats.revenue?.total || 0).toLocaleString()}</span>
+            </div>
+          </div>
+        `;
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    async function loadCustomers() {
+      try {
+        const response = await api.get('/admin/customers');
+        allCustomers = response.customers || [];
+        renderCustomers();
+      } catch (error) {
+        console.error('Error loading customers:', error);
+      }
+    }
+
+    function renderCustomers() {
+      const searchValue = document.getElementById('customerSearch')?.value.trim().toLowerCase() || '';
+      const filtered = allCustomers.filter(customer => {
+        const name = `${customer.full_name || ''} ${customer.email || ''}`.toLowerCase();
+        return !searchValue || name.includes(searchValue);
+      });
+      const container = document.getElementById('customersTable');
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="padding: 2rem; text-align: center; color: #6b7280;">No customers found.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(customer => `
+        <div class="data-row">
+          <div>
+            <div class="title">${customer.full_name || 'Unnamed Customer'}</div>
+            <div class="meta">${customer.email || 'No email'} • ${customer.phone || 'No phone'}</div>
+          </div>
+          <div>
+            <div class="title">${customer.stats?.jobs_total || 0} Jobs</div>
+            <div class="meta">Active: ${customer.stats?.jobs_active || 0} • Completed: ${customer.stats?.jobs_completed || 0}</div>
+          </div>
+          <div>
+            <div class="title">$${(customer.stats?.revenue_total || 0).toLocaleString()}</div>
+            <div class="meta">Payments: ${customer.stats?.payments_completed || 0}/${customer.stats?.payments_total || 0}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function loadJobs() {
+      try {
+        const response = await api.get('/admin/jobs');
+        allJobs = response.jobs || [];
+        renderJobs();
+      } catch (error) {
+        console.error('Error loading jobs:', error);
+      }
+    }
+
+    function renderJobs() {
+      const filterValue = document.getElementById('jobStatusFilter')?.value || '';
+      const filtered = allJobs.filter(job => !filterValue || String(job.status) === filterValue);
+      const container = document.getElementById('jobsTable');
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="padding: 2rem; text-align: center; color: #6b7280;">No jobs found.</div>';
+        return;
+      }
+      container.innerHTML = filtered.map(job => `
+        <div class="data-row">
+          <div>
+            <div class="title">${job.category_name || 'Service'} - ${job.type_name || 'Type'}</div>
+            <div class="meta">${job.customer_email || 'No customer'} • ${job.city || ''}</div>
+          </div>
+          <div>
+            <div class="title">Job ID</div>
+            <div class="meta">${job.id}</div>
+          </div>
+          <div>
+            <div class="title">${job.status || 'pending'}</div>
+            <div class="meta">${job.urgency || 'standard'} • ${job.time_window || '—'}</div>
+          </div>
+          <div class="data-actions">
+            <span class="status-pill ${job.status === 'completed' ? 'success' : job.status === 'cancelled' ? 'danger' : 'warning'}">${job.status || 'pending'}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function loadPayments() {
+      try {
+        const response = await api.get('/admin/payments');
+        allPayments = response.payments || [];
+        renderPayments();
+      } catch (error) {
+        console.error('Error loading payments:', error);
+      }
+    }
+
+    function renderPayments() {
+      const filterValue = document.getElementById('paymentStatusFilter')?.value || '';
+      const filtered = allPayments.filter(payment => !filterValue || String(payment.status) === filterValue);
+      const container = document.getElementById('paymentsTable');
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="padding: 2rem; text-align: center; color: #6b7280;">No payments found.</div>';
+        return;
+      }
+      container.innerHTML = filtered.map(payment => `
+        <div class="data-row">
+          <div>
+            <div class="title">$${Number(payment.amount || 0).toLocaleString()}</div>
+            <div class="meta">${payment.currency || 'USD'} • ${payment.payment_method || 'Method N/A'}</div>
+          </div>
+          <div>
+            <div class="title">Customer</div>
+            <div class="meta">${payment.customer_id || '—'}</div>
+          </div>
+          <div>
+            <div class="title">Status</div>
+            <div class="meta">${payment.status || 'pending'}</div>
+          </div>
+          <div class="data-actions">
+            <span class="status-pill ${payment.status === 'completed' || payment.status === 'paid' ? 'success' : payment.status === 'failed' ? 'danger' : 'warning'}">${payment.status || 'pending'}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('customerSearch')?.addEventListener('input', renderCustomers);
+    document.getElementById('jobStatusFilter')?.addEventListener('change', renderJobs);
+    document.getElementById('paymentStatusFilter')?.addEventListener('change', renderPayments);
+
+    async function initDashboard() {
+      await loadStats();
+      await loadCustomers();
+      await loadJobs();
+      await loadPayments();
+    }
+
+    initDashboard();
+
+    // Auto refresh every 5 minutes
+    setInterval(initDashboard, 5 * 60 * 1000);
+  </script>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

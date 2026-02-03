@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - FirstClick</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="../js/notifications.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="header-title">
+          <div class="header-icon">🔐</div>
+          <div>
+            <h1>Admin Login</h1>
+            <div class="header-meta">
+              <span>Admin Control Center</span>
+            </div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn btn-secondary btn-small" onclick="window.location.href='../index.html'">← Go Back</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="login-section" style="padding-top: 2rem;">
+    <div class="container" style="display: flex; justify-content: center; min-height: calc(100vh - 180px); align-items: flex-start;">
+      <div class="card" style="max-width: 400px; margin: 0 auto;">
+        <h2 class="card-title">Admin Login</h2>
+        <form id="adminLoginForm" class="form">
+          <div class="form-group">
+            <label class="label">Email</label>
+            <input type="text" id="email" class="input" value="admin@firstclick.com" required>
+          </div>
+          <div class="form-group">
+            <label class="label">Password</label>
+            <input type="password" id="password" class="input" value="admin123" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <p class="help-text" style="text-align: center; margin-top: 1rem; color: #666;">
+          Demo credentials:<br>
+          admin@firstclick.com / admin123
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await api.post('/auth/admin/login', { email, password });
+        saveUser(response.user, response.token);
+        if (response.user?.role === 'super_admin') {
+          window.location.href = '../../examples/superadmin-dashboard.html';
+        } else {
+          window.location.href = 'admin-dashboard.html';
+        }
+      } catch (error) {
+        notify.error('Login failed: ' + (error.message || 'Invalid credentials'));
+      }
+    });
+  </script>
+  <script src="../js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

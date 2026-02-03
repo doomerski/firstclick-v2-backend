@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find a Contractor - FirstClick</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --border-radius: 12px;
+      --shadow-lg: 0 18px 30px rgba(15, 23, 42, 0.25);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-display);
+      background: linear-gradient(135deg, var(--slate-950), var(--slate-900));
+      color: var(--slate-100);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      padding: 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--emerald-500);
+      text-decoration: none;
+    }
+
+    .nav-link {
+      padding: 0.625rem 1.5rem;
+      border-radius: 999px;
+      background: var(--slate-800);
+      color: var(--slate-100);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid var(--slate-700);
+      transition: 0.2s ease;
+    }
+
+    .nav-link:hover {
+      border-color: var(--emerald-500);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--slate-50);
+      letter-spacing: -0.025em;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: var(--slate-400);
+      margin-bottom: 2rem;
+    }
+
+    .search-section {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 2rem;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border-radius: var(--border-radius);
+      border: 2px solid var(--slate-700);
+      background: rgba(30, 41, 59, 0.6);
+      color: var(--slate-100);
+      font-size: 1rem;
+      font-family: var(--font-display);
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--emerald-500);
+    }
+
+    .search-btn {
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .search-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--slate-700);
+      background: var(--slate-800);
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--slate-200);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--emerald-500);
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald-500);
+    }
+
+    .contractors-section {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--slate-100);
+    }
+
+    .count-badge {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      background: rgba(16, 185, 129, 0.15);
+      border-radius: 999px;
+      color: var(--emerald-500);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .contractors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .contractor-card {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .contractor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      border-color: var(--emerald-500);
+    }
+
+    .contractor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+
+    .contractor-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--slate-100);
+      margin-bottom: 0.25rem;
+    }
+
+    .contractor-business {
+      color: var(--emerald-500);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .trade-badge {
+      padding: 0.25rem 0.75rem;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .contractor-details {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--slate-700);
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .detail-label {
+      color: var(--slate-400);
+    }
+
+    .detail-value {
+      color: var(--slate-200);
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--slate-400);
+    }
+
+    .empty-state h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--slate-400);
+    }
+
+    .spinner {
+      border: 3px solid var(--slate-700);
+      border-top: 3px solid var(--emerald-500);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .contractors-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-box {
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="../index.html" class="logo">FirstClick</a>
+        <div style="display: flex; gap: 0.75rem;">
+          <a href="contractor-signup.html" class="nav-link">Become a Contractor</a>
+          <a href="contractor-dashboard.html" class="nav-link">Contractor Login</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Find the Perfect Contractor</h1>
+      <p class="subtitle">Connect with verified, professional contractors in your area</p>
+    </div>
+  </section>
+
+  <section class="search-section">
+    <div class="search-box">
+      <input 
+        type="text" 
+        class="search-input" 
+        id="searchInput" 
+        placeholder="Search by name, business, or trade..."
+      >
+      <button class="search-btn" onclick="applySearch()">Search</button>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterByTrade('all')">All Trades</button>
+      <button class="filter-btn" onclick="filterByTrade('plumbing')">Plumbing</button>
+      <button class="filter-btn" onclick="filterByTrade('electrical')">Electrical</button>
+      <button class="filter-btn" onclick="filterByTrade('hvac')">HVAC</button>
+      <button class="filter-btn" onclick="filterByTrade('construction')">Construction</button>
+      <button class="filter-btn" onclick="filterByTrade('roofing')">Roofing</button>
+      <button class="filter-btn" onclick="filterByTrade('landscaping')">Landscaping</button>
+    </div>
+  </section>
+
+  <section class="contractors-section">
+    <div class="section-header">
+      <h2 class="section-title">Available Contractors</h2>
+      <span class="count-badge" id="contractorCount">Loading...</span>
+    </div>
+
+    <div id="loadingState" class="loading">
+      <div class="spinner"></div>
+      <p>Loading contractors...</p>
+    </div>
+
+    <div id="contractorsGrid" class="contractors-grid" style="display: none;">
+      <!-- Contractors will be inserted here -->
+    </div>
+
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <h2>No contractors found</h2>
+      <p>Try adjusting your search or filters</p>
+    </div>
+  </section>
+
+  <script>
+    let allContractors = [];
+    let filteredContractors = [];
+    let currentFilter = 'all';
+
+    // Trade name mapping
+    const tradeNames = {
+      'plumbing': 'Plumbing',
+      'electrical': 'Electrical',
+      'hvac': 'HVAC',
+      'appliance_repair': 'Appliance Repair',
+      'construction': 'Construction',
+      'roofing': 'Roofing',
+      'landscaping': 'Landscaping',
+      'security': 'Security Systems',
+      'cleaning': 'Cleaning',
+      'pest_control': 'Pest Control',
+      'moving': 'Moving',
+      'handyman': 'Handyman'
+    };
+
+    // Simulated API call - in production, this would call your actual API
+    async function loadContractors() {
+      try {
+        // Mock data - replace with actual API call: const response = await api.get('/contractors');
+        allContractors = [
+          {
+            id: 'contractor-001',
+            legal_name: 'John Smith',
+            business_name: 'Smith Plumbing Co.',
+            email: 'john@smithplumbing.com',
+            phone: '+1 416-555-1001',
+            primary_trade: 'plumbing',
+            experience_years: 12,
+            vetting_status: 'APPROVED_ACTIVE'
+          },
+          {
+            id: 'contractor-002',
+            legal_name: 'Sarah Johnson',
+            business_name: 'Sparks Electric',
+            email: 'sarah@sparkselectric.com',
+            phone: '+1 416-555-1002',
+            primary_trade: 'electrical',
+            experience_years: 8,
+            vetting_status: 'APPROVED_ACTIVE'
+          },
+          {
+            id: 'contractor-003',
+            legal_name: 'Mike Chen',
+            business_name: 'Comfort HVAC Solutions',
+            email: 'mike@comforthvac.com',
+            phone: '+1 416-555-1003',
+            primary_trade: 'hvac',
+            experience_years: 15,
+            vetting_status: 'APPROVED_ACTIVE'
+          },
+          {
+            id: 'contractor-004',
+            legal_name: 'Lisa Martinez',
+            business_name: 'Fix-It Appliance Repair',
+            email: 'lisa@fixitappliances.com',
+            phone: '+1 416-555-1004',
+            primary_trade: 'appliance_repair',
+            experience_years: 10,
+            vetting_status: 'APPROVED_ACTIVE'
+          }
+        ];
+
+        // Filter only approved contractors
+        allContractors = allContractors.filter(c => c.vetting_status === 'APPROVED_ACTIVE');
+        filteredContractors = [...allContractors];
+        
+        renderContractors();
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('contractorsGrid').style.display = 'grid';
+      } catch (error) {
+        console.error('Error loading contractors:', error);
+        document.getElementById('loadingState').innerHTML = '<p>Error loading contractors. Please try again later.</p>';
+      }
+    }
+
+    function renderContractors() {
+      const grid = document.getElementById('contractorsGrid');
+      const count = document.getElementById('contractorCount');
+      const emptyState = document.getElementById('emptyState');
+
+      count.textContent = `${filteredContractors.length} Contractors`;
+
+      if (filteredContractors.length === 0) {
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      grid.style.display = 'grid';
+
+      grid.innerHTML = filteredContractors.map(contractor => {
+        const tradeName = tradeNames[contractor.primary_trade] || contractor.primary_trade || 'General';
+        
+        return `
+          <a href="contractor-public-profile.html?id=${contractor.id}" class="contractor-card">
+            <div class="contractor-header">
+              <div>
+                <div class="contractor-name">${contractor.legal_name}</div>
+                <div class="contractor-business">${contractor.business_name || 'Independent'}</div>
+              </div>
+              <span class="trade-badge">${tradeName}</span>
+            </div>
+            
+            <div class="contractor-details">
+              <div class="detail-row">
+                <span class="detail-label">Experience</span>
+                <span class="detail-value">${contractor.experience_years} years</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Phone</span>
+                <span class="detail-value">${contractor.phone || 'Contact via email'}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Email</span>
+                <span class="detail-value">${contractor.email}</span>
+              </div>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    function filterByTrade(trade) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      currentFilter = trade;
+      applyFiltersAndSearch();
+    }
+
+    function applySearch() {
+      applyFiltersAndSearch();
+    }
+
+    function applyFiltersAndSearch() {
+      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+      
+      filteredContractors = allContractors.filter(contractor => {
+        // Apply trade filter
+        if (currentFilter !== 'all' && contractor.primary_trade !== currentFilter) {
+          return false;
+        }
+
+        // Apply search filter
+        if (searchQuery) {
+          const searchableText = `
+            ${contractor.legal_name} 
+            ${contractor.business_name} 
+            ${contractor.primary_trade}
+          `.toLowerCase();
+          
+          if (!searchableText.includes(searchQuery)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      renderContractors();
+    }
+
+    // Add enter key support for search
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        applySearch();
+      }
+    });
+
+    // Add real-time search
+    document.getElementById('searchInput').addEventListener('input', () => {
+      applyFiltersAndSearch();
+    });
+
+    // Load contractors on page load
+    loadContractors();
+  </script>
+  <!-- API Integration Scripts -->
+  <script src="../backend/contractor-directory-api.js"></script>
+</body>
+</html>

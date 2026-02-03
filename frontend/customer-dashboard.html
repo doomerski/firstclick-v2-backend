@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Jobs - FirstClick</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/notifications.js"></script>
+</head>
+<body class="offset-title">
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
+          <img class="logo-img logo-light" src="assets/lightmode-logo.png" alt="FirstClick" loading="eager">
+          <img class="logo-img logo-dark" src="assets/darkmode-logo.png" alt="FirstClick" loading="eager">
+          <span class="logo-text">FirstClick</span>
+        </a>
+        <nav class="nav">
+          <a href="customer-dashboard.html" class="nav-link">My Tasks</a>
+          <a href="index.html#request" class="nav-link">Post a Job</a>
+          <span id="userEmail" class="nav-text small"></span>
+          <button id="logoutButton" onclick="logout()" class="btn btn-small">Logout</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="dashboard">
+    <div class="container">
+      <h2 class="page-title">My Service Requests</h2>
+
+      <!-- Customer Login -->
+      <div id="loginSection" class="card" style="display: none; margin-bottom: 1.5rem;">
+        <h3 class="card-title">Customer Login</h3>
+        <p class="card-subtitle">Sign in to view and manage your service requests</p>
+        <form id="loginForm" class="form">
+          <div class="form-group">
+            <label class="label">Email</label>
+            <input id="loginEmail" type="email" class="input" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label class="label">Password</label>
+            <input id="loginPassword" type="password" class="input" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Sign In</button>
+        </form>
+        <div style="margin-top: 0.75rem;">
+          <button id="toggleResetForm" type="button" class="btn btn-secondary btn-small">Reset Password</button>
+        </div>
+        <form id="resetForm" class="form" style="display: none; margin-top: 1rem;">
+          <div class="form-group">
+            <label class="label">Account Email</label>
+            <input id="resetEmail" type="email" class="input" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label class="label">New Password</label>
+            <input id="resetPassword" type="password" class="input" placeholder="Enter a new password" required>
+          </div>
+          <div class="form-group">
+            <label class="label">Confirm New Password</label>
+            <input id="resetPasswordConfirm" type="password" class="input" placeholder="Re-enter the password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Update Password</button>
+        </form>
+        <p class="help-text" style="margin-top: 0.75rem;">
+          Need an account? <a href="index.html#request">Create one while submitting a request</a>.
+        </p>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading" class="loading">Loading your jobs...</div>
+
+      <!-- Jobs List -->
+      <div id="jobsList" class="jobs-list" style="display: none;"></div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <p>You haven't requested any services yet.</p>
+        <a href="index.html" class="btn btn-primary">Request a Service</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Customer dashboard logic
+    let jobs = [];
+
+    async function loadJobs() {
+      try {
+        const user = getUser();
+        if (!user || user.role !== 'customer') {
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('loginSection').style.display = 'block';
+          document.getElementById('logoutButton').style.display = 'none';
+          return;
+        }
+
+        document.getElementById('userEmail').textContent = user.email;
+
+        const response = await api.get(`/customer/jobs/${user.id}`);
+        jobs = response.jobs || [];
+
+        document.getElementById('loading').style.display = 'none';
+
+        if (jobs.length === 0) {
+          document.getElementById('emptyState').style.display = 'block';
+        } else {
+          renderJobs();
+          document.getElementById('jobsList').style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error loading jobs:', error);
+        document.getElementById('loading').innerHTML = '<p style="color: red;">Error loading jobs. Please try again.</p>';
+      }
+    }
+
+    function renderJobs() {
+      const container = document.getElementById('jobsList');
+      container.innerHTML = jobs.map(job => {
+        const jobId = job.id || job.job_id;
+        return `
+        <div class="job-card">
+          <div class="job-header">
+            <div>
+              <h3 class="job-title">${job.category_name} - ${job.type_name}</h3>
+              <p class="job-meta">${job.address_line1}, ${job.city}</p>
+            </div>
+            <span class="status-badge status-${job.status}">${formatStatus(job.status)}</span>
+          </div>
+          
+          <p class="job-description">${job.description}</p>
+          ${job.status === 'cancelled' && job.cancellation?.notes ? `
+            <div class="alert alert-warning" style="margin-top: 0.75rem;">
+              <strong>Closed by admin:</strong> ${job.cancellation.notes}
+            </div>
+          ` : ''}
+          
+          <div class="job-details">
+            <div class="detail-item">
+              <span class="detail-label">Urgency:</span>
+              <span class="detail-value">${formatUrgency(job.urgency)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Time Window:</span>
+              <span class="detail-value">${formatTimeWindow(job.time_window)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Submitted:</span>
+              <span class="detail-value">${new Date(job.created_at).toLocaleString()}</span>
+            </div>
+            ${job.contractor_name ? `
+              <div class="detail-item">
+                <span class="detail-label">Contractor:</span>
+                <span class="detail-value">${job.contractor_name}</span>
+              </div>
+            ` : ''}
+          </div>
+
+          ${job.status === 'completed' ? `
+            <div class="job-details" style="margin-top: 1rem;">
+              <div class="detail-item">
+                <span class="detail-label">Final Price:</span>
+                <span class="detail-value">${formatCurrency(getFinalPrice(job))}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Payment:</span>
+                <button class="btn btn-primary btn-small" type="button" ${((job.payment_status || '').toLowerCase() === 'paid') ? 'disabled' : ''} onclick="mockPay('${jobId || ''}')">
+                  ${((job.payment_status || '').toLowerCase() === 'paid') ? 'Paid' : 'Pay Now'}
+                </button>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+      }).join('');
+    }
+
+    function formatStatus(status) {
+      const statusMap = {
+        'draft': 'Draft',
+        'submitted': 'Submitted',
+        'ready_to_assign': 'Finding Contractor',
+        'assigned': 'Contractor Assigned',
+        'in_progress': 'In Progress',
+        'completed': 'Completed',
+        'cancelled': 'Cancelled'
+      };
+      return statusMap[status] || status;
+    }
+
+    function formatUrgency(urgency) {
+      const urgencyMap = {
+        'emergency': '🚨 Emergency',
+        'same-day': '⚡ Same-day',
+        'next-day': '📅 Next-day',
+        'scheduled': '🗓️ Scheduled'
+      };
+      return urgencyMap[urgency] || urgency;
+    }
+
+    function formatTimeWindow(window) {
+      const windowMap = {
+        'morning': 'Morning (8am-12pm)',
+        'afternoon': 'Afternoon (12pm-5pm)',
+        'evening': 'Evening (5pm-8pm)',
+        'flexible': 'Flexible'
+      };
+      return windowMap[window] || window;
+    }
+
+    function getFinalPrice(job) {
+      const estimate = job?.estimate;
+      if (estimate && estimate.mode === 'fixed_range') {
+        return estimate.max ?? estimate.min ?? null;
+      }
+      return null;
+    }
+
+    function formatCurrency(amount) {
+      if (amount === null || amount === undefined) return 'TBD';
+      return `$${Number(amount).toLocaleString()}`;
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      if (!email || !password) return;
+      try {
+        const response = await api.post('/auth/customer/login', { email, password });
+        if (response.user && response.token) {
+          saveUser(response.user, response.token);
+        }
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('logoutButton').style.display = 'inline-flex';
+        loadJobs();
+      } catch (error) {
+        notify.error('Login failed: ' + (error.message || 'Please check your credentials.'));
+      }
+    });
+
+    document.getElementById('toggleResetForm').addEventListener('click', () => {
+      const resetForm = document.getElementById('resetForm');
+      if (!resetForm) return;
+      resetForm.style.display = resetForm.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.getElementById('resetForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('resetEmail').value.trim();
+      const password = document.getElementById('resetPassword').value;
+      const confirm = document.getElementById('resetPasswordConfirm').value;
+      if (!email || !password) return;
+      if (password !== confirm) {
+        notify.error('Passwords do not match.');
+        return;
+      }
+      try {
+        await api.post('/auth/customer/reset-password', { email, password });
+        notify.success('Password updated. Please sign in.');
+        document.getElementById('resetForm').reset();
+        document.getElementById('resetForm').style.display = 'none';
+      } catch (error) {
+        notify.error('Reset failed: ' + (error.message || 'Please try again.'));
+      }
+    });
+
+    async function refreshJobsAfterPayment() {
+      const user = getUser();
+      if (user && user.role === 'customer') {
+        await loadJobs();
+      }
+    }
+
+    async function mockPay(jobId) {
+      if (!jobId) {
+        notify.error('Cannot pay: missing job id.');
+        return;
+      }
+      if (!confirm('Process a mock payment for this job?')) return;
+      try {
+        await api.post(`/customer/jobs/${jobId}/mock-pay`, {});
+        notify.success('Payment recorded! This job is now ready for payouts.');
+        await refreshJobsAfterPayment();
+      } catch (error) {
+        notify.error('Payment failed: ' + (error.message || 'Please try again.'));
+      }
+    }
+
+    // Load jobs on page load
+    loadJobs();
+  </script>
+  <script src="js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FirstClick - Essential Home Services</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="home">
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
+          <img class="logo-img logo-light" src="assets/lightmode-logo.png" alt="FirstClick" loading="eager">
+          <img class="logo-img logo-dark" src="assets/darkmode-logo.png" alt="FirstClick" loading="eager">
+          <span class="logo-text">FirstClick</span>
+        </a>
+        <nav class="nav">
+          <a href="customer-dashboard.html" class="nav-link">My Tasks</a>
+          <a href="join-team.html" class="nav-link">Join Our Team</a>
+          <a href="contractor/contractor-signup.html" class="nav-link">Become a Contractor</a>
+          <a href="contractor/contractor-dashboard.html" class="nav-link">Contractor Portal</a>
+          <div class="admin-group">
+            <a href="admin/admin-login.html" class="nav-link muted">Admin</a></div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title">
+        Essential Services,
+        <span class="gradient-text">On Demand</span>
+      </h1>
+      <p class="hero-subtitle">
+        Connect with licensed, vetted contractors for plumbing, electrical, and HVAC services. 
+        Fast response times. Transparent pricing. Quality guaranteed.
+      </p>
+    </div>
+  </section>
+
+  <!-- Job Intake Form -->
+  <section class="job-intake" id="request">
+    <div class="container">
+      <div class="card">
+        <h3 class="card-title">What do you need help with?</h3>
+        <p class="card-subtitle">Complete the form below to get matched with a qualified contractor</p>
+        
+        <form id="jobForm" class="form">
+          <!-- Step 1: Service Selection -->
+          <div class="form-step active" id="step1">
+            <div class="form-group">
+              <label class="label">Service Category</label>
+              <select id="serviceCategory" class="input" required>
+                <option value="">Select a category...</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label">Service Type</label>
+              <select id="serviceType" class="input" required disabled>
+                <option value="">First select a category...</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label">Describe the issue</label>
+              <textarea id="description" class="input" rows="4" placeholder="Tell us what's happening..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="label">Add a photo (optional)</label>
+              <input type="file" id="problemPhoto" class="input" accept="image/*">
+              <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">
+                Upload a clear photo of the problem area. Max 5MB.
+              </p>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-block" onclick="nextStep(2)">
+              Next: Location
+              <span>→</span>
+            </button>
+          </div>
+
+          <!-- Step 2: Location -->
+          <div class="form-step" id="step2">
+            <div class="form-group">
+              <label class="label">Property Type</label>
+              <select id="propertyType" class="input" required>
+                <option value="house">House</option>
+                <option value="condo">Condo</option>
+                <option value="apartment">Apartment</option>
+                <option value="commercial">Commercial</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label">Street Number</label>
+                <input type="text" id="addressNumber" class="input" placeholder="123" required>
+              </div>
+              <div class="form-group">
+                <label class="label">Street Name</label>
+                <input type="text" id="addressStreet" class="input" placeholder="Main St" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label">Unit/Apt (optional)</label>
+              <input type="text" id="addressLine2" class="input" placeholder="Unit 4B">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label">City</label>
+                <input type="text" id="city" class="input" placeholder="Toronto" required>
+              </div>
+              <div class="form-group">
+                <label class="label">Province</label>
+                <select id="province" class="input" required>
+                  <option value="ON">Ontario</option>
+                  <option value="BC">British Columbia</option>
+                  <option value="AB">Alberta</option>
+                  <option value="QC">Quebec</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label">Postal Code</label>
+              <input type="text" id="postalCode" class="input" placeholder="M5V 3A8" required>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="prevStep(1)">← Back</button>
+              <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next: Schedule →</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Schedule & Contact -->
+          <div class="form-step" id="step3">
+            <div class="form-group">
+              <label class="label">Urgency</label>
+              <select id="urgency" class="input" required>
+                <option value="emergency">🚨 Emergency (within 2 hours)</option>
+                <option value="same-day">⚡ Same-day (within 8 hours)</option>
+                <option value="next-day">📅 Next-day (24-48 hours)</option>
+                <option value="scheduled">🗓️ Scheduled (flexible)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label">Preferred Time Window</label>
+              <select id="timeWindow" class="input" required>
+                <option value="morning">Morning (8am - 12pm)</option>
+                <option value="afternoon">Afternoon (12pm - 5pm)</option>
+                <option value="evening">Evening (5pm - 8pm)</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label">Estimated Service Fee</label>
+              <div id="estimateBox" class="input" style="height: auto; min-height: 3rem; display: flex; align-items: center;">
+                <span id="estimateValue" style="color: #6b7280;">Select a service type and urgency to see an estimate.</span>
+              </div>
+              <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">
+                Estimate only. Includes labor and standard materials for typical jobs.
+                Final price may change after inspection if additional work, materials, or equipment are required.
+                No work proceeds without your approval.
+              </p>
+            </div>
+
+            <h4 class="section-title">Account Access</h4>
+            <p class="help-text" style="margin-bottom: 1rem;">
+              You need a customer account to submit a service request.
+            </p>
+
+            <div class="form-group">
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <button type="button" id="authModeLogin" class="btn btn-secondary btn-small">I have an account</button>
+                <button type="button" id="authModeRegister" class="btn btn-secondary btn-small">Create account</button>
+              </div>
+            </div>
+
+            <div id="authStatus" class="help-text" style="display: none; margin-bottom: 1rem;"></div>
+
+            <div id="authLoginFields">
+              <div class="form-group">
+                <label class="label">Email</label>
+                <input type="email" id="loginEmail" class="input" placeholder="john@example.com" required>
+              </div>
+
+              <div class="form-group">
+                <label class="label">Password</label>
+                <input type="password" id="loginPassword" class="input" placeholder="Enter your password" required>
+              </div>
+            </div>
+
+            <div id="authRegisterFields" style="display: none;">
+              <div class="form-group">
+                <label class="label">Full Name</label>
+                <input type="text" id="registerFullName" class="input" placeholder="John Smith">
+              </div>
+
+              <div class="form-group">
+                <label class="label">Email</label>
+                <input type="email" id="registerEmail" class="input" placeholder="john@example.com">
+              </div>
+
+              <div class="form-group">
+                <label class="label">Phone</label>
+                <input type="tel" id="registerPhone" class="input" placeholder="+1 (416) 555-1234">
+              </div>
+
+              <div class="form-group">
+                <label class="label">Create Password</label>
+                <input type="password" id="registerPassword" class="input" placeholder="Create a password">
+              </div>
+
+              <div class="form-group">
+                <label class="label">Confirm Password</label>
+                <input type="password" id="registerPasswordConfirm" class="input" placeholder="Confirm your password">
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
+              <button type="submit" class="btn btn-primary">Submit Request ✓</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message" style="display: none;">
+          <h3>✅ Request Submitted!</h3>
+          <p>We've received your service request and are finding the perfect contractor for you.</p>
+          <a href="customer-dashboard.html" class="btn btn-primary">View My Jobs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/customer.js"></script>
+  <script src="js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

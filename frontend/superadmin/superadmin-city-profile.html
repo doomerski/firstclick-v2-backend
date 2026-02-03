@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Profile - Super Admin - FirstClick</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0b1016;
+      --bg-alt: #0f1621;
+      --surface: #151d29;
+      --surface-2: #1b2635;
+      --border: #2a3a52;
+      --accent: #ff8f1f;
+      --accent-2: #2dd4bf;
+      --accent-3: #f43f5e;
+      --text: #eef2ff;
+      --muted: #9aa6c1;
+      --muted-2: #6b7a93;
+      --shadow: 0 18px 35px rgba(6, 12, 20, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 45%),
+                  radial-gradient(circle at 20% 20%, rgba(255, 143, 31, 0.16), transparent 38%),
+                  radial-gradient(circle at bottom left, rgba(244, 63, 94, 0.14), transparent 40%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2.5rem clamp(1.2rem, 3vw, 3rem) 4rem;
+    }
+
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: var(--accent-2);
+      margin: 0 0 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #0b0f14;
+      background: linear-gradient(120deg, var(--accent), #facc15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 20px rgba(255, 143, 31, 0.3);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .kpi-card {
+      background: linear-gradient(160deg, rgba(21, 29, 41, 0.9), rgba(27, 38, 53, 0.7));
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-value {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .kpi-label {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: rgba(21, 29, 41, 0.85);
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .meta-item {
+      background: rgba(15, 22, 33, 0.9);
+      border: 1px solid rgba(42, 58, 82, 0.6);
+      border-radius: 0.9rem;
+      padding: 1rem;
+    }
+
+    .meta-label {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.65rem;
+      color: var(--muted-2);
+    }
+
+    .meta-value {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .list {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .list-item {
+      padding: 1.1rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 22, 33, 0.9);
+      border: 1px solid rgba(42, 58, 82, 0.6);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .list-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .status-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .status-proposed {
+      background: rgba(251, 191, 36, 0.2);
+      color: #fcd34d;
+      border-color: rgba(251, 191, 36, 0.4);
+    }
+
+    .status-under_review,
+    .status-market_validated {
+      background: rgba(56, 189, 248, 0.2);
+      color: #bae6fd;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .status-team_recruiting,
+    .status-contractor_onboarding {
+      background: rgba(45, 212, 191, 0.2);
+      color: #99f6e4;
+      border-color: rgba(45, 212, 191, 0.4);
+    }
+
+    .status-soft_launch,
+    .status-live {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86efac;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .status-paused,
+    .status-rejected {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted-2);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(15, 22, 33, 0.9);
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="background-grid"></div>
+  <div class="container">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Super Admin Command Center</p>
+        <h1 id="cityTitle">City Profile</h1>
+        <p class="subtext" id="citySubtext">Market status and readiness overview.</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="superadmin-team-intake.html">Back to Expansion</a>
+        <a class="btn ghost" href="superadmin-team-applications.html">Team Applications</a>
+        <button class="btn ghost" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value" id="proposalCount">0</div>
+        <div class="kpi-label">Expansion Proposals</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="teamCount">0</div>
+        <div class="kpi-label">Team Applications</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="demandScore">N/A</div>
+        <div class="kpi-label">Demand Score</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>City Snapshot</h3>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <div class="meta-label">Status</div>
+          <div class="meta-value"><span id="cityStatus" class="status-pill">Proposed</span></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Population</div>
+          <div class="meta-value" id="cityPopulation">N/A</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Submissions</div>
+          <div class="meta-value" id="citySubmissions">0</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Primary Proposer</div>
+          <div class="meta-value" id="cityPrimary">N/A</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Priority</div>
+          <div class="meta-value" id="cityPriority">Not set</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Roles Proposed</div>
+          <div class="meta-value" id="cityRoles">N/A</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Trades In Demand</div>
+          <div class="meta-value" id="cityTrades">N/A</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Notes</div>
+          <div class="meta-value" id="cityNotes">N/A</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Expansion Proposals</h3>
+      <div class="list" id="proposalList"></div>
+    </section>
+
+    <section class="card">
+      <h3>Team Applications</h3>
+      <div class="list" id="teamList"></div>
+    </section>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/expansion-store.js"></script>
+  <script>
+    const user = getUser();
+    if (!user || user.role !== 'super_admin') {
+      window.location.href = '../admin/admin-login.html';
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const cityName = params.get('city') || '';
+    const cityRegion = params.get('region') || '';
+
+    const displayName = cityRegion ? `${cityName}, ${cityRegion}` : cityName || 'City Profile';
+    document.getElementById('cityTitle').textContent = displayName;
+    const subtext = document.getElementById('citySubtext');
+    if (subtext) {
+      subtext.textContent = displayName
+        ? `Viewing ${displayName} expansion readiness.`
+        : 'Market status and readiness overview.';
+    }
+
+    const MOCK_CITIES = [
+      {
+        id: 'city-001',
+        name: 'Hamilton',
+        region: 'ON',
+        population: '550,000',
+        submissions_count: 8,
+        primary_proposer: 'Sarah Chen',
+        proposed_roles: ['Local Admin', 'Contractor Recruiter'],
+        demand_score: 85,
+        status: 'under_review',
+        priority: 'high',
+        trade_coverage: { plumbing: true, electrical: true, hvac: true },
+        created_at: '2025-01-15',
+        notes: 'Strong industrial base, aging housing stock'
+      }
+    ];
+
+    function normalizeCityKey(city, region) {
+      return `${String(city || '').trim().toLowerCase()}__${String(region || '').trim().toLowerCase()}`;
+    }
+
+    function uniqueValues(values) {
+      return Array.from(new Set(values.filter(Boolean)));
+    }
+
+    function buildCitiesFromProposals(proposals) {
+      const grouped = new Map();
+      proposals.forEach(proposal => {
+        const city = proposal.location?.city || proposal.city_name || proposal.city || 'Unknown';
+        const region = proposal.location?.region || proposal.region || '';
+        const key = normalizeCityKey(city, region);
+        const existing = grouped.get(key) || {
+          id: key,
+          name: city,
+          region: region,
+          population: proposal.location?.population || proposal.population || 'N/A',
+          submissions_count: 0,
+          primary_proposer: proposal.contact?.name || proposal.contact_name || proposal.name || 'N/A',
+          proposed_roles: [],
+          demand_score: 0,
+          status: proposal.status || 'proposed',
+          priority: null,
+          trade_coverage: {},
+          created_at: proposal.created_at || proposal.submitted_at || new Date().toISOString(),
+          notes: proposal.market_insights?.why_broken || proposal.notes || ''
+        };
+
+        existing.submissions_count += 1;
+        existing.proposed_roles = uniqueValues(existing.proposed_roles.concat(proposal.roles || []));
+        const trades = proposal.trades_in_demand || [];
+        trades.forEach(trade => {
+          existing.trade_coverage[trade] = true;
+        });
+        existing.notes = existing.notes || proposal.market_insights?.why_broken || '';
+        grouped.set(key, existing);
+      });
+
+      const cities = Array.from(grouped.values());
+      cities.forEach(city => {
+        city.demand_score = Math.min(100, 40 + city.submissions_count * 10);
+      });
+      return cities;
+    }
+
+    function mergeCities(baseCities, proposalCities) {
+      const merged = new Map();
+      baseCities.forEach(city => {
+        merged.set(normalizeCityKey(city.name, city.region), { ...city });
+      });
+      proposalCities.forEach(city => {
+        const key = normalizeCityKey(city.name, city.region);
+        if (!merged.has(key)) {
+          merged.set(key, { ...city });
+          return;
+        }
+        const existing = merged.get(key);
+        existing.submissions_count = (existing.submissions_count || 0) + (city.submissions_count || 0);
+        existing.primary_proposer = existing.primary_proposer || city.primary_proposer;
+        existing.proposed_roles = uniqueValues([...(existing.proposed_roles || []), ...(city.proposed_roles || [])]);
+        existing.trade_coverage = { ...(existing.trade_coverage || {}), ...(city.trade_coverage || {}) };
+        existing.notes = existing.notes || city.notes;
+        existing.population = existing.population || city.population;
+        merged.set(key, existing);
+      });
+      return Array.from(merged.values());
+    }
+
+    function formatStatus(status) {
+      const map = {
+        proposed: 'Proposed',
+        under_review: 'Under Review',
+        market_validated: 'Market Validated',
+        team_recruiting: 'Recruiting Team',
+        contractor_onboarding: 'Onboarding Contractors',
+        soft_launch: 'Soft Launch',
+        live: 'Live',
+        paused: 'Paused',
+        rejected: 'Rejected'
+      };
+      if (map[status]) return map[status];
+      const cleaned = String(status || '').replace(/_/g, ' ').trim();
+      if (!cleaned) return 'Proposed';
+      return cleaned.replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+    function matchesCity(proposal) {
+      const proposalCity = proposal.location?.city || proposal.city_name || proposal.city || '';
+      const proposalRegion = proposal.location?.region || proposal.region || '';
+      const cityMatch = proposalCity.toLowerCase() === cityName.toLowerCase();
+      if (!cityRegion) return cityMatch;
+      return cityMatch && proposalRegion.toLowerCase() === cityRegion.toLowerCase();
+    }
+
+    function matchesTeam(app) {
+      const proposalCity = app.city_name || '';
+      return proposalCity.toLowerCase() === cityName.toLowerCase();
+    }
+
+    function loadStoredCityMeta() {
+      try {
+        const raw = sessionStorage.getItem('expansion_city_profile');
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if ((parsed.name || '').toLowerCase() !== cityName.toLowerCase()) return null;
+        if (cityRegion && (parsed.region || '').toLowerCase() !== cityRegion.toLowerCase()) return null;
+        return parsed;
+      } catch (error) {
+        console.warn('Unable to read stored city profile.', error);
+        return null;
+      }
+    }
+
+    function renderCitySnapshot(city, proposals) {
+      const roles = uniqueValues(proposals.flatMap(p => p.roles || []));
+      const trades = uniqueValues(proposals.flatMap(p => p.trades_in_demand || []));
+      const status = city.status || proposals[0]?.status || 'proposed';
+      const demand = city.demand_score || (proposals.length ? Math.min(100, 40 + proposals.length * 10) : null);
+
+      const statusEl = document.getElementById('cityStatus');
+      statusEl.textContent = formatStatus(status);
+      statusEl.className = `status-pill status-${status}`;
+
+      document.getElementById('cityPopulation').textContent = city.population || proposals[0]?.location?.population || 'N/A';
+      document.getElementById('citySubmissions').textContent = city.submissions_count || proposals.length || 0;
+      document.getElementById('cityPrimary').textContent = city.primary_proposer || proposals[0]?.contact?.name || 'N/A';
+      document.getElementById('cityPriority').textContent = city.priority || 'Not set';
+      document.getElementById('cityRoles').textContent = roles.length ? roles.join(', ') : 'N/A';
+      document.getElementById('cityTrades').textContent = trades.length ? trades.join(', ') : 'N/A';
+      document.getElementById('cityNotes').textContent = city.notes || proposals[0]?.market_insights?.why_broken || 'N/A';
+
+      document.getElementById('proposalCount').textContent = proposals.length;
+      document.getElementById('demandScore').textContent = demand ? `${demand}` : 'N/A';
+    }
+
+    function renderProposals(proposals) {
+      const list = document.getElementById('proposalList');
+      if (!proposals.length) {
+        list.innerHTML = '<div class="empty-state">No expansion proposals submitted for this city.</div>';
+        return;
+      }
+
+      list.innerHTML = proposals.map(proposal => {
+        const status = proposal.status || 'pending_review';
+        const roles = (proposal.roles || []).join(', ') || 'N/A';
+        const trades = (proposal.trades_in_demand || []).join(', ') || 'N/A';
+        return `
+          <div class="list-item">
+            <div class="list-row">
+              <div>
+                <strong>${proposal.contact?.name || proposal.contact_name || 'Unknown Proposer'}</strong>
+                <div class="muted">${proposal.contact?.email || proposal.contact_email || 'No email'}${proposal.contact?.phone ? ` / ${proposal.contact.phone}` : ''}</div>
+              </div>
+              <span class="status-pill status-${status}">${formatStatus(status)}</span>
+            </div>
+            <div class="muted">Commitment: ${proposal.commitment_level || 'N/A'}</div>
+            <div class="muted">Roles: ${roles}</div>
+            <div class="muted">Trades in demand: ${trades}</div>
+            ${proposal.market_insights?.why_broken ? `<div class="muted">Why this city: ${proposal.market_insights.why_broken}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTeamApplications(applications) {
+      const list = document.getElementById('teamList');
+      if (!applications.length) {
+        list.innerHTML = '<div class="empty-state">No team applications submitted for this city.</div>';
+        return;
+      }
+
+      list.innerHTML = applications.map(app => {
+        const status = app.status || 'pending_review';
+        const roles = (app.roles || []).join(', ') || 'N/A';
+        return `
+          <div class="list-item">
+            <div class="list-row">
+              <div>
+                <strong>${app.name || 'Unknown Applicant'}</strong>
+                <div class="muted">${app.email || 'No email'}${app.phone ? ` / ${app.phone}` : ''}</div>
+              </div>
+              <span class="status-pill status-${status}">${formatStatus(status)}</span>
+            </div>
+            <div class="muted">Roles: ${roles}</div>
+            ${app.why ? `<div class="muted">Why: ${app.why}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadCityProfile() {
+      const storedCity = loadStoredCityMeta();
+      let proposals = [];
+
+      try {
+        const response = await api.get('/admin/expansion/proposals');
+        const apiProposals = response.proposals || [];
+        proposals = expansionStore ? expansionStore.mergeProposals(apiProposals) : apiProposals;
+      } catch (error) {
+        console.error('Error loading expansion proposals:', error);
+        proposals = expansionStore ? expansionStore.getCachedProposals() : [];
+      }
+
+      const proposalCities = buildCitiesFromProposals(proposals);
+      const mergedCities = mergeCities(MOCK_CITIES, proposalCities);
+      const fallbackCity = mergedCities.find(c => normalizeCityKey(c.name, c.region) === normalizeCityKey(cityName, cityRegion));
+      const city = storedCity || fallbackCity || { name: cityName, region: cityRegion };
+      const cityProposals = proposals.filter(matchesCity);
+
+      renderCitySnapshot(city, cityProposals);
+      renderProposals(cityProposals);
+
+      try {
+        const response = await api.get('/admin/team/applications');
+        const applications = (response.applications || []).filter(matchesTeam);
+        document.getElementById('teamCount').textContent = applications.length;
+        renderTeamApplications(applications);
+      } catch (error) {
+        console.error('Error loading team applications:', error);
+        document.getElementById('teamCount').textContent = '0';
+        renderTeamApplications([]);
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      logout();
+    });
+
+    loadCityProfile();
+  </script>
+</body>
+</html>

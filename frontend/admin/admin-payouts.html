@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Payouts | FirstClick Admin</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --amber-500: #f59e0b;
+      --red-500: #ef4444;
+      --blue-500: #3b82f6;
+      --border-radius: 10px;
+      --shadow-md: 0 10px 20px rgba(15, 23, 42, 0.2);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h1: clamp(22px, 5vw, 40px);
+      --text-h2: clamp(18px, 4vw, 30px);
+      --text-h3: clamp(16px, 3.5vw, 24px);
+      --text-body: clamp(14px, 2.5vw, 16px);
+      --text-small: clamp(12px, 2vw, 14px);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-display);
+      background: linear-gradient(135deg, var(--slate-950), var(--slate-900));
+      color: var(--slate-100);
+      min-height: 100vh;
+      font-size: var(--text-body);
+    }
+
+    .header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      padding: 35px 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      font-family: 'Space Grotesk', var(--font-display);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: inherit;
+    }
+
+    .logo-img {
+      height: clamp(36px, 4vw, 52px);
+      width: clamp(36px, 4vw, 52px);
+      object-fit: contain;
+      display: block;
+    }
+
+    .logo-img.logo-light {
+      transform: scale(1.18) scaleX(0.9);
+      transform-origin: left center;
+    }
+
+    .logo-text {
+      font-family: 'Space Grotesk', var(--font-display);
+      font-weight: 700;
+      font-size: clamp(22px, 2.4vw, 32px);
+      line-height: 1;
+    }
+
+    html.theme-dark .logo-text {
+      color: #21c58c;
+    }
+
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 2.5rem 0 2rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: #2dd4bf;
+      margin: 0 0 0.75rem;
+    }
+
+    .super-header h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: #9aa6c1;
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    .admin-page-select {
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.6rem;
+      border: 1px solid var(--slate-700);
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--slate-100);
+      font-weight: 600;
+      font-size: 0.85rem;
+      min-width: 180px;
+    }
+
+    .site-footer {
+      margin-top: 3rem;
+      padding: 1.5rem 2rem 2.5rem;
+      border-top: 1px solid var(--slate-700);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .site-footer .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .site-footer .footer-text {
+      color: var(--slate-400);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .nav {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      padding: 0.625rem 1.5rem;
+      border-radius: 999px;
+      background: var(--slate-800);
+      color: var(--slate-100);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid var(--slate-700);
+      transition: 0.2s ease;
+    }
+
+    .nav-link:hover {
+      border-color: var(--blue-500);
+      color: var(--slate-50);
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue-500), var(--emerald-500));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    h1 {
+      font-size: var(--text-h1);
+      font-weight: 800;
+    }
+
+    h2 {
+      font-size: var(--text-h2);
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: var(--text-h3);
+      line-height: 1.25;
+    }
+
+    .small {
+      font-size: var(--text-small);
+    }
+
+    .header-meta {
+      color: var(--slate-400);
+      font-size: 0.9rem;
+      margin-top: 0.2rem;
+    }
+
+    .finance-nav {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin: 1rem 0 2rem;
+    }
+
+    .finance-nav a {
+      text-decoration: none;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--slate-700);
+      color: var(--slate-200);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .finance-nav a.active {
+      background: var(--blue-500);
+      border-color: var(--blue-500);
+      color: white;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+      font-family: var(--font-display);
+    }
+
+    .btn-primary { background: var(--blue-500); color: white; }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-secondary { background: var(--slate-700); color: white; }
+    .btn-secondary:hover { filter: brightness(1.1); }
+    .btn-ghost { background: transparent; color: var(--slate-200); border: 1px solid var(--slate-700); }
+    .btn-ghost:hover { background: var(--slate-800); }
+    .btn-small { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
+
+    /* Theme Toggle Switch */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--slate-700);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .theme-toggle-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .theme-toggle-slider {
+      width: 38px;
+      height: 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #0ea5e9, #10b981);
+      position: relative;
+      transition: background 0.2s ease;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+    }
+
+    .theme-toggle-slider::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      transition: transform 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .theme-toggle-text {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--slate-100);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .theme-toggle-input:checked + .theme-toggle-slider {
+      background: linear-gradient(135deg, #0ea5e9, #10b981);
+    }
+
+    .theme-toggle-input:checked + .theme-toggle-slider::after {
+      transform: translateX(18px);
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .summary-card {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .summary-label { color: var(--slate-400); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .summary-value { font-size: 1.6rem; font-weight: 800; margin-top: 0.5rem; font-family: var(--font-mono); }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-chip {
+      border: 1px solid var(--slate-700);
+      background: var(--slate-800);
+      color: var(--slate-200);
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .filter-chip.active {
+      background: var(--blue-500);
+      border-color: var(--blue-500);
+      color: white;
+    }
+
+    .contractor-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .contractor-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .contractor-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .contractor-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .contractor-meta {
+      color: var(--slate-400);
+      font-size: 0.9rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald-500);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .contractor-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--slate-200);
+    }
+
+    .detail-label { color: var(--slate-400); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .detail-value { font-weight: 600; margin-top: 0.3rem; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid var(--slate-700); }
+    th { color: var(--slate-400); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    .hide-mobile { display: block !important; }
+    .show-mobile { display: none !important; }
+
+    .card-list {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .data-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+    }
+
+    .data-card .card-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .data-card .card-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .data-card .card-meta {
+      color: var(--slate-400);
+      font-size: 0.8rem;
+      margin-top: 0.35rem;
+    }
+
+    .card-kv {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.85rem;
+    }
+
+    .card-kv span {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--slate-400);
+    }
+
+    .card-kv b {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-top: 0.2rem;
+    }
+
+    .empty-card {
+      padding: 0.9rem;
+      border: 1px dashed var(--slate-700);
+      border-radius: var(--border-radius);
+      color: var(--slate-400);
+      font-size: 0.85rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .status-ready { background: rgba(16, 185, 129, 0.2); color: var(--emerald-500); }
+    .status-processing { background: rgba(59, 130, 246, 0.2); color: var(--blue-500); }
+    .status-paid { background: rgba(16, 185, 129, 0.2); color: var(--emerald-500); }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: var(--slate-900);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .modal-content h3 { margin-bottom: 1rem; }
+
+    .form-row { display: grid; gap: 1rem; margin-bottom: 1rem; }
+    .input {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--slate-700);
+      background: var(--slate-800);
+      color: var(--slate-100);
+    }
+
+    .empty-state {
+      padding: 2rem;
+      border: 1px dashed var(--slate-700);
+      border-radius: var(--border-radius);
+      text-align: center;
+      color: var(--slate-400);
+    }
+
+    /* ==========================================================================
+       LIGHT MODE OVERRIDES (match main site theme)
+       ========================================================================== */
+
+    html:not(.theme-dark) body {
+      background: linear-gradient(to bottom right, #fffbeb, #fed7aa, #fecaca);
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .header {
+      background: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) .header-icon {
+      background: linear-gradient(135deg, #f97316, #dc2626);
+      color: white;
+    }
+
+    html:not(.theme-dark) h1 {
+      color: #111827;
+    }
+
+    html:not(.theme-dark) .header-meta,
+    html:not(.theme-dark) .summary-label,
+    html:not(.theme-dark) .contractor-meta {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) .summary-card,
+    html:not(.theme-dark) .contractor-card {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    html:not(.theme-dark) .finance-nav a {
+      border-color: #e5e7eb;
+      color: #1f2937;
+      background: white;
+    }
+
+    html:not(.theme-dark) .finance-nav a.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: white;
+    }
+
+    html:not(.theme-dark) .filter-chip {
+      background: #f3f4f6;
+      border-color: #e5e7eb;
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .filter-chip.active {
+      background: #f97316;
+      border-color: #f97316;
+      color: white;
+    }
+
+    html:not(.theme-dark) .nav-link {
+      background: white;
+      color: #111827;
+      border-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .nav-link:hover {
+      border-color: #2563eb;
+      color: #111827;
+    }
+
+    html:not(.theme-dark) .admin-page-select {
+      background: white;
+      color: #1f2937;
+      border-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .site-footer {
+      background: rgba(255, 255, 255, 0.8);
+      border-top-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .site-footer .footer-text {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) table {
+      color: #111827;
+    }
+
+    html:not(.theme-dark) th {
+      background: #f9fafb;
+      color: #111827;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) td {
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    html:not(.theme-dark) .pill {
+      background: rgba(249, 115, 22, 0.15);
+      color: #9a3412;
+      border-color: rgba(249, 115, 22, 0.35);
+    }
+
+    html:not(.theme-dark) .btn-secondary {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .btn-ghost {
+      color: #1f2937;
+      border-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .theme-toggle {
+      background: #f3f4f6;
+      border-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) .theme-toggle-text {
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .theme-toggle-slider {
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+    }
+
+    html:not(.theme-dark) .empty-state {
+      color: #6b7280;
+      border-color: #e5e7eb;
+      background: white;
+    }
+
+    html:not(.theme-dark) .data-card {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    html:not(.theme-dark) .data-card .card-meta,
+    html:not(.theme-dark) .card-kv span {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) .empty-card {
+      border-color: #e5e7eb;
+      color: #6b7280;
+      background: white;
+    }
+
+    @media (max-width: 768px) {
+      .header { padding: 1rem 1.25rem; }
+      .header-content { flex-direction: column; align-items: flex-start; }
+      .header-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; gap: 0.5rem; }
+      .admin-page-select { width: 100%; min-width: 0; }
+      .site-footer .footer-content { flex-direction: column; align-items: flex-start; }
+      .header-actions .btn { padding: 0.5rem 0.75rem; font-size: 0.8rem; border-radius: 0.6rem; }
+      h1 { font-size: 1.35rem; }
+      main { margin: 1.5rem auto; padding: 0 1rem 4rem; }
+      .contractor-details { grid-template-columns: 1fr; }
+      .actions { flex-direction: column; align-items: stretch; }
+      .hide-mobile { display: none !important; }
+      .show-mobile { display: block !important; }
+    }
+
+    @media (min-width: 769px) {
+      .show-mobile { display: none !important; }
+    }
+  </style>
+  <link rel="stylesheet" href="../css/admin-unified.css">
+</head>
+<body class="compact-header admin-theme">
+  <div class="container admin-header-shell">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Admin Command Center</p>
+        <h1>Contractor Payouts</h1>
+        <p class="subtext">Process contractor payments and manage schedules.</p>
+      </div>
+      <div class="header-actions">
+        <a href="admin-dashboard.html" class="btn btn-secondary btn-small">← Back to Admin</a>
+        <select class="admin-page-select" aria-label="Admin pages">
+          <option value="">Admin Pages</option>
+          <option value="admin-dashboard.html">Dashboard</option>
+          <option value="admin-jobs.html">Jobs</option>
+          <option value="admin-contractors.html">Contractors</option>
+          <option value="admin-revenue.html">Finance Overview</option>
+          <option value="admin-payouts.html">Payouts</option>
+          <option value="admin-payments-history.html">Payments History</option>
+          <option value="admin-contractor-profile.html">Contractor Profile</option>
+          <option value="admin-login.html">Admin Login</option>
+        </select>
+        <button onclick="logout()" class="btn btn-small">Logout</button>
+      </div>
+    </header>
+  </div>
+
+  <main>
+    <nav class="finance-nav" aria-label="Finance">
+      <a href="admin-revenue.html">Overview</a>
+      <a href="admin-payouts.html" class="active">Payouts</a>
+      <a href="admin-payments-history.html">Payments History</a>
+    </nav>
+    <section class="summary-grid" id="summary-grid"></section>
+
+    <section>
+      <div class="filters" id="filter-bar"></div>
+      <div class="table-container">
+        <div class="hide-mobile">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="sortTable('name')">Contractor</th>
+                <th onclick="sortTable('pending_jobs')">Pending Jobs</th>
+                <th onclick="sortTable('total_pending')">Total Pending</th>
+                <th onclick="sortTable('tier')">Tier</th>
+                <th onclick="sortTable('schedule')">Payment Schedule</th>
+                <th onclick="sortTable('next_payment')">Next Payment</th>
+              </tr>
+            </thead>
+            <tbody id="payouts-table">
+              <tr>
+                <td colspan="6" class="loading">
+                  <div class="spinner"></div>
+                  <div>Loading contractors with pending payouts...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="payouts-cards" class="card-list show-mobile"></div>
+      </div>
+      <div class="empty-state" id="empty-state" style="display:none;">No contractors with pending payouts.</div>
+    </section>
+  </main>
+
+  <div class="modal" id="payment-modal">
+    <div class="modal-content">
+      <h3>Process Payment</h3>
+      <div id="payment-modal-body"></div>
+      <div class="actions" style="justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="closePaymentModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmPayment()">Confirm Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="schedule-modal">
+    <div class="modal-content">
+      <h3>Update Payment Schedule</h3>
+      <div class="form-row">
+        <select id="schedule-select" class="input">
+          <option value="per-job">Per Job</option>
+          <option value="weekly">Weekly</option>
+          <option value="biweekly">Bi-Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+      <div class="actions" style="justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="closeScheduleModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSchedule()">Save Schedule</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/admin-payouts.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-nav.js"></script>
+  <script src="../js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

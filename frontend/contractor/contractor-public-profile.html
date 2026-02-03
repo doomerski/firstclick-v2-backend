@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Profile - FirstClick</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --border-radius: 12px;
+      --shadow-lg: 0 18px 30px rgba(15, 23, 42, 0.25);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-display);
+      background: linear-gradient(135deg, var(--slate-950), var(--slate-900));
+      color: var(--slate-100);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      padding: 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--emerald-500);
+      text-decoration: none;
+    }
+
+    .nav-link {
+      padding: 0.625rem 1.5rem;
+      border-radius: 999px;
+      background: var(--slate-800);
+      color: var(--slate-100);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid var(--slate-700);
+      transition: 0.2s ease;
+    }
+
+    .nav-link:hover {
+      border-color: var(--emerald-500);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .profile-section {
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--slate-400);
+      text-decoration: none;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--emerald-500);
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+      border-radius: var(--border-radius);
+      padding: 3rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .profile-title {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    .profile-subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--emerald-500);
+      margin-bottom: 0.5rem;
+      font-family: var(--font-mono);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+
+    .card {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--slate-100);
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--slate-700);
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 8px;
+    }
+
+    .info-label {
+      color: var(--slate-400);
+      font-weight: 600;
+    }
+
+    .info-value {
+      color: var(--slate-200);
+      font-weight: 600;
+    }
+
+    .trade-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--slate-700);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: var(--slate-600);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--slate-400);
+    }
+
+    .spinner {
+      border: 3px solid var(--slate-700);
+      border-top: 3px solid var(--emerald-500);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald-500);
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    @media (max-width: 968px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-title {
+        font-size: 2rem;
+      }
+
+      .profile-subtitle {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+  <script src="../js/notifications.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="../index.html" class="logo">FirstClick</a>
+        <div style="display: flex; gap: 0.75rem;">
+          <a href="contractor-directory.html" class="nav-link">Find Contractors</a>
+          <a href="contractor-signup.html" class="nav-link">Become a Contractor</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="loadingState" class="loading">
+    <div class="spinner"></div>
+    <p>Loading contractor profile...</p>
+  </div>
+
+  <section id="profileContent" class="profile-section" style="display: none;">
+    <a href="contractor-directory.html" class="back-link">← Back to Contractors</a>
+    
+    <div class="profile-header">
+      <div class="profile-title" id="contractorName">Loading...</div>
+      <div class="profile-subtitle" id="businessName"></div>
+      <div class="profile-meta">
+        <div class="meta-item">
+          <span>📧</span>
+          <span id="contractorEmail">-</span>
+        </div>
+        <div class="meta-item">
+          <span>📱</span>
+          <span id="contractorPhone">-</span>
+        </div>
+        <div class="meta-item">
+          <span class="verified-badge">✓ Verified & Licensed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="experienceYears">0</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="completedJobs">0</div>
+        <div class="stat-label">Completed Jobs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="rating">5.0</div>
+        <div class="stat-label">Rating</div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div>
+        <div class="card">
+          <h2 class="card-title">About</h2>
+          <p id="contractorBio" style="color: var(--slate-300); line-height: 1.8;">
+            This is a verified professional contractor on the FirstClick platform.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Specialties & Services</h2>
+          <div id="tradesList" style="margin-bottom: 1rem;">
+            <!-- Trade badges will be inserted here -->
+          </div>
+          <div id="servicesList" style="color: var(--slate-300);">
+            <!-- Services will be listed here -->
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2 class="card-title">Contact Information</h2>
+          <div class="info-grid">
+            <div class="info-row">
+              <span class="info-label">Email</span>
+              <span class="info-value" id="emailValue">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Phone</span>
+              <span class="info-value" id="phoneValue">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Primary Trade</span>
+              <span class="info-value" id="primaryTradeValue">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Experience</span>
+              <span class="info-value" id="experienceValue">-</span>
+            </div>
+          </div>
+          
+          <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem;">
+            <a href="#" class="btn" id="contactBtn">📧 Send Message</a>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Print Profile</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Get contractor ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const contractorId = params.get('id');
+
+    // Trade name mapping
+    const tradeNames = {
+      'plumbing': 'Plumbing',
+      'electrical': 'Electrical',
+      'hvac': 'HVAC',
+      'appliance_repair': 'Appliance Repair',
+      'construction': 'Construction & Renovation',
+      'roofing': 'Roofing & Exterior',
+      'landscaping': 'Outdoor & Property Services',
+      'security': 'Security & Smart Systems',
+      'cleaning': 'Cleaning & Restoration',
+      'pest_control': 'Pest & Wildlife Control',
+      'moving': 'Moving & Junk Removal',
+      'handyman': 'Handyman & Specialty'
+    };
+
+    // Mock contractor data - in production, fetch from API
+    const mockContractors = {
+      'contractor-001': {
+        id: 'contractor-001',
+        legal_name: 'John Smith',
+        business_name: 'Smith Plumbing Co.',
+        email: 'john@smithplumbing.com',
+        phone: '+1 416-555-1001',
+        primary_trade: 'plumbing',
+        experience_years: 12,
+        completed_jobs: 347,
+        rating: 4.9,
+        bio: 'Licensed master plumber with over 12 years of experience serving the Greater Toronto Area. Specializing in residential and commercial plumbing repairs, installations, and emergency services. Available 24/7 for urgent plumbing needs.',
+        services: ['Emergency Repairs', 'Pipe Installation', 'Drain Cleaning', 'Water Heater Installation', 'Bathroom Renovations', 'Leak Detection'],
+        vetting_status: 'APPROVED_ACTIVE'
+      },
+      'contractor-002': {
+        id: 'contractor-002',
+        legal_name: 'Sarah Johnson',
+        business_name: 'Sparks Electric',
+        email: 'sarah@sparkselectric.com',
+        phone: '+1 416-555-1002',
+        primary_trade: 'electrical',
+        experience_years: 8,
+        completed_jobs: 215,
+        rating: 5.0,
+        bio: 'Licensed electrician providing safe, reliable electrical services. From simple repairs to complete rewiring projects, I ensure all work meets or exceeds electrical codes and safety standards.',
+        services: ['Panel Upgrades', 'Lighting Installation', 'Electrical Repairs', 'EV Charger Installation', 'Smart Home Wiring', 'Code Compliance'],
+        vetting_status: 'APPROVED_ACTIVE'
+      },
+      'contractor-003': {
+        id: 'contractor-003',
+        legal_name: 'Mike Chen',
+        business_name: 'Comfort HVAC Solutions',
+        email: 'mike@comforthvac.com',
+        phone: '+1 416-555-1003',
+        primary_trade: 'hvac',
+        experience_years: 15,
+        completed_jobs: 512,
+        rating: 4.8,
+        bio: 'Certified HVAC technician with 15 years of experience in heating, cooling, and ventilation systems. Committed to energy-efficient solutions that keep your home comfortable year-round.',
+        services: ['AC Installation', 'Furnace Repair', 'Duct Cleaning', 'Air Quality Testing', 'Thermostat Installation', 'Maintenance Plans'],
+        vetting_status: 'APPROVED_ACTIVE'
+      },
+      'contractor-004': {
+        id: 'contractor-004',
+        legal_name: 'Lisa Martinez',
+        business_name: 'Fix-It Appliance Repair',
+        email: 'lisa@fixitappliances.com',
+        phone: '+1 416-555-1004',
+        primary_trade: 'appliance_repair',
+        experience_years: 10,
+        completed_jobs: 423,
+        rating: 4.9,
+        bio: 'Expert appliance repair technician specializing in all major brands. Fast, reliable service for refrigerators, washers, dryers, ovens, and more. Same-day service available.',
+        services: ['Refrigerator Repair', 'Washer/Dryer Repair', 'Oven Repair', 'Dishwasher Repair', 'Microwave Repair', 'Preventive Maintenance'],
+        vetting_status: 'APPROVED_ACTIVE'
+      }
+    };
+
+    async function loadContractor() {
+      if (!contractorId) {
+        notify.error('No contractor ID provided');
+        window.location.href = 'contractor-directory.html';
+        return;
+      }
+
+      try {
+        // In production: const response = await api.get(`/contractors/${contractorId}`);
+        // const contractor = response.contractor;
+        
+        // For now, use mock data
+        const contractor = mockContractors[contractorId];
+        
+        if (!contractor) {
+          throw new Error('Contractor not found');
+        }
+
+        renderContractor(contractor);
+        
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('profileContent').style.display = 'block';
+      } catch (error) {
+        console.error('Error loading contractor:', error);
+        notify.error('Error loading contractor profile: ' + error.message);
+        window.location.href = 'contractor-directory.html';
+      }
+    }
+
+    function renderContractor(contractor) {
+      // Header
+      document.getElementById('contractorName').textContent = contractor.legal_name;
+      document.getElementById('businessName').textContent = contractor.business_name || 'Independent Contractor';
+      document.getElementById('contractorEmail').textContent = contractor.email;
+      document.getElementById('contractorPhone').textContent = contractor.phone;
+
+      // Stats
+      document.getElementById('experienceYears').textContent = contractor.experience_years;
+      document.getElementById('completedJobs').textContent = contractor.completed_jobs || '0';
+      document.getElementById('rating').textContent = contractor.rating ? contractor.rating.toFixed(1) : '5.0';
+
+      // Bio
+      document.getElementById('contractorBio').textContent = contractor.bio || 'This is a verified professional contractor on the FirstClick platform.';
+
+      // Trades
+      const tradesList = document.getElementById('tradesList');
+      const tradeName = tradeNames[contractor.primary_trade] || contractor.primary_trade;
+      tradesList.innerHTML = `<span class="trade-badge">${tradeName}</span>`;
+
+      // Services
+      const servicesList = document.getElementById('servicesList');
+      if (contractor.services && contractor.services.length > 0) {
+        servicesList.innerHTML = '<ul style="list-style: none; padding: 0;">' +
+          contractor.services.map(service => `<li style="padding: 0.5rem 0; border-bottom: 1px solid var(--slate-700);">✓ ${service}</li>`).join('') +
+          '</ul>';
+      } else {
+        servicesList.innerHTML = '<p>No services listed</p>';
+      }
+
+      // Contact info sidebar
+      document.getElementById('emailValue').textContent = contractor.email;
+      document.getElementById('phoneValue').textContent = contractor.phone;
+      document.getElementById('primaryTradeValue').textContent = tradeName;
+      document.getElementById('experienceValue').textContent = `${contractor.experience_years} years`;
+
+      // Contact button
+      document.getElementById('contactBtn').href = `mailto:${contractor.email}?subject=FirstClick Service Request`;
+    }
+
+    // Load contractor on page load
+    loadContractor();
+  </script>
+  <!-- API Integration Scripts -->
+  <script src="../backend/contractor-public-profile-api.js"></script>
+</body>
+</html>

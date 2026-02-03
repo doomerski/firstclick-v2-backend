@@ -1,0 +1,703 @@
+{
+  "version": "1.0",
+  "globalRules": {
+    "urgencyMultipliers": {
+      "flexible": 0.9,
+      "standard": 1.0,
+      "same_day": 1.25,
+      "emergency": 1.6
+    },
+    "pricingModes": [
+      "fixed_range",
+      "quote_only",
+      "inspection_fee"
+    ]
+  },
+  "categories": [
+    {
+      "id": 1,
+      "name": "Plumbing",
+      "services": [
+        {
+          "id": 1,
+          "name": "Emergency plumbing",
+          "pricing": {
+            "min": 250,
+            "max": 600
+          }
+        },
+        {
+          "id": 2,
+          "name": "Leak detection & repair",
+          "pricing": {
+            "min": 150,
+            "max": 350
+          }
+        },
+        {
+          "id": 3,
+          "name": "Drain cleaning & unclogging",
+          "pricing": {
+            "min": 150,
+            "max": 300
+          }
+        },
+        {
+          "id": 4,
+          "name": "Pipe repair & replacement",
+          "pricing": {
+            "min": 250,
+            "max": 700
+          }
+        },
+        {
+          "id": 5,
+          "name": "Faucet & fixture installation",
+          "pricing": {
+            "min": 120,
+            "max": 250
+          }
+        },
+        {
+          "id": 6,
+          "name": "Toilet repair & installation",
+          "pricing": {
+            "min": 150,
+            "max": 450
+          }
+        },
+        {
+          "id": 7,
+          "name": "Water heater (tank)",
+          "pricing": {
+            "min": 300,
+            "max": 900
+          }
+        },
+        {
+          "id": 8,
+          "name": "Tankless water heater",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 9,
+          "name": "Sump pump install/repair",
+          "pricing": {
+            "min": 350,
+            "max": 1000
+          }
+        },
+        {
+          "id": 10,
+          "name": "Frozen pipe thawing",
+          "pricing": {
+            "min": 250,
+            "max": 600
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Electrical",
+      "services": [
+        {
+          "id": 20,
+          "name": "Emergency electrical repair",
+          "pricing": {
+            "min": 250,
+            "max": 650
+          }
+        },
+        {
+          "id": 21,
+          "name": "Panel upgrades & replacements",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 22,
+          "name": "Circuit breaker repair",
+          "pricing": {
+            "min": 180,
+            "max": 400
+          }
+        },
+        {
+          "id": 23,
+          "name": "Outlet & switch installation",
+          "pricing": {
+            "min": 120,
+            "max": 300
+          }
+        },
+        {
+          "id": 24,
+          "name": "Lighting installation",
+          "pricing": {
+            "min": 150,
+            "max": 350
+          }
+        },
+        {
+          "id": 25,
+          "name": "EV charger installation",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 26,
+          "name": "Smart home wiring",
+          "pricing": {
+            "min": 180,
+            "max": 450
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "HVAC",
+      "services": [
+        {
+          "id": 40,
+          "name": "Furnace repair",
+          "pricing": {
+            "min": 250,
+            "max": 700
+          }
+        },
+        {
+          "id": 41,
+          "name": "Furnace installation",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 42,
+          "name": "Air conditioning repair",
+          "pricing": {
+            "min": 250,
+            "max": 600
+          }
+        },
+        {
+          "id": 43,
+          "name": "Air conditioning installation",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 44,
+          "name": "Duct cleaning",
+          "pricing": {
+            "min": 250,
+            "max": 600
+          }
+        },
+        {
+          "id": 45,
+          "name": "Thermostat installation",
+          "pricing": {
+            "min": 150,
+            "max": 350
+          }
+        },
+        {
+          "id": 46,
+          "name": "HVAC inspections / tune-ups",
+          "pricing": {
+            "min": 150,
+            "max": 300
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Appliance Repair",
+      "services": [
+        {
+          "id": 60,
+          "name": "Refrigerator repair",
+          "pricing": {
+            "min": 200,
+            "max": 500
+          }
+        },
+        {
+          "id": 61,
+          "name": "Dishwasher repair",
+          "pricing": {
+            "min": 150,
+            "max": 400
+          }
+        },
+        {
+          "id": 62,
+          "name": "Washing machine repair",
+          "pricing": {
+            "min": 150,
+            "max": 400
+          }
+        },
+        {
+          "id": 63,
+          "name": "Dryer repair",
+          "pricing": {
+            "min": 150,
+            "max": 350
+          }
+        },
+        {
+          "id": 64,
+          "name": "Garbage disposal repair",
+          "pricing": {
+            "min": 120,
+            "max": 300
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Construction & Renovation",
+      "services": [
+        {
+          "id": 80,
+          "name": "General renovations",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 81,
+          "name": "Basement finishing",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 82,
+          "name": "Kitchen renovation",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 83,
+          "name": "Bathroom renovation",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 84,
+          "name": "Framing & structural work",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 85,
+          "name": "Drywall install/repair (small jobs)",
+          "pricing": {
+            "min": 300,
+            "max": 1200
+          }
+        },
+        {
+          "id": 86,
+          "name": "Flooring installation",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 87,
+          "name": "Painting (room-level)",
+          "pricing": {
+            "min": 400,
+            "max": 1200
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Roofing & Exterior",
+      "services": [
+        {
+          "id": 90,
+          "name": "Roof inspection",
+          "pricing": {
+            "min": 200,
+            "max": 400
+          }
+        },
+        {
+          "id": 91,
+          "name": "Roof leak repair",
+          "pricing": {
+            "min": 300,
+            "max": 900
+          }
+        },
+        {
+          "id": 92,
+          "name": "Shingle replacement (partial)",
+          "pricing": {
+            "min": 500,
+            "max": 1500
+          }
+        },
+        {
+          "id": 93,
+          "name": "Full roof replacement",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 94,
+          "name": "Emergency tarping",
+          "pricing": {
+            "min": 350,
+            "max": 1000
+          }
+        },
+        {
+          "id": 95,
+          "name": "Siding repair",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 96,
+          "name": "Gutter repair / cleaning",
+          "pricing": {
+            "min": 150,
+            "max": 400
+          }
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Outdoor & Property Services",
+      "services": [
+        {
+          "id": 110,
+          "name": "Lawn care (one-time)",
+          "pricing": {
+            "min": 80,
+            "max": 200
+          }
+        },
+        {
+          "id": 111,
+          "name": "Yard cleanup",
+          "pricing": {
+            "min": 150,
+            "max": 600
+          }
+        },
+        {
+          "id": 112,
+          "name": "Tree trimming",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 113,
+          "name": "Tree removal",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 114,
+          "name": "Snow removal (one-time)",
+          "pricing": {
+            "min": 100,
+            "max": 300
+          }
+        },
+        {
+          "id": 115,
+          "name": "Fence repair",
+          "pricing": {
+            "min": 300,
+            "max": 1200
+          }
+        },
+        {
+          "id": 116,
+          "name": "Deck repair",
+          "pricing": {
+            "quote_only": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Security & Smart Systems",
+      "services": [
+        {
+          "id": 120,
+          "name": "Smart doorbell install",
+          "pricing": {
+            "min": 120,
+            "max": 300
+          }
+        },
+        {
+          "id": 121,
+          "name": "Camera installation",
+          "pricing": {
+            "min": 200,
+            "max": 600
+          }
+        },
+        {
+          "id": 122,
+          "name": "Alarm system install",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 123,
+          "name": "Access control systems",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 124,
+          "name": "Smart lock install",
+          "pricing": {
+            "min": 150,
+            "max": 350
+          }
+        },
+        {
+          "id": 125,
+          "name": "Home automation setup",
+          "pricing": {
+            "quote_only": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Cleaning & Restoration",
+      "services": [
+        {
+          "id": 130,
+          "name": "Standard home cleaning",
+          "pricing": {
+            "min": 120,
+            "max": 300
+          }
+        },
+        {
+          "id": 131,
+          "name": "Deep cleaning",
+          "pricing": {
+            "min": 250,
+            "max": 600
+          }
+        },
+        {
+          "id": 132,
+          "name": "Move-in / move-out cleaning",
+          "pricing": {
+            "min": 250,
+            "max": 600
+          }
+        },
+        {
+          "id": 133,
+          "name": "Carpet cleaning",
+          "pricing": {
+            "min": 150,
+            "max": 400
+          }
+        },
+        {
+          "id": 134,
+          "name": "Water damage restoration",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 135,
+          "name": "Mold remediation",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 136,
+          "name": "Fire/smoke cleanup",
+          "pricing": {
+            "quote_only": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Pest & Wildlife Control",
+      "services": [
+        {
+          "id": 140,
+          "name": "Pest inspection",
+          "pricing": {
+            "min": 120,
+            "max": 250
+          }
+        },
+        {
+          "id": 141,
+          "name": "One-time pest treatment",
+          "pricing": {
+            "min": 200,
+            "max": 500
+          }
+        },
+        {
+          "id": 142,
+          "name": "Ongoing pest control",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 143,
+          "name": "Wildlife removal",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 144,
+          "name": "Rodent exclusion",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 145,
+          "name": "Emergency animal removal",
+          "pricing": {
+            "min": 250,
+            "max": 600
+          }
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Moving & Junk Removal",
+      "services": [
+        {
+          "id": 150,
+          "name": "Junk removal (small load)",
+          "pricing": {
+            "min": 150,
+            "max": 350
+          }
+        },
+        {
+          "id": 151,
+          "name": "Junk removal (large load)",
+          "pricing": {
+            "min": 350,
+            "max": 800
+          }
+        },
+        {
+          "id": 152,
+          "name": "Furniture removal",
+          "pricing": {
+            "min": 150,
+            "max": 400
+          }
+        },
+        {
+          "id": 153,
+          "name": "Local moving (studio/1BR)",
+          "pricing": {
+            "min": 400,
+            "max": 1200
+          }
+        },
+        {
+          "id": 154,
+          "name": "Full household move",
+          "pricing": {
+            "quote_only": true
+          }
+        },
+        {
+          "id": 155,
+          "name": "Specialty item moving",
+          "pricing": {
+            "quote_only": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Handyman & Specialty",
+      "services": [
+        {
+          "id": 100,
+          "name": "Minor repairs",
+          "pricing": {
+            "min": 100,
+            "max": 200
+          }
+        },
+        {
+          "id": 101,
+          "name": "Furniture assembly",
+          "pricing": {
+            "min": 120,
+            "max": 300
+          }
+        },
+        {
+          "id": 102,
+          "name": "TV mounting",
+          "pricing": {
+            "min": 150,
+            "max": 350
+          }
+        },
+        {
+          "id": 103,
+          "name": "Door & lock repair",
+          "pricing": {
+            "min": 150,
+            "max": 350
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Profile - FirstClick</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --border-radius: 10px;
+      --shadow-md: 0 10px 20px rgba(15, 23, 42, 0.2);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body.profile-control {
+      font-family: var(--font-display);
+    }
+
+    body.profile-control .header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 35px 0 16px;
+    }
+
+    body.profile-control .container {
+      max-width: 1400px;
+    }
+
+    body.profile-control .dashboard {
+      padding: 2.5rem 0 4rem;
+    }
+
+    body.profile-control .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 1.25rem 0 0.75rem;
+    }
+
+    body.profile-control .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--slate-100);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    body.profile-control .section-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 999px;
+      color: var(--slate-200);
+      border: 1px solid var(--slate-700);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    body.profile-control .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    body.profile-control .kpi-card {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    body.profile-control .kpi-label {
+      font-size: 0.75rem;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    body.profile-control .kpi-value {
+      font-family: var(--font-mono);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--slate-100);
+      margin-top: 0.5rem;
+    }
+
+    body.profile-control .card {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+    }
+
+    body.profile-control .card-title {
+      color: var(--slate-100);
+    }
+
+    body.profile-control .card-subtitle {
+      color: var(--slate-400);
+    }
+
+    @media (max-width: 768px) {
+      body.profile-control .dashboard {
+        padding: 1.5rem 0 3rem;
+      }
+
+      body.profile-control .section-header {
+        margin: 1rem 0 0.6rem;
+      }
+    }
+
+    body.profile-control .label,
+    body.profile-control .help-text,
+    body.profile-control .job-meta {
+      color: var(--slate-400);
+    }
+
+    body.profile-control .input,
+    body.profile-control input,
+    body.profile-control select,
+    body.profile-control textarea {
+      background: #0f172a;
+      color: var(--slate-100);
+      border: 1px solid var(--slate-600);
+    }
+
+    body.profile-control .form-subsection {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--slate-700);
+    }
+
+    body.profile-control .multi-select > summary {
+      background: #0f172a;
+      border: 1px solid var(--slate-600);
+      color: var(--slate-100);
+      padding: 0.75rem 1rem;
+    }
+
+    body.profile-control .checkbox-label {
+      color: var(--slate-200);
+    }
+
+    body.profile-control .btn-primary {
+      background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    html:not(.theme-dark) body.profile-control {
+      background: linear-gradient(to bottom right, #fffbeb, #fed7aa, #fecaca);
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) body.profile-control .header {
+      background: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) body.profile-control .section-title {
+      color: #111827;
+    }
+
+    html:not(.theme-dark) body.profile-control .section-badge {
+      background: #f3f4f6;
+      color: #6b7280;
+      border-color: #e5e7eb;
+    }
+
+    html:not(.theme-dark) body.profile-control .kpi-card {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    html:not(.theme-dark) body.profile-control .kpi-label {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) body.profile-control .kpi-value {
+      color: #111827;
+    }
+
+
+    html:not(.theme-dark) body.profile-control .card {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    html:not(.theme-dark) body.profile-control .card-title {
+      color: #111827;
+    }
+
+    html:not(.theme-dark) body.profile-control .card-subtitle,
+    html:not(.theme-dark) body.profile-control .label,
+    html:not(.theme-dark) body.profile-control .help-text {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) body.profile-control .input,
+    html:not(.theme-dark) body.profile-control input,
+    html:not(.theme-dark) body.profile-control select,
+    html:not(.theme-dark) body.profile-control textarea,
+    html:not(.theme-dark) body.profile-control .multi-select > summary {
+      background: white;
+      color: #111827;
+      border: 1px solid #e5e7eb;
+    }
+
+    .multi-select {
+      border-radius: 0.5rem;
+    }
+
+    .multi-select > summary {
+      list-style: none;
+      cursor: pointer;
+    }
+
+    .multi-select > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .audit-log-item {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--slate-700);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    .audit-log-item:last-child {
+      border-bottom: none;
+    }
+
+    .audit-log-action {
+      font-weight: 600;
+      color: var(--slate-100);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .audit-log-timestamp {
+      color: var(--slate-400);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+    }
+
+    .audit-log-details {
+      color: var(--slate-400);
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
+    .audit-log-action-icon {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--emerald-500);
+    }
+
+  </style>
+  <script src="../js/notifications.js"></script>
+</head>
+<body class="profile-control has-bottom-nav">
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="../index.html" class="logo" style="text-decoration: none; color: inherit;">
+          <img class="logo-img logo-light" src="../assets/lightmode-logo.png" alt="FirstClick" loading="eager">
+          <img class="logo-img logo-dark" src="../assets/darkmode-logo.png" alt="FirstClick" loading="eager">
+          <span class="logo-text">FirstClick</span>
+        </a>
+        <nav class="nav hide-mobile">
+          <span id="contractorName" class="nav-text small"></span>
+          <a href="contractor-dashboard.html" class="nav-link">Dashboard</a>
+          <a href="contractor-dashboard.html#my-jobs" class="nav-link">My Jobs</a>
+          <a href="contractor-profile.html" class="nav-link">Profile</a>
+          <button onclick="logout()" class="btn btn-small">Logout</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="dashboard">
+    <div class="container">
+      <h2 class="hero-title"><span id="profileHeadingName" class="gradient-text">Profile</span></h2>
+
+      <div class="section-header">
+        <div class="section-title">
+          Profile Snapshot
+          <span class="section-badge">Overview</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Account Status</div>
+          <div class="kpi-value" id="kpiStatus">Active</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Primary Trade</div>
+          <div class="kpi-value" id="kpiPrimaryTrade">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Experience</div>
+          <div class="kpi-value" id="kpiExperience">—</div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">
+          Account Details
+          <span class="section-badge">Editable</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3 class="card-title">Account Details</h3>
+        <p class="card-subtitle">Update your business and contact information.</p>
+
+        <form id="contractorProfileForm" class="form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="label">Legal Name</label>
+              <input type="text" id="legalName" class="input" required>
+            </div>
+            <div class="form-group">
+              <label class="label">Business Name</label>
+              <input type="text" id="businessName" class="input" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="label">Email</label>
+              <input type="email" id="email" class="input" required>
+            </div>
+            <div class="form-group">
+              <label class="label">Phone</label>
+              <input type="tel" id="phone" class="input" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="label">Primary Trade</label>
+              <select id="primaryTrade" class="input">
+                <option value="">Select a primary trade...</option>
+                <option value="plumbing">Plumbing</option>
+                <option value="electrical">Electrical</option>
+                <option value="hvac">HVAC</option>
+                <option value="appliance-repair">Appliance Repair</option>
+                <option value="construction-renovation">Construction & Renovation</option>
+                <option value="roofing-exterior">Roofing & Exterior</option>
+                <option value="outdoor-property">Outdoor & Property Services</option>
+                <option value="security-smart">Security & Smart Systems</option>
+                <option value="cleaning-restoration">Cleaning & Restoration</option>
+                <option value="pest-wildlife">Pest & Wildlife Control</option>
+                <option value="moving-junk">Moving & Junk Removal</option>
+                <option value="handyman-specialty">Handyman & Specialty</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="label">Years of Experience</label>
+              <input type="number" id="experienceYears" class="input" min="0" step="1" placeholder="8">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Secondary Trades (optional)</label>
+            <details class="multi-select" id="secondaryTrades">
+              <summary class="input" id="secondaryTradesSummary">Select secondary trades...</summary>
+              <div class="checkbox-grid" style="margin-top: 0.75rem;">
+                <label class="checkbox-label"><input type="checkbox" value="plumbing"> Plumbing</label>
+                <label class="checkbox-label"><input type="checkbox" value="electrical"> Electrical</label>
+                <label class="checkbox-label"><input type="checkbox" value="hvac"> HVAC</label>
+                <label class="checkbox-label"><input type="checkbox" value="appliance-repair"> Appliance Repair</label>
+                <label class="checkbox-label"><input type="checkbox" value="construction-renovation"> Construction & Renovation</label>
+                <label class="checkbox-label"><input type="checkbox" value="roofing-exterior"> Roofing & Exterior</label>
+                <label class="checkbox-label"><input type="checkbox" value="outdoor-property"> Outdoor & Property Services</label>
+                <label class="checkbox-label"><input type="checkbox" value="security-smart"> Security & Smart Systems</label>
+                <label class="checkbox-label"><input type="checkbox" value="cleaning-restoration"> Cleaning & Restoration</label>
+                <label class="checkbox-label"><input type="checkbox" value="pest-wildlife"> Pest & Wildlife Control</label>
+                <label class="checkbox-label"><input type="checkbox" value="moving-junk"> Moving & Junk Removal</label>
+                <label class="checkbox-label"><input type="checkbox" value="handyman-specialty"> Handyman & Specialty</label>
+              </div>
+            </details>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Service Types (optional)</label>
+            <details class="multi-select" id="serviceTypes">
+              <summary class="input" id="serviceTypesSummary">Select service types...</summary>
+              <div style="margin-top: 0.75rem;">
+                <div data-trade="appliance-repair" class="service-type-group">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.75rem 0 0.5rem;">
+                    <div style="font-weight: 700;">Appliance Repair</div>
+                    <button type="button" class="btn btn-small" onclick="toggleServiceTypeGroup('appliance-repair', this)">Select All</button>
+                  </div>
+                  <div class="checkbox-grid">
+                  <label class="checkbox-label"><input type="checkbox" value="60"> Refrigerator repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="61"> Dishwasher repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="62"> Washing machine repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="63"> Dryer repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="64"> Garbage disposal repair</label>
+                  </div>
+                </div>
+
+                <div data-trade="electrical" class="service-type-group">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.75rem 0 0.5rem;">
+                    <div style="font-weight: 700;">Electrical</div>
+                    <button type="button" class="btn btn-small" onclick="toggleServiceTypeGroup('electrical', this)">Select All</button>
+                  </div>
+                  <div class="checkbox-grid">
+                  <label class="checkbox-label"><input type="checkbox" value="20"> Emergency electrical repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="21"> Panel upgrades &amp; replacements</label>
+                  <label class="checkbox-label"><input type="checkbox" value="22"> Circuit breaker repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="23"> Outlet &amp; switch installation</label>
+                  <label class="checkbox-label"><input type="checkbox" value="24"> Lighting installation</label>
+                  <label class="checkbox-label"><input type="checkbox" value="25"> EV charger installation</label>
+                  <label class="checkbox-label"><input type="checkbox" value="26"> Smart home wiring</label>
+                  </div>
+                </div>
+
+                <div data-trade="hvac" class="service-type-group">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.75rem 0 0.5rem;">
+                    <div style="font-weight: 700;">HVAC</div>
+                    <button type="button" class="btn btn-small" onclick="toggleServiceTypeGroup('hvac', this)">Select All</button>
+                  </div>
+                  <div class="checkbox-grid">
+                  <label class="checkbox-label"><input type="checkbox" value="40"> Furnace repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="41"> Furnace installation</label>
+                  <label class="checkbox-label"><input type="checkbox" value="42"> Air conditioning repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="43"> Air conditioning installation</label>
+                  <label class="checkbox-label"><input type="checkbox" value="44"> Duct cleaning</label>
+                  <label class="checkbox-label"><input type="checkbox" value="45"> Thermostat installation</label>
+                  <label class="checkbox-label"><input type="checkbox" value="46"> HVAC inspections / tune-ups</label>
+                  </div>
+                </div>
+
+                <div data-trade="handyman-specialty" class="service-type-group">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.75rem 0 0.5rem;">
+                    <div style="font-weight: 700;">Handyman &amp; Specialty</div>
+                    <button type="button" class="btn btn-small" onclick="toggleServiceTypeGroup('handyman-specialty', this)">Select All</button>
+                  </div>
+                  <div class="checkbox-grid">
+                  <label class="checkbox-label"><input type="checkbox" value="100"> Minor repairs</label>
+                  <label class="checkbox-label"><input type="checkbox" value="101"> Furniture assembly</label>
+                  <label class="checkbox-label"><input type="checkbox" value="102"> TV mounting</label>
+                  <label class="checkbox-label"><input type="checkbox" value="103"> Door &amp; lock repair</label>
+                  </div>
+                </div>
+
+                <div data-trade="plumbing" class="service-type-group">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.75rem 0 0.5rem;">
+                    <div style="font-weight: 700;">Plumbing</div>
+                    <button type="button" class="btn btn-small" onclick="toggleServiceTypeGroup('plumbing', this)">Select All</button>
+                  </div>
+                  <div class="checkbox-grid">
+                  <label class="checkbox-label"><input type="checkbox" value="1"> Emergency plumbing</label>
+                  <label class="checkbox-label"><input type="checkbox" value="2"> Leak detection &amp; repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="3"> Drain cleaning &amp; unclogging</label>
+                  <label class="checkbox-label"><input type="checkbox" value="4"> Pipe repair &amp; replacement</label>
+                  <label class="checkbox-label"><input type="checkbox" value="5"> Faucet &amp; fixture installation</label>
+                  <label class="checkbox-label"><input type="checkbox" value="6"> Toilet repair &amp; installation</label>
+                  <label class="checkbox-label"><input type="checkbox" value="7"> Water heater (tank) install/repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="8"> Tankless water heater install/repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="9"> Sump pump install/repair</label>
+                  <label class="checkbox-label"><input type="checkbox" value="10"> Frozen pipe thawing</label>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Completed Jobs</h3>
+        <p class="card-subtitle">Jobs you have completed.</p>
+        <div id="completedStats" style="margin-bottom: 1rem; color: #6b7280;"></div>
+        <div id="completedJobsList" class="jobs-list"></div>
+        <div id="completedPagination" style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;"></div>
+        <div id="noCompletedJobs" class="empty-state" style="display: none;">
+          <p>No completed jobs yet.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Recent Audit Logs</h3>
+        <p class="card-subtitle">Last 3 activity records on your account.</p>
+        <div id="auditLogsContainer" style="border: 1px solid var(--slate-700); border-radius: 8px; max-height: 400px; overflow-y: auto;">
+          <div id="auditLogsList" style="padding: 1rem;"></div>
+        </div>
+        <div id="noAuditLogs" class="empty-state" style="display: none; margin-top: 1rem;">
+          <p>No audit logs available.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let contractor = null;
+    let completedJobs = [];
+    let completedPage = 1;
+    const completedPageSize = 5;
+
+    const user = getUser();
+    if (!user || user.role !== 'contractor') {
+      window.location.href = 'contractor-dashboard.html';
+    } else {
+      contractor = user;
+      const displayName = contractor.business_name || contractor.legal_name || contractor.email || 'Profile';
+      document.getElementById('contractorName').textContent = displayName;
+      const headingName = document.getElementById('profileHeadingName');
+      if (headingName) headingName.textContent = displayName;
+      loadProfile();
+      loadCompletedJobs();
+      loadAuditLogs();
+    }
+
+    function updateServiceTypesSummary() {
+      const summary = document.getElementById('serviceTypesSummary');
+      if (!summary) return;
+      const selected = Array.from(document.querySelectorAll('#serviceTypes input[type=\"checkbox\"]:checked'))
+        .map(input => input.parentElement?.textContent?.trim())
+        .filter(Boolean);
+      summary.textContent = selected.length ? selected.join(', ') : 'Select service types...';
+    }
+
+    function getSelectedTradesForServiceTypes() {
+      const trades = [];
+      const primary = document.getElementById('primaryTrade').value;
+      if (primary) trades.push(primary);
+      Array.from(document.querySelectorAll('#secondaryTrades input[type=\"checkbox\"]:checked')).forEach(input => {
+        if (!trades.includes(input.value)) trades.push(input.value);
+      });
+      return trades;
+    }
+
+    function filterServiceTypesByTrade() {
+      const selectedTrades = getSelectedTradesForServiceTypes();
+      const groups = Array.from(document.querySelectorAll('.service-type-group'));
+      if (selectedTrades.length === 0) {
+        groups.forEach(group => {
+          group.style.display = 'none';
+          group.querySelectorAll('input[type=\"checkbox\"]').forEach(input => {
+            input.checked = false;
+          });
+        });
+        updateServiceTypesSummary();
+        return;
+      }
+
+      groups.forEach(group => {
+        const trade = group.getAttribute('data-trade');
+        const shouldShow = selectedTrades.includes(trade);
+        group.style.display = shouldShow ? 'block' : 'none';
+        if (!shouldShow) {
+          group.querySelectorAll('input[type=\"checkbox\"]').forEach(input => {
+            input.checked = false;
+          });
+        }
+      });
+      updateServiceTypesSummary();
+    }
+
+    function toggleServiceTypeGroup(trade, button) {
+      const group = document.querySelector(`.service-type-group[data-trade="${trade}"]`);
+      if (!group) return;
+      const inputs = Array.from(group.querySelectorAll('input[type="checkbox"]'));
+      const allChecked = inputs.every(input => input.checked);
+      inputs.forEach(input => {
+        input.checked = !allChecked;
+      });
+      if (button) {
+        button.textContent = allChecked ? 'Select All' : 'Clear All';
+      }
+      updateServiceTypesSummary();
+    }
+
+    async function loadProfile() {
+      try {
+        const response = await api.get(`/contractors/${contractor.id}/profile`);
+        const data = response.contractor || contractor;
+        contractor = { ...data, role: contractor.role || 'contractor' };
+        document.getElementById('legalName').value = data.legal_name || '';
+        document.getElementById('businessName').value = data.business_name || '';
+        document.getElementById('email').value = data.email || '';
+        document.getElementById('phone').value = data.phone || '';
+        document.getElementById('primaryTrade').value = data.primary_trade || data.primaryTrade || '';
+        document.getElementById('experienceYears').value = data.experience_years || data.experienceYears || '';
+        updateProfileKPIs(contractor);
+        const secondary = data.secondary_trades || data.secondaryTrades || [];
+        const secondaryContainer = document.getElementById('secondaryTrades');
+        if (secondaryContainer && Array.isArray(secondary)) {
+          Array.from(secondaryContainer.querySelectorAll('input[type="checkbox"]')).forEach(input => {
+            input.checked = secondary.includes(input.value);
+          });
+        }
+        updateSecondaryTradesSummary();
+        const serviceTypes = data.service_types || data.serviceTypes || [];
+        const serviceContainer = document.getElementById('serviceTypes');
+        if (serviceContainer && Array.isArray(serviceTypes)) {
+          Array.from(serviceContainer.querySelectorAll('input[type="checkbox"]')).forEach(input => {
+            input.checked = serviceTypes.map(String).includes(input.value);
+          });
+        }
+        updateServiceTypesSummary();
+        filterServiceTypesByTrade();
+      } catch (error) {
+        console.error('Error loading contractor profile:', error);
+        notify.error('Unable to load your profile. Please try again.');
+      }
+    }
+
+    function updateProfileKPIs(data) {
+      const statusEl = document.getElementById('kpiStatus');
+      const tradeEl = document.getElementById('kpiPrimaryTrade');
+      const expEl = document.getElementById('kpiExperience');
+
+      if (statusEl) {
+        const status = data.vetting_status || data.status || 'Active';
+        statusEl.textContent = String(status).replace(/_/g, ' ');
+      }
+      if (tradeEl) {
+        tradeEl.textContent = data.primary_trade || data.primaryTrade || '—';
+      }
+      if (expEl) {
+        const years = data.experience_years ?? data.experienceYears;
+        expEl.textContent = years != null ? `${years} yrs` : '—';
+      }
+    }
+
+    async function loadCompletedJobs() {
+      try {
+        const response = await api.get(`/contractor/jobs/${contractor.id}`);
+        const jobs = response.jobs || [];
+        completedJobs = jobs
+          .filter(job => job.status === 'completed')
+          .sort((a, b) => new Date(b.updated_at || b.completed_at || b.created_at || 0) - new Date(a.updated_at || a.completed_at || a.created_at || 0));
+        completedPage = 1;
+
+        if (completedJobs.length === 0) {
+          document.getElementById('noCompletedJobs').style.display = 'block';
+        } else {
+          renderCompletedJobs();
+        }
+
+        document.getElementById('completedStats').textContent = `${completedJobs.length} completed job${completedJobs.length === 1 ? '' : 's'}.`;
+      } catch (error) {
+        console.error('Error loading completed jobs:', error);
+        document.getElementById('completedStats').textContent = 'Unable to load completed jobs right now.';
+      }
+    }
+
+    function renderCompletedJobs() {
+      const container = document.getElementById('completedJobsList');
+      const totalPages = Math.max(1, Math.ceil(completedJobs.length / completedPageSize));
+      if (completedPage > totalPages) completedPage = totalPages;
+      const startIndex = (completedPage - 1) * completedPageSize;
+      const pageJobs = completedJobs.slice(startIndex, startIndex + completedPageSize);
+      container.innerHTML = pageJobs.map(job => {
+        const estimate = job.estimate;
+        const maxEstimate = estimate && estimate.mode === 'fixed_range' ? estimate.max : null;
+        const paymentAmount = job?.completion_report?.payment?.amount;
+        let earnings = typeof paymentAmount === 'number' ? paymentAmount : null;
+        const materialCostsRaw = job?.completion_report?.material_costs ?? '';
+        const materialCostsValue = typeof materialCostsRaw === 'string'
+          ? materialCostsRaw.replace(/[^0-9.-]/g, '')
+          : materialCostsRaw;
+        const materialCosts = materialCostsValue !== '' && materialCostsValue != null ? Number(materialCostsValue) : 0;
+        if (earnings === null) {
+          const tierKey = (job.contractor_tier || job.contractorTier || contractor?.contractor_tier || contractor?.contractorTier || 'bronze').toLowerCase();
+          const tierRates = { bronze: 0.20, silver: 0.15, gold: 0.10 };
+          const rate = tierRates[tierKey] ?? 0.20;
+          const net = maxEstimate != null ? Math.max(0, maxEstimate - (Number.isFinite(materialCosts) ? materialCosts : 0)) : null;
+          earnings = net != null ? Math.max(0, Math.round(net * (1 - rate))) : null;
+        }
+        return `
+        <div class="job-card">
+          <div class="job-header">
+            <div>
+              <h3 class="job-title">${job.category_name} - ${job.type_name}</h3>
+              <p class="job-meta">${job.city || '—'}</p>
+            </div>
+            <span class="status-badge status-${job.status}">Completed</span>
+          </div>
+          <p class="job-description">${job.description}</p>
+          <div class="job-details" style="margin-bottom: 1rem;">
+            <div class="detail-item">
+              <span class="detail-label">Materials Cost:</span>
+              <span class="detail-value" id="materialsValue-${job.id}">$${Number.isFinite(materialCosts) ? materialCosts.toLocaleString() : '0'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Recalc Payout:</span>
+              <span class="detail-value" id="earningsValue-${job.id}">${earnings != null ? `$${earnings.toLocaleString()}` : 'N/A'}</span>
+            </div>
+          </div>
+          <div class="job-details">
+            <div class="detail-item">
+              <span class="detail-label">Update materials cost</span>
+              <input type="number" min="0" step="0.01" class="input" id="materialsInput-${job.id}" value="${Number.isFinite(materialCosts) ? materialCosts : 0}">
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Receipts (required)</span>
+              <input type="file" class="input" id="materialsReceipts-${job.id}" multiple accept="image/*,application/pdf">
+            </div>
+            <div class="detail-item" style="align-items: flex-start;">
+              <span class="detail-label">Action</span>
+              <button class="btn btn-primary btn-small" type="button" onclick="saveMaterials('${job.id}')">Save Materials</button>
+            </div>
+          </div>
+          <div class="job-details">
+            <div class="detail-item">
+              <span class="detail-label">Completed:</span>
+              <span class="detail-value">${new Date(job.updated_at || job.completed_at || job.created_at).toLocaleString()}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Earnings:</span>
+              <span class="detail-value">${earnings != null ? `$${earnings.toLocaleString()}` : 'N/A'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      }).join('');
+      renderCompletedPagination(totalPages);
+    }
+
+    function renderCompletedPagination(totalPages) {
+      const pagination = document.getElementById('completedPagination');
+      if (!pagination) return;
+      if (completedJobs.length <= completedPageSize) {
+        pagination.innerHTML = '';
+        return;
+      }
+      pagination.innerHTML = `
+        <button class="btn btn-secondary btn-small" type="button" ${completedPage === 1 ? 'disabled' : ''} onclick="setCompletedPage(${completedPage - 1})">Previous</button>
+        <button class="btn btn-secondary btn-small" type="button" ${completedPage >= totalPages ? 'disabled' : ''} onclick="setCompletedPage(${completedPage + 1})">Next</button>
+      `;
+    }
+
+    function setCompletedPage(page) {
+      const totalPages = Math.max(1, Math.ceil(completedJobs.length / completedPageSize));
+      completedPage = Math.min(Math.max(1, page), totalPages);
+      renderCompletedJobs();
+    }
+
+    async function saveMaterials(jobId) {
+      const costInput = document.getElementById(`materialsInput-${jobId}`);
+      const receiptsInput = document.getElementById(`materialsReceipts-${jobId}`);
+      if (!costInput || !receiptsInput) return;
+      const cost = Number(costInput.value);
+      if (!Number.isFinite(cost) || cost < 0) {
+        notify.warning('Please enter a valid materials cost.');
+        return;
+      }
+      const files = Array.from(receiptsInput.files || []);
+      if (files.length === 0) {
+        notify.error('Receipts are required to update materials.');
+        return;
+      }
+      try {
+        const receipts = await readFilesAsDataUrls(files);
+        const response = await api.post(`/contractor/jobs/${jobId}/materials`, {
+          material_costs: cost,
+          receipts,
+          contractorId: contractor.id
+        });
+        const updatedJob = response.job;
+        if (updatedJob) {
+          const idx = completedJobs.findIndex(j => j.id === jobId);
+          if (idx !== -1) {
+            completedJobs[idx] = updatedJob;
+          }
+          renderCompletedJobs();
+        }
+        notify.success('Materials updated.');
+      } catch (error) {
+        console.error('Error updating materials:', error);
+        notify.error('Failed to update materials: ' + error.message);
+      }
+    }
+
+    function readFilesAsDataUrls(files) {
+      return Promise.all((files || []).map(file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+          filename: file.name,
+          dataUrl: reader.result,
+          size: file.size,
+          mime: file.type
+        });
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+      })));
+    }
+
+    document.getElementById('contractorProfileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        legal_name: document.getElementById('legalName').value.trim(),
+        business_name: document.getElementById('businessName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        primary_trade: document.getElementById('primaryTrade').value.trim(),
+        secondary_trades: Array.from(document.querySelectorAll('#secondaryTrades input[type="checkbox"]:checked')).map(input => input.value),
+        service_types: Array.from(document.querySelectorAll('#serviceTypes input[type="checkbox"]:checked')).map(input => parseInt(input.value, 10)),
+        experience_years: document.getElementById('experienceYears').value ? parseInt(document.getElementById('experienceYears').value, 10) : null
+      };
+
+      try {
+        const response = await api.patch(`/contractors/${contractor.id}/profile`, payload);
+        contractor = { ...(response.contractor || contractor), role: contractor.role || 'contractor' };
+        localStorage.setItem('user', JSON.stringify(contractor));
+        updateProfileKPIs(contractor);
+        localStorage.setItem('admin_contractors_updated', JSON.stringify({
+          contractor_id: contractor.id,
+          updated_at: new Date().toISOString(),
+          fields: Object.keys(payload)
+        }));
+        const displayName = contractor.business_name || contractor.legal_name || contractor.email || 'Profile';
+        document.getElementById('contractorName').textContent = displayName;
+        const headingName = document.getElementById('profileHeadingName');
+        if (headingName) headingName.textContent = displayName;
+        notify.success('Profile updated successfully.');
+      } catch (error) {
+        console.error('Error updating contractor profile:', error);
+        notify.error('Failed to update profile: ' + error.message);
+      }
+    });
+
+    function updateSecondaryTradesSummary() {
+      const summary = document.getElementById('secondaryTradesSummary');
+      if (!summary) return;
+      const selected = Array.from(document.querySelectorAll('#secondaryTrades input[type=\"checkbox\"]:checked'))
+        .map(input => input.parentElement?.textContent?.trim())
+        .filter(Boolean);
+      summary.textContent = selected.length ? selected.join(', ') : 'Select secondary trades...';
+    }
+
+    document.querySelectorAll('#secondaryTrades input[type=\"checkbox\"]').forEach(input => {
+      input.addEventListener('change', () => {
+        updateSecondaryTradesSummary();
+        filterServiceTypesByTrade();
+      });
+    });
+
+    document.getElementById('primaryTrade').addEventListener('change', () => {
+      filterServiceTypesByTrade();
+    });
+
+    document.querySelectorAll('#serviceTypes input[type=\"checkbox\"]').forEach(input => {
+      input.addEventListener('change', () => {
+        updateServiceTypesSummary();
+        const group = input.closest('.service-type-group');
+        if (!group) return;
+        const groupInputs = Array.from(group.querySelectorAll('input[type=\"checkbox\"]'));
+        const allChecked = groupInputs.every(item => item.checked);
+        const toggle = group.querySelector('button.btn');
+        if (toggle) {
+          toggle.textContent = allChecked ? 'Clear All' : 'Select All';
+        }
+      });
+    });
+
+    filterServiceTypesByTrade();
+
+    async function loadAuditLogs() {
+      try {
+        const response = await api.get(`/contractors/${contractor.id}/audit-logs`);
+        const logs = (response.logs || response || []).slice(0, 3);
+        const container = document.getElementById('auditLogsList');
+        const noLogs = document.getElementById('noAuditLogs');
+
+        if (!logs || logs.length === 0) {
+          container.innerHTML = '';
+          noLogs.style.display = 'block';
+          return;
+        }
+
+        noLogs.style.display = 'none';
+        container.innerHTML = logs.map(log => `
+          <div class="audit-log-item">
+            <div class="audit-log-action">
+              <span class="audit-log-action-icon"></span>
+              ${escapeHtml(log.action || 'Activity')}
+            </div>
+            <div class="audit-log-timestamp">${formatAuditLogDate(log.timestamp || log.created_at || new Date())}</div>
+            ${log.details ? `<div class="audit-log-details">${escapeHtml(log.details)}</div>` : ''}
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading audit logs:', error);
+        const container = document.getElementById('auditLogsList');
+        const noLogs = document.getElementById('noAuditLogs');
+        container.innerHTML = '';
+        noLogs.style.display = 'block';
+      }
+    }
+
+    function formatAuditLogDate(timestamp) {
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins}m ago`;
+      if (diffHours < 24) return `${diffHours}h ago`;
+      if (diffDays < 7) return `${diffDays}d ago`;
+      
+      return date.toLocaleDateString(undefined, { 
+        month: 'short', 
+        day: 'numeric', 
+        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined 
+      });
+    }
+
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
+  </script>
+  <script src="../js/theme.js"></script>
+
+  <nav class="bottom-nav show-mobile">
+    <a href="contractor-dashboard.html">Home</a>
+    <a href="contractor-dashboard.html#jobs">Jobs</a>
+    <a href="#" class="is-disabled" aria-disabled="true">Messages</a>
+    <a href="contractor-profile.html">Profile</a>
+  </nav>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

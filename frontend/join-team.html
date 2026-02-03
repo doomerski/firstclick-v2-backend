@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join the Team - FirstClick</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .join-hero {
+      background: linear-gradient(to bottom right, #fffbeb, #fed7aa, #fecaca);
+      padding: 4.5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .join-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTEsMTkxLDM2LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==');
+      opacity: 0.4;
+    }
+
+    .join-hero h1 {
+      position: relative;
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .join-hero p {
+      position: relative;
+      font-size: 1.25rem;
+      color: #4b5563;
+      max-width: 48rem;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .active-cities-section {
+      padding: 4rem 0;
+      background: white;
+    }
+
+    .cities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .city-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .city-card:hover {
+      border-color: #f97316;
+      box-shadow: 0 8px 16px rgba(249, 115, 22, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .city-card h3 {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    .city-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #d1fae5;
+      color: #065f46;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .city-status.coming-soon {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .city-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 0.75rem;
+    }
+
+    .city-stat {
+      text-align: center;
+    }
+
+    .city-stat-value {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #111827;
+    }
+
+    .city-stat-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-transform: uppercase;
+    }
+
+    .roles-needed {
+      margin-top: 1rem;
+    }
+
+    .roles-needed h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .role-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .role-tag {
+      padding: 0.25rem 0.75rem;
+      background: #eff6ff;
+      color: #1e40af;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .expansion-cta-section {
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      padding: 4rem 0;
+      color: white;
+      text-align: center;
+    }
+
+    .expansion-cta-section h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .expansion-cta-section p {
+      font-size: 1.25rem;
+      color: #d1d5db;
+      margin-bottom: 2rem;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 3rem;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      margin: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      color: #6b7280;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .modal-close:hover {
+      color: #111827;
+    }
+
+    .form-subsection {
+      background: #f9fafb;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-subsection h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .commitment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .commitment-option {
+      padding: 1.25rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .commitment-option:hover {
+      border-color: #f97316;
+      background: #fff7ed;
+    }
+
+    .commitment-option input[type="radio"] {
+      margin-right: 1rem;
+    }
+
+    .commitment-option label {
+      cursor: pointer;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .commitment-option p {
+      margin-left: 2rem;
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .success-message {
+      background: #d1fae5;
+      border: 2px solid #10b981;
+      color: #065f46;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .join-hero {
+        padding: 1.25rem 0 2.5rem;
+      }
+
+      .join-hero h1 {
+        font-size: var(--text-h1);
+        margin-bottom: 0.75rem;
+      }
+
+      .join-hero p {
+        font-size: 1rem;
+        margin-bottom: 1.25rem;
+      }
+    }
+  </style>
+  <script src="js/notifications.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
+          <img class="logo-img logo-light" src="assets/lightmode-logo.png" alt="FirstClick" loading="eager">
+          <img class="logo-img logo-dark" src="assets/darkmode-logo.png" alt="FirstClick" loading="eager">
+          <span class="logo-text">FirstClick</span>
+        </a>
+        <nav class="nav">
+          <a href="customer-dashboard.html" class="nav-link">My Tasks</a>
+          <a href="join-team.html" class="nav-link">Join Our Team</a>
+          <a href="contractor/contractor-signup.html" class="nav-link">Become a Contractor</a>
+          <a href="contractor/contractor-dashboard.html" class="nav-link">Contractor Portal</a>
+          <div class="admin-group">
+            <a href="admin/admin-login.html" class="nav-link muted">Admin</a></div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="join-hero">
+    <div class="container">
+      <h1>Join a Local FirstClick Team</h1>
+      <p>
+        We operate city by city, with local teams who know their markets. 
+        Join an existing operation or help us launch in your city.
+      </p>
+    </div>
+  </section>
+
+  <!-- Active Cities Section -->
+  <section class="active-cities-section">
+    <div class="container">
+      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; text-align: center;">
+        Where We're Operating
+      </h2>
+      <p style="text-align: center; color: #6b7280; font-size: 1.125rem; max-width: 48rem; margin: 0 auto 3rem;">
+        Join a team in one of our active cities. We're looking for local operators, admin support, 
+        contractor recruiters, and community champions.
+      </p>
+
+      <div class="cities-grid" id="citiesGrid">
+        <!-- Cities will be loaded dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Expansion CTA Section -->
+  <section class="expansion-cta-section">
+    <div class="container">
+      <h2>Don't See Your City?</h2>
+      <p>Help us bring FirstClick to your community. We expand based on local demand and local champions.</p>
+      <button onclick="openExpansionModal()" class="btn btn-primary" style="background: white; color: #111827;">
+        Propose Your City →
+      </button>
+    </div>
+  </section>
+
+  <!-- Join City Team Modal -->
+  <div id="joinCityModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeJoinCityModal()">&times;</span>
+      <div id="joinCityContent">
+        <!-- Content loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Propose City Modal (Expansion Form) -->
+  <div id="expansionModal" class="modal">
+    <div class="modal-content" style="max-width: 900px;">
+      <span class="modal-close" onclick="closeExpansionModal()">&times;</span>
+      
+      <h2 style="font-size: 2rem; font-weight: 900; margin-bottom: 1rem;">Propose Your City</h2>
+      <p style="color: #6b7280; margin-bottom: 2rem;">
+        This isn't just a contact form — every submission helps us understand where to launch next.
+      </p>
+
+      <form id="expansionForm">
+        <!-- Section A: Location -->
+        <div class="form-subsection">
+          <h3>📍 Location</h3>
+          <div class="form-group">
+            <label class="label">City *</label>
+            <input type="text" id="city" class="input" required placeholder="e.g., Hamilton">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+                <label class="label">Province/State *</label>
+                <select id="region" class="input" required>
+                  <option value="">Select...</option>
+                  <option value="" disabled>— Canada —</option>
+                  <option value="AB">Alberta</option>
+                  <option value="BC">British Columbia</option>
+                  <option value="MB">Manitoba</option>
+                  <option value="NB">New Brunswick</option>
+                  <option value="NL">Newfoundland and Labrador</option>
+                  <option value="NS">Nova Scotia</option>
+                  <option value="NT">Northwest Territories</option>
+                  <option value="NU">Nunavut</option>
+                  <option value="ON">Ontario</option>
+                  <option value="PE">Prince Edward Island</option>
+                  <option value="QC">Quebec</option>
+                  <option value="SK">Saskatchewan</option>
+                  <option value="YT">Yukon</option>
+                  <option value="" disabled>— USA —</option>
+                  <option value="AL">Alabama</option>
+                  <option value="AK">Alaska</option>
+                  <option value="AZ">Arizona</option>
+                  <option value="AR">Arkansas</option>
+                  <option value="CA">California</option>
+                  <option value="CO">Colorado</option>
+                  <option value="CT">Connecticut</option>
+                  <option value="DE">Delaware</option>
+                  <option value="FL">Florida</option>
+                  <option value="GA">Georgia</option>
+                  <option value="HI">Hawaii</option>
+                  <option value="ID">Idaho</option>
+                  <option value="IL">Illinois</option>
+                  <option value="IN">Indiana</option>
+                  <option value="IA">Iowa</option>
+                  <option value="KS">Kansas</option>
+                  <option value="KY">Kentucky</option>
+                  <option value="LA">Louisiana</option>
+                  <option value="ME">Maine</option>
+                  <option value="MD">Maryland</option>
+                  <option value="MA">Massachusetts</option>
+                  <option value="MI">Michigan</option>
+                  <option value="MN">Minnesota</option>
+                  <option value="MS">Mississippi</option>
+                  <option value="MO">Missouri</option>
+                  <option value="MT">Montana</option>
+                  <option value="NE">Nebraska</option>
+                  <option value="NV">Nevada</option>
+                  <option value="NH">New Hampshire</option>
+                  <option value="NJ">New Jersey</option>
+                  <option value="NM">New Mexico</option>
+                  <option value="NY">New York</option>
+                  <option value="NC">North Carolina</option>
+                  <option value="ND">North Dakota</option>
+                  <option value="OH">Ohio</option>
+                  <option value="OK">Oklahoma</option>
+                  <option value="OR">Oregon</option>
+                  <option value="PA">Pennsylvania</option>
+                  <option value="RI">Rhode Island</option>
+                  <option value="SC">South Carolina</option>
+                  <option value="SD">South Dakota</option>
+                  <option value="TN">Tennessee</option>
+                  <option value="TX">Texas</option>
+                  <option value="UT">Utah</option>
+                  <option value="VT">Vermont</option>
+                  <option value="VA">Virginia</option>
+                  <option value="WA">Washington</option>
+                  <option value="WV">West Virginia</option>
+                  <option value="WI">Wisconsin</option>
+                  <option value="WY">Wyoming</option>
+                </select>
+              </div>
+            <div class="form-group">
+              <label class="label">Estimated Population</label>
+              <input type="text" id="population" class="input" placeholder="e.g., 500,000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label">Coverage Distance Willing to Travel *</label>
+            <select id="coverageDistance" class="input" required>
+              <option value="">Select...</option>
+              <option value="city-only">City limits only</option>
+              <option value="30km">Within 30km</option>
+              <option value="50km">Within 50km</option>
+              <option value="regional">Regional (100km+)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section B: Why This City -->
+        <div class="form-subsection">
+          <h3>💡 Why This City?</h3>
+          <div class="form-group">
+            <label class="label">What's broken about local home services here? *</label>
+            <textarea id="whyBroken" class="input" rows="4" required 
+              placeholder="e.g., Hard to find reliable contractors, long wait times, price gouging..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="label">Is demand high for home services? *</label>
+            <select id="demandHigh" class="input" required>
+              <option value="">Select...</option>
+              <option value="very-high">Very high - booming housing market</option>
+              <option value="high">High - steady demand</option>
+              <option value="moderate">Moderate - seasonal spikes</option>
+              <option value="uncertain">Not sure</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section C: Your Role -->
+        <div class="form-subsection">
+          <h3>👤 Your Role (select all that apply)</h3>
+          <div class="checkbox-grid">
+            <label class="checkbox-label">
+              <input type="checkbox" name="role" value="local-admin">
+              <span>Local admin / operations</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="role" value="recruiter">
+              <span>Contractor recruiter</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="role" value="trade-pro">
+              <span>Trade professional</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="role" value="contractor">
+              <span>Contractor</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="role" value="property-manager">
+              <span>Property manager</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="role" value="organizer">
+              <span>Community organizer</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Section C.1: Contractor Trade -->
+        <div class="form-subsection" id="contractorTradeSection" style="display: none;">
+          <h3>🧰 Contractor Trade</h3>
+          <div class="form-group">
+            <label class="label">What trade are you in? *</label>
+            <select id="contractorTrade" class="input">
+              <option value="">Select trade...</option>
+              <optgroup label="Plumbing">
+                <option value="1">Emergency plumbing</option>
+                <option value="2">Leak detection & repair</option>
+                <option value="3">Drain cleaning & unclogging</option>
+                <option value="4">Pipe repair & replacement</option>
+                <option value="5">Faucet & fixture installation</option>
+                <option value="6">Toilet repair & installation</option>
+                <option value="7">Water heater (tank) install/repair</option>
+                <option value="8">Tankless water heater install/repair</option>
+                <option value="9">Sump pump install/repair</option>
+                <option value="10">Frozen pipe thawing</option>
+              </optgroup>
+              <optgroup label="Electrical">
+                <option value="20">Emergency electrical repair</option>
+                <option value="21">Panel upgrades & replacements</option>
+                <option value="22">Circuit breaker repair</option>
+                <option value="23">Outlet & switch installation</option>
+                <option value="24">Lighting installation</option>
+                <option value="25">EV charger installation</option>
+                <option value="26">Smart home wiring</option>
+              </optgroup>
+              <optgroup label="HVAC">
+                <option value="40">Furnace repair</option>
+                <option value="41">Furnace installation</option>
+                <option value="42">Air conditioning repair</option>
+                <option value="43">Air conditioning installation</option>
+                <option value="44">Duct cleaning</option>
+                <option value="45">Thermostat installation</option>
+                <option value="46">HVAC inspections / tune-ups</option>
+              </optgroup>
+              <optgroup label="Appliance Repair">
+                <option value="60">Refrigerator repair</option>
+                <option value="61">Dishwasher repair</option>
+                <option value="62">Washing machine repair</option>
+                <option value="63">Dryer repair</option>
+                <option value="64">Garbage disposal repair</option>
+              </optgroup>
+              <optgroup label="Handyman & Specialty">
+                <option value="100">Minor repairs</option>
+                <option value="101">Furniture assembly</option>
+                <option value="102">TV mounting</option>
+                <option value="103">Door & lock repair</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section D: Trades in Demand -->
+        <div class="form-subsection">
+          <h3>🔧 Which trades are most in demand? *</h3>
+          <div class="checkbox-grid">
+            <label class="checkbox-label"><input type="checkbox" name="trades" value="plumbing"> Plumbing</label>
+            <label class="checkbox-label"><input type="checkbox" name="trades" value="electrical"> Electrical</label>
+            <label class="checkbox-label"><input type="checkbox" name="trades" value="hvac"> HVAC</label>
+            <label class="checkbox-label"><input type="checkbox" name="trades" value="appliance"> Appliance Repair</label>
+            <label class="checkbox-label"><input type="checkbox" name="trades" value="construction"> Construction</label>
+            <label class="checkbox-label"><input type="checkbox" name="trades" value="roofing"> Roofing</label>
+            <label class="checkbox-label"><input type="checkbox" name="trades" value="not_sure"> Not sure</label>
+          </div>
+        </div>
+
+        <!-- Section E: Commitment Level -->
+        <div class="form-subsection">
+          <h3>🎯 Commitment Level</h3>
+          <div class="commitment-options">
+            <div class="commitment-option">
+              <input type="radio" name="commitment" value="suggesting" id="commit1" required>
+              <label for="commit1">Just Suggesting</label>
+              <p>I think FirstClick would work here, but I'm not looking to be involved</p>
+            </div>
+            <div class="commitment-option">
+              <input type="radio" name="commitment" value="onboard-contractors" id="commit2">
+              <label for="commit2">Help Onboard Contractors</label>
+              <p>I have connections in the trades and can help recruit</p>
+            </div>
+            <div class="commitment-option">
+              <input type="radio" name="commitment" value="local-ops" id="commit3">
+              <label for="commit3">Help Operate Locally</label>
+              <p>I want to be involved in day-to-day operations</p>
+            </div>
+            <div class="commitment-option">
+              <input type="radio" name="commitment" value="leadership" id="commit4">
+              <label for="commit4">Interested in Local Leadership</label>
+              <p>I'm interested in future revenue share or leading the operation</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="form-subsection">
+          <h3>📧 Your Contact Info</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="label">Name *</label>
+              <input type="text" id="contactName" class="input" required placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label class="label">Email *</label>
+              <input type="email" id="contactEmail" class="input" required placeholder="you@example.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label">Phone (optional)</label>
+            <input type="tel" id="contactPhone" class="input" placeholder="+1 (416) 555-1234">
+          </div>
+          <div class="form-group">
+            <label class="label">Resume/CV (optional)</label>
+            <input type="file" id="expansionResume" class="input" accept=".pdf,.doc,.docx">
+            <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem;">Accepted formats: PDF, DOC, DOCX</p>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          Submit Proposal
+        </button>
+      </form>
+
+      <div id="expansionSuccessMessage" style="display: none;" class="success-message">
+        <h2>✅ Proposal Submitted!</h2>
+        <p>
+          Thank you for helping us understand your market. We'll reach out if your city is a strong candidate.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/expansion-store.js"></script>
+  <script>
+    // Mock active cities data
+    const ACTIVE_CITIES = [
+      {
+        id: 1,
+        name: 'Toronto',
+        region: 'ON',
+        status: 'live',
+        contractors: 45,
+        jobs_completed: 320,
+        roles_needed: ['Admin Support', 'Contractor Recruiter', 'Quality Control'],
+        launch_date: '2024-01-15'
+      },
+      {
+        id: 2,
+        name: 'Mississauga',
+        region: 'ON',
+        status: 'live',
+        contractors: 28,
+        jobs_completed: 180,
+        roles_needed: ['Local Operator', 'Admin Support'],
+        launch_date: '2024-03-01'
+      },
+      {
+        id: 3,
+        name: 'Vancouver',
+        region: 'BC',
+        status: 'coming-soon',
+        contractors: 12,
+        jobs_completed: 0,
+        roles_needed: ['Local Lead', 'Contractor Recruiter', 'Admin Support'],
+        launch_date: 'Q2 2025'
+      }
+    ];
+
+    function loadCities() {
+      const grid = document.getElementById('citiesGrid');
+      
+      grid.innerHTML = ACTIVE_CITIES.map(city => `
+        <div class="city-card" onclick="openJoinCityModal(${city.id})">
+          <h3>${city.name}, ${city.region}</h3>
+          <div class="city-status ${city.status === 'coming-soon' ? 'coming-soon' : ''}">
+            ${city.status === 'live' ? '✅ Live & Operating' : '⏳ Coming Soon'}
+          </div>
+          
+          <div class="city-stats">
+            <div class="city-stat">
+              <div class="city-stat-value">${city.contractors}</div>
+              <div class="city-stat-label">Contractors</div>
+            </div>
+            <div class="city-stat">
+              <div class="city-stat-value">${city.jobs_completed}</div>
+              <div class="city-stat-label">Jobs Done</div>
+            </div>
+          </div>
+
+          <div class="roles-needed">
+            <h4>Roles Needed:</h4>
+            <div class="role-tags">
+              ${city.roles_needed.map(role => `<span class="role-tag">${role}</span>`).join('')}
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-block" style="margin-top: 1rem;">
+            Join ${city.name} Team →
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function openJoinCityModal(cityId) {
+      const city = ACTIVE_CITIES.find(c => c.id === cityId);
+      const modal = document.getElementById('joinCityModal');
+      const content = document.getElementById('joinCityContent');
+      
+      content.innerHTML = `
+        <h2>Join the ${city.name} Team</h2>
+        <p style="color: #6b7280; margin-bottom: 2rem;">
+          Help us grow FirstClick in ${city.name}. We're looking for ${city.roles_needed.join(', ').toLowerCase()}.
+        </p>
+
+        <div class="form-subsection">
+          <h3>📋 Available Roles</h3>
+          ${city.roles_needed.map(role => `
+            <label class="checkbox-label" style="display: block; padding: 0.75rem; margin-bottom: 0.5rem;">
+              <input type="checkbox" name="city-role" value="${role.toLowerCase().replace(/\s+/g, '-')}">
+              <span><strong>${role}</strong></span>
+            </label>
+          `).join('')}
+        </div>
+
+        <div class="form-group">
+          <label class="label">Your Name *</label>
+          <input type="text" id="cityJoinName" class="input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Your Email *</label>
+          <input type="email" id="cityJoinEmail" class="input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Phone</label>
+          <input type="tel" id="cityJoinPhone" class="input">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Why do you want to join the ${city.name} team?</label>
+          <textarea id="cityJoinWhy" class="input" rows="4" 
+            placeholder="Tell us about your background, local knowledge, or what you'd bring to the team..."></textarea>
+        </div>
+        <div class=\"form-group\">
+          <label class=\"label\">Resume/CV (optional)</label>
+          <input type=\"file\" id=\"cityJoinResume\" class=\"input\" accept=\".pdf,.doc,.docx\">
+          <p style=\"font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem;\">Accepted formats: PDF, DOC, DOCX</p>
+        </div>
+        <button onclick="submitCityJoin(${cityId})" class="btn btn-primary btn-block">
+          Submit Application
+        </button>
+      `;
+      
+      modal.style.display = 'flex';
+    }
+
+    function closeJoinCityModal() {
+      document.getElementById('joinCityModal').style.display = 'none';
+    }
+
+    async function submitCityJoin(cityId) {
+      const city = ACTIVE_CITIES.find(c => c.id === cityId);
+      const roles = Array.from(document.querySelectorAll('input[name="city-role"]:checked')).map(cb => cb.value);
+      const resumeFile = document.getElementById('cityJoinResume')?.files[0];
+      
+      let resumeData = null;
+      if (resumeFile) {
+        resumeData = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve({
+            filename: resumeFile.name,
+            dataUrl: reader.result,
+            size: resumeFile.size,
+            mime: resumeFile.type
+          });
+          reader.onerror = () => reject(new Error('Failed to read resume'));
+          reader.readAsDataURL(resumeFile);
+        });
+      }
+      
+      const application = {
+        city_id: cityId,
+        city_name: city.name,
+        roles: roles,
+        name: document.getElementById('cityJoinName').value,
+        email: document.getElementById('cityJoinEmail').value,
+        phone: document.getElementById('cityJoinPhone').value,
+        why: document.getElementById('cityJoinWhy').value,
+        resume: resumeData,
+        submitted_at: new Date().toISOString()
+      };
+
+      try {
+        await api.post('/team/applications', application);
+        notify.success(`Application submitted for ${city.name} team!\n\nWe'll review your application and reach out shortly.`);
+        closeJoinCityModal();
+      } catch (error) {
+        console.error('Team application error:', error);
+        notify.error('Error submitting application. Please try again.');
+      }
+    }
+
+    function openExpansionModal() {
+      document.getElementById('expansionModal').style.display = 'flex';
+    }
+
+    function closeExpansionModal() {
+      document.getElementById('expansionModal').style.display = 'none';
+    }
+
+    function isContractorSelected() {
+      return Array.from(document.querySelectorAll('input[name="role"]'))
+        .some(input => input.checked && input.value === 'contractor');
+    }
+
+    function toggleContractorTradeSection() {
+      const section = document.getElementById('contractorTradeSection');
+      const tradeSelect = document.getElementById('contractorTrade');
+      if (!section || !tradeSelect) return;
+
+      if (isContractorSelected()) {
+        section.style.display = 'block';
+        tradeSelect.setAttribute('required', 'required');
+      } else {
+        section.style.display = 'none';
+        tradeSelect.removeAttribute('required');
+        tradeSelect.value = '';
+      }
+    }
+
+    document.querySelectorAll('input[name="role"]').forEach(input => {
+      input.addEventListener('change', toggleContractorTradeSection);
+    });
+
+    document.getElementById('expansionForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (isContractorSelected()) {
+        const contractorTrade = document.getElementById('contractorTrade').value;
+        if (!contractorTrade) {
+          notify.warning('Please select your contractor trade.');
+          return;
+        }
+      }
+
+      // Handle resume file
+      const resumeFile = document.getElementById('expansionResume')?.files[0];
+      let resumeData = null;
+      if (resumeFile) {
+        resumeData = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve({
+            filename: resumeFile.name,
+            dataUrl: reader.result,
+            size: resumeFile.size,
+            mime: resumeFile.type
+          });
+          reader.onerror = () => reject(new Error('Failed to read resume'));
+          reader.readAsDataURL(resumeFile);
+        });
+      }
+
+      const formData = {
+        location: {
+          city: document.getElementById('city').value,
+          region: document.getElementById('region').value,
+          population: document.getElementById('population').value,
+          coverage_distance: document.getElementById('coverageDistance').value
+        },
+        market_insights: {
+          why_broken: document.getElementById('whyBroken').value,
+          demand_level: document.getElementById('demandHigh').value
+        },
+        roles: Array.from(document.querySelectorAll('input[name="role"]:checked')).map(cb => cb.value),
+        contractor_trade: isContractorSelected() ? document.getElementById('contractorTrade').value : null,
+        trades_in_demand: Array.from(document.querySelectorAll('input[name="trades"]:checked')).map(cb => cb.value),
+        commitment_level: document.querySelector('input[name="commitment"]:checked')?.value,
+        contact: {
+          name: document.getElementById('contactName').value,
+          email: document.getElementById('contactEmail').value,
+          phone: document.getElementById('contactPhone').value
+        },
+        resume: resumeData,
+        submitted_at: new Date().toISOString()
+      };
+
+      try {
+        await expansionStore.submitProposal(formData);
+        document.getElementById('expansionForm').style.display = 'none';
+        document.getElementById('expansionSuccessMessage').style.display = 'block';
+      } catch (error) {
+        console.error('Expansion proposal error:', error);
+        notify.error('Error submitting proposal. Please try again.');
+      }
+    });
+
+    // Initialize
+    loadCities();
+  </script>
+  <script src="js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

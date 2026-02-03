@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Logs - Super Admin</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0b1016;
+      --surface: #151d29;
+      --surface-2: #1b2635;
+      --border: #2a3a52;
+      --accent: #ff8f1f;
+      --accent-2: #2dd4bf;
+      --accent-3: #f43f5e;
+      --text: #eef2ff;
+      --muted: #9aa6c1;
+      --muted-2: #6b7a93;
+      --shadow: 0 18px 35px rgba(6, 12, 20, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 45%),
+                  radial-gradient(circle at 20% 20%, rgba(255, 143, 31, 0.16), transparent 38%),
+                  radial-gradient(circle at bottom left, rgba(244, 63, 94, 0.14), transparent 40%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2.5rem clamp(1.2rem, 3vw, 3rem) 4rem;
+    }
+
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: var(--accent-2);
+      margin: 0 0 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #0b0f14;
+      background: linear-gradient(120deg, var(--accent), #facc15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 20px rgba(255, 143, 31, 0.3);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .kpi-card {
+      background: linear-gradient(160deg, rgba(21, 29, 41, 0.9), rgba(27, 38, 53, 0.7));
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-value {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .kpi-label {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: rgba(21, 29, 41, 0.85);
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .input,
+    select {
+      padding: 0.7rem 0.9rem;
+      border-radius: 0.8rem;
+      border: 1px solid var(--border);
+      background: rgba(10, 16, 24, 0.8);
+      color: var(--text);
+      font-family: inherit;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .list {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .list-item {
+      padding: 1.1rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 22, 33, 0.9);
+      border: 1px solid rgba(42, 58, 82, 0.6);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .list-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted-2);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .approval-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .approval-approved {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86efac;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .approval-denied {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="background-grid"></div>
+  <div class="container">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Super Admin Command Center</p>
+        <h1>Audit Logs</h1>
+        <p class="subtext">Full system audit trail across admins and super admins.</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="../../examples/superadmin-dashboard.html">Back to Super Admin</a>
+        <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
+        <button class="btn" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value" id="logsTotal">0</div>
+        <div class="kpi-label">Total Logs</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="logsAdmin">0</div>
+        <div class="kpi-label">Admin Actions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="logsSuper">0</div>
+        <div class="kpi-label">Super Admin Actions</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Audit Entries</h3>
+      <div class="filters">
+        <select id="actionFilter">
+          <option value="">All actions</option>
+        </select>
+        <input class="input" id="userFilter" placeholder="Filter by user id or email">
+      </div>
+      <div class="list" id="auditList"></div>
+    </section>
+
+    <section class="card">
+      <div class="list-row">
+        <div>
+          <h3>Admin Changes Awaiting Approval</h3>
+          <p class="muted">Approve or deny recent admin actions.</p>
+        </div>
+        <span class="mono" id="adminApprovalCount">0 total</span>
+      </div>
+      <div class="list" id="adminApprovalList" data-count-id="adminApprovalCount" data-match="/admin"></div>
+    </section>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-approvals.js"></script>
+  <script>
+    const user = getUser();
+    if (!user || user.role !== 'super_admin') {
+      window.location.href = '../admin/admin-login.html';
+    }
+
+    const state = {
+      logs: [],
+      actions: []
+    };
+
+    function formatDate(value) {
+      if (!value) return 'N/A';
+      return new Date(value).toLocaleString();
+    }
+
+    function renderStats() {
+      document.getElementById('logsTotal').textContent = state.logs.length;
+      document.getElementById('logsAdmin').textContent = state.logs.filter(log => log.user_role === 'admin').length;
+      document.getElementById('logsSuper').textContent = state.logs.filter(log => log.user_role === 'super_admin').length;
+    }
+
+    function renderLogs() {
+      const actionFilter = document.getElementById('actionFilter').value;
+      const userFilter = document.getElementById('userFilter').value.toLowerCase();
+      const list = document.getElementById('auditList');
+
+      const filtered = state.logs.filter(log => {
+        const matchesAction = !actionFilter || String(log.action) === actionFilter;
+        const haystack = `${log.user_id || ''} ${log.user_email || ''}`.toLowerCase();
+        const matchesUser = !userFilter || haystack.includes(userFilter);
+        return matchesAction && matchesUser;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = '<div class="empty-state">No audit entries match your filters.</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(log => `
+        <div class="list-item">
+          <div class="list-row">
+            <div>
+              <strong>${log.action || 'Unknown action'}</strong>
+              <div class="muted">${log.user_email || 'Unknown user'} • ${formatDate(log.created_at)}</div>
+            </div>
+            <span class="mono">${log.user_role || 'N/A'}</span>
+          </div>
+          <div class="mono">User ID: ${log.user_id || 'N/A'} • IP: ${log.ip_address || 'N/A'}</div>
+        </div>
+      `).join('');
+    }
+
+    async function loadLogs() {
+      try {
+        const response = await api.get('/superadmin/audit-logs');
+        state.logs = response.logs || [];
+        renderStats();
+        renderLogs();
+      } catch (error) {
+        document.getElementById('auditList').innerHTML = '<div class="empty-state">Unable to load audit logs.</div>';
+      }
+    }
+
+    async function loadActions() {
+      try {
+        const response = await api.get('/superadmin/audit-logs/actions');
+        state.actions = response.actions || [];
+        const select = document.getElementById('actionFilter');
+        select.innerHTML = '<option value="">All actions</option>';
+        state.actions.forEach(action => {
+          const option = document.createElement('option');
+          option.value = action;
+          option.textContent = action;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        // ignore
+      }
+    }
+
+    document.getElementById('actionFilter').addEventListener('change', renderLogs);
+    document.getElementById('userFilter').addEventListener('input', renderLogs);
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      loadLogs();
+      loadActions();
+      loadAdminApprovals({ listId: 'adminApprovalList', countId: 'adminApprovalCount', match: ['/admin'] });
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => logout());
+
+    attachApprovalHandlers('adminApprovalList');
+    loadLogs();
+    loadActions();
+    loadAdminApprovals({ listId: 'adminApprovalList', countId: 'adminApprovalCount', match: ['/admin'] });
+  </script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sessions Overview - Super Admin</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0b1016;
+      --surface: #151d29;
+      --surface-2: #1b2635;
+      --border: #2a3a52;
+      --accent: #ff8f1f;
+      --accent-2: #2dd4bf;
+      --accent-3: #f43f5e;
+      --text: #eef2ff;
+      --muted: #9aa6c1;
+      --muted-2: #6b7a93;
+      --shadow: 0 18px 35px rgba(6, 12, 20, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 45%),
+                  radial-gradient(circle at 20% 20%, rgba(255, 143, 31, 0.16), transparent 38%),
+                  radial-gradient(circle at bottom left, rgba(244, 63, 94, 0.14), transparent 40%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2.5rem clamp(1.2rem, 3vw, 3rem) 4rem;
+    }
+
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: var(--accent-2);
+      margin: 0 0 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #0b0f14;
+      background: linear-gradient(120deg, var(--accent), #facc15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 20px rgba(255, 143, 31, 0.3);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn.danger {
+      background: linear-gradient(120deg, #f43f5e, #fb7185);
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(244, 63, 94, 0.35);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .kpi-card {
+      background: linear-gradient(160deg, rgba(21, 29, 41, 0.9), rgba(27, 38, 53, 0.7));
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-value {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .kpi-label {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: rgba(21, 29, 41, 0.85);
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .input,
+    select {
+      padding: 0.7rem 0.9rem;
+      border-radius: 0.8rem;
+      border: 1px solid var(--border);
+      background: rgba(10, 16, 24, 0.8);
+      color: var(--text);
+      font-family: inherit;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .list {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .list-item {
+      padding: 1.1rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 22, 33, 0.9);
+      border: 1px solid rgba(42, 58, 82, 0.6);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .list-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted-2);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .status-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .status-active {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86efac;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .status-revoked {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .approval-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .approval-approved {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86efac;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .approval-denied {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="background-grid"></div>
+  <div class="container">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Super Admin Command Center</p>
+        <h1>Sessions Overview</h1>
+        <p class="subtext">Monitor live sessions, revoke access, and clean up expired tokens.</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="../../examples/superadmin-dashboard.html">Back to Super Admin</a>
+        <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
+        <button class="btn" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value" id="activeSessions">0</div>
+        <div class="kpi-label">Active Sessions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="revokedSessions">0</div>
+        <div class="kpi-label">Revoked</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="expiredSessions">0</div>
+        <div class="kpi-label">Expired</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="list-row">
+        <h3>Session Control</h3>
+        <button class="btn danger" id="cleanupSessionsBtn" type="button">Cleanup Expired</button>
+      </div>
+      <form id="terminateSessionForm" style="margin-top: 1rem;">
+        <div class="filters">
+          <input class="input" name="sessionId" placeholder="Session ID to terminate" required>
+          <button class="btn" type="submit">Terminate Session</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h3>Active Sessions</h3>
+      <div class="filters">
+        <input class="input" id="sessionSearch" placeholder="Search by session id or user id">
+        <select id="sessionStatusFilter">
+          <option value="">All statuses</option>
+          <option value="active">Active</option>
+          <option value="revoked">Revoked</option>
+          <option value="expired">Expired</option>
+        </select>
+      </div>
+      <div class="list" id="sessionsList"></div>
+    </section>
+
+    <section class="card">
+      <div class="list-row">
+        <div>
+          <h3>Admin Changes Awaiting Approval</h3>
+          <p class="muted">Session and access changes submitted by admins.</p>
+        </div>
+        <span class="mono" id="adminApprovalCount">0 total</span>
+      </div>
+      <div class="list" id="adminApprovalList" data-count-id="adminApprovalCount" data-match="/admin"></div>
+    </section>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-approvals.js"></script>
+  <script>
+    const user = getUser();
+    if (!user || user.role !== 'super_admin') {
+      window.location.href = '../admin/admin-login.html';
+    }
+
+    const state = {
+      sessions: []
+    };
+
+    function sessionStatus(session) {
+      const now = new Date();
+      if (session.revoked_at) return 'revoked';
+      if (session.expires_at && new Date(session.expires_at) <= now) return 'expired';
+      return 'active';
+    }
+
+    function renderStats(sessions) {
+      const active = sessions.filter(s => sessionStatus(s) === 'active').length;
+      const revoked = sessions.filter(s => sessionStatus(s) === 'revoked').length;
+      const expired = sessions.filter(s => sessionStatus(s) === 'expired').length;
+      document.getElementById('activeSessions').textContent = active;
+      document.getElementById('revokedSessions').textContent = revoked;
+      document.getElementById('expiredSessions').textContent = expired;
+    }
+
+    function renderSessions() {
+      const query = document.getElementById('sessionSearch').value.toLowerCase();
+      const statusFilter = document.getElementById('sessionStatusFilter').value;
+      const list = document.getElementById('sessionsList');
+
+      const filtered = state.sessions.filter(session => {
+        const status = sessionStatus(session);
+        const haystack = `${session.id || ''} ${session.user_id || ''}`.toLowerCase();
+        if (query && !haystack.includes(query)) return false;
+        if (statusFilter && status !== statusFilter) return false;
+        return true;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = '<div class="empty-state">No sessions match your filters.</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(session => {
+        const status = sessionStatus(session);
+        return `
+          <div class="list-item">
+            <div class="list-row">
+              <div>
+                <strong>${session.id || 'Session'}</strong>
+                <div class="muted">User: ${session.user_id || 'N/A'} • Role: ${session.user_role || 'N/A'}</div>
+              </div>
+              <span class="status-pill status-${status}">${status}</span>
+            </div>
+            <div class="list-row">
+              <div class="mono">Created: ${session.created_at || 'N/A'}</div>
+              <div class="mono">Expires: ${session.expires_at || 'N/A'}</div>
+            </div>
+            ${status === 'active' ? `
+              <div class="list-actions">
+                <button class="btn ghost" data-terminate="${session.id}">Terminate</button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadSessions() {
+      try {
+        const response = await api.get('/superadmin/sessions');
+        state.sessions = response.sessions || [];
+        renderStats(state.sessions);
+        renderSessions();
+      } catch (error) {
+        document.getElementById('sessionsList').innerHTML = '<div class="empty-state">Unable to load sessions.</div>';
+      }
+    }
+
+    document.getElementById('sessionsList').addEventListener('click', async event => {
+      const sessionId = event.target?.getAttribute('data-terminate');
+      if (!sessionId) return;
+      await api.delete(`/superadmin/sessions/${sessionId}`);
+      loadSessions();
+    });
+
+    document.getElementById('terminateSessionForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const sessionId = event.target.sessionId.value.trim();
+      if (!sessionId) return;
+      await api.delete(`/superadmin/sessions/${sessionId}`);
+      event.target.reset();
+      loadSessions();
+    });
+
+    document.getElementById('cleanupSessionsBtn').addEventListener('click', async () => {
+      await api.post('/superadmin/sessions/cleanup', {});
+      loadSessions();
+    });
+
+    document.getElementById('sessionSearch').addEventListener('input', renderSessions);
+    document.getElementById('sessionStatusFilter').addEventListener('change', renderSessions);
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      loadSessions();
+      loadAdminApprovals({ listId: 'adminApprovalList', countId: 'adminApprovalCount', match: ['/admin'] });
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => logout());
+
+    attachApprovalHandlers('adminApprovalList');
+    loadSessions();
+    loadAdminApprovals({ listId: 'adminApprovalList', countId: 'adminApprovalCount', match: ['/admin'] });
+  </script>
+</body>
+</html>

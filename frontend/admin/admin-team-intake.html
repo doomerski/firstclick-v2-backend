@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expansion Dashboard - Super Admin - FirstClick</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+      --slate-950: #0b1016;
+      --slate-900: #0f1621;
+      --slate-800: #151d29;
+      --slate-700: #1b2635;
+      --slate-600: #2a3a52;
+      --slate-500: #6b7a93;
+      --slate-200: #9aa6c1;
+      --slate-100: #eef2ff;
+      --border-radius: 12px;
+      --shadow-md: 0 18px 35px rgba(6, 12, 20, 0.45);
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: none;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-display);
+      background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 45%),
+                  radial-gradient(circle at 20% 20%, rgba(255, 143, 31, 0.16), transparent 38%),
+                  radial-gradient(circle at bottom left, rgba(244, 63, 94, 0.14), transparent 40%),
+                  var(--slate-950);
+      color: var(--slate-100);
+      padding: 2.5rem clamp(1.2rem, 3vw, 3rem) 4rem;
+      min-height: 100vh;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 2.5rem 0;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: #2dd4bf;
+      margin: 0 0 0.75rem;
+    }
+
+    .super-header h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: var(--slate-200);
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    .container {
+      max-width: 1400px;
+    }
+
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      background: linear-gradient(120deg, #ff8f1f, #facc15);
+      color: #0b0f14;
+      border: none;
+    }
+
+    .btn.btn-secondary {
+      background: transparent;
+      color: var(--slate-100);
+      border: 1px solid var(--slate-600);
+    }
+
+    .btn.btn-secondary:hover {
+      background: rgba(21, 29, 41, 0.6);
+    }
+
+    .btn.btn-small {
+      border-radius: 999px;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 999px;
+      color: var(--slate-200);
+      border: 1px solid var(--slate-700);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .section-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .admin-hero {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .admin-hero-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #f43f5e, #ff8f1f);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #ffffff;
+      box-shadow: 0 10px 18px rgba(255, 143, 31, 0.35);
+    }
+
+    .admin-hero h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .header-meta {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--slate-400);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      color: #22c55e;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    }
+
+    .panel {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+    }
+
+    .expansion-widgets {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .expansion-widget {
+      background: rgba(30, 41, 59, 0.85);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid var(--slate-700);
+      border-left: 4px solid #2563eb;
+      position: relative;
+    }
+
+    .expansion-widget:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.25);
+    }
+
+    .expansion-widget.new { border-left-color: #f59e0b; }
+    .expansion-widget.review { border-left-color: #3b82f6; }
+    .expansion-widget.recruiting { border-left-color: #8b5cf6; }
+    .expansion-widget.ready { border-left-color: #10b981; }
+    .expansion-widget.live { border-left-color: #059669; }
+    .expansion-widget.rejected { border-left-color: #ef4444; }
+
+    .widget-value {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(to right, #f97316, #dc2626);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .widget-label {
+      color: var(--slate-400);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+    }
+
+    .widget-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--slate-100);
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1px solid var(--slate-700);
+    }
+
+    .expansion-filters {
+      background: rgba(30, 41, 59, 0.85);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--slate-700);
+    }
+
+    .filters-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .cities-table {
+      background: rgba(30, 41, 59, 0.85);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--slate-700);
+    }
+
+    .city-row {
+      display: grid;
+      grid-template-columns: 200px 100px 150px 150px 120px 150px 200px;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .city-row:hover {
+      background: rgba(148, 163, 184, 0.08);
+    }
+
+    .table-header {
+      background: rgba(15, 23, 42, 0.75);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--slate-300);
+      border-bottom: 1px solid var(--slate-700);
+    }
+
+    .city-name {
+      font-weight: 700;
+      color: var(--slate-100);
+      font-size: 1rem;
+    }
+
+    .submission-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    .demand-score {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .score-bar {
+      height: 0.5rem;
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 9999px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      background: linear-gradient(to right, #f97316, #dc2626);
+      border-radius: 9999px;
+    }
+
+    .city-status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid transparent;
+    }
+
+    .status-proposed { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border-color: rgba(245, 158, 11, 0.35); }
+    .status-under_review { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border-color: rgba(59, 130, 246, 0.35); }
+    .status-market_validated { background: rgba(129, 140, 248, 0.2); color: #c7d2fe; border-color: rgba(129, 140, 248, 0.35); }
+    .status-team_recruiting { background: rgba(167, 139, 250, 0.2); color: #ddd6fe; border-color: rgba(167, 139, 250, 0.35); }
+    .status-contractor_onboarding { background: rgba(244, 114, 182, 0.2); color: #fbcfe8; border-color: rgba(244, 114, 182, 0.35); }
+    .status-soft_launch { background: rgba(251, 146, 60, 0.2); color: #fed7aa; border-color: rgba(251, 146, 60, 0.35); }
+    .status-live { background: rgba(34, 197, 94, 0.2); color: #86efac; border-color: rgba(34, 197, 94, 0.35); }
+    .status-paused { background: rgba(148, 163, 184, 0.2); color: #cbd5f5; border-color: rgba(148, 163, 184, 0.35); }
+    .status-rejected { background: rgba(239, 68, 68, 0.2); color: #fecaca; border-color: rgba(239, 68, 68, 0.35); }
+
+    .action-btns {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .priority-flag {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      border: 2px solid var(--slate-700);
+      background: rgba(15, 23, 42, 0.6);
+      transition: all 0.2s;
+    }
+
+    .priority-flag.high {
+      background: #ef4444;
+      border-color: #ef4444;
+    }
+
+    .priority-flag.medium {
+      background: #f59e0b;
+      border-color: #f59e0b;
+    }
+
+    .filter-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--slate-300);
+    }
+
+    .filter-input {
+      padding: 0.625rem;
+      border: 1px solid var(--slate-700);
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      background: var(--slate-950);
+      color: var(--slate-100);
+    }
+
+    .muted-text {
+      color: var(--slate-400);
+    }
+
+    .muted-small {
+      font-size: 0.75rem;
+    }
+
+    .site-footer {
+      border-top: 1px solid rgba(42, 58, 82, 0.6);
+      background: rgba(15, 22, 33, 0.75);
+    }
+
+    .site-footer .footer-text {
+      color: var(--slate-200);
+    }
+
+    .modal-content {
+      background: rgba(21, 29, 41, 0.95);
+      border: 1px solid var(--slate-600);
+      color: var(--slate-100);
+    }
+
+    .modal-close {
+      color: var(--slate-200);
+    }
+
+    .modal-close:hover {
+      color: var(--slate-100);
+    }
+  </style>
+</head>
+<body class="compact-header">
+  <div class="background-grid"></div>
+  <div class="container">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Super Admin Command Center</p>
+        <h1>Expansion Pipeline</h1>
+        <p class="subtext">Pipeline health and market readiness. Total markets: <strong id="citiesTotalHeader">0</strong></p>
+      </div>
+      <div class="header-actions">
+        <a href="../../examples/superadmin-dashboard.html" class="btn btn-secondary btn-small">← Back to Super Admin</a>
+        <a href="admin-city-profile.html" class="btn btn-secondary btn-small">City Profiles</a>
+        <button onclick="logout()" class="btn btn-small">Logout</button>
+      </div>
+    </header>
+  </div>
+
+  <section class="dashboard">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="section-badge" id="citiesCountBadge">Loading…</span>
+        </div>
+        <div class="section-actions">
+          <button onclick="viewTeamApplications()" class="btn btn-secondary btn-small">👥 Team Applications</button>
+          <button onclick="loadExpansionData()" class="btn btn-primary btn-small">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- Status Widgets -->
+      <div class="expansion-widgets">
+        <div class="expansion-widget new" onclick="filterByStatus('proposed')">
+          <span class="widget-badge">🆕 New</span>
+          <div class="widget-value" id="widgetProposed">0</div>
+          <div class="widget-label">Proposed Cities</div>
+        </div>
+
+        <div class="expansion-widget review" onclick="filterByStatus('under_review')">
+          <div class="widget-value" id="widgetUnderReview">0</div>
+          <div class="widget-label">Under Review</div>
+        </div>
+
+        <div class="expansion-widget recruiting" onclick="filterByStatus('team_recruiting')">
+          <div class="widget-value" id="widgetRecruiting">0</div>
+          <div class="widget-label">Recruiting Team</div>
+        </div>
+
+        <div class="expansion-widget ready" onclick="filterByStatus('soft_launch')">
+          <div class="widget-value" id="widgetReady">0</div>
+          <div class="widget-label">Ready to Launch</div>
+        </div>
+
+        <div class="expansion-widget live" onclick="filterByStatus('live')">
+          <div class="widget-value" id="widgetLive">0</div>
+          <div class="widget-label">Live Cities</div>
+        </div>
+
+        <div class="expansion-widget rejected" onclick="filterByStatus('rejected,paused')">
+          <div class="widget-value" id="widgetRejected">0</div>
+          <div class="widget-label">On Hold / Rejected</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="expansion-filters">
+        <div class="filters-row">
+          <div class="filter-group">
+            <label class="filter-label">Region</label>
+            <select id="filterRegion" class="filter-input" onchange="applyFilters()">
+              <option value="">All Regions</option>
+              <option value="ON">Ontario</option>
+              <option value="BC">British Columbia</option>
+              <option value="AB">Alberta</option>
+              <option value="QC">Quebec</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Population</label>
+            <select id="filterPopulation" class="filter-input" onchange="applyFilters()">
+              <option value="">Any Size</option>
+              <option value="large">500k+</option>
+              <option value="medium">100k - 500k</option>
+              <option value="small">&lt; 100k</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <select id="filterStatus" class="filter-input" onchange="applyFilters()">
+              <option value="">All Statuses</option>
+              <option value="proposed">Proposed</option>
+              <option value="under_review">Under Review</option>
+              <option value="market_validated">Market Validated</option>
+              <option value="team_recruiting">Team Recruiting</option>
+              <option value="contractor_onboarding">Contractor Onboarding</option>
+              <option value="soft_launch">Soft Launch</option>
+              <option value="live">Live</option>
+              <option value="paused">Paused</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Priority</label>
+            <select id="filterPriority" class="filter-input" onchange="applyFilters()">
+              <option value="">All</option>
+              <option value="high">High Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="low">Low Priority</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <button onclick="applyFilters()" class="btn btn-primary btn-small">Apply Filters</button>
+          <button onclick="clearFilters()" class="btn btn-secondary btn-small">Clear</button>
+        </div>
+      </div>
+
+      <!-- Cities Table -->
+      <div class="cities-table">
+        <div class="city-row table-header">
+          <div>City + Region</div>
+          <div>Submissions</div>
+          <div>Primary Proposer</div>
+          <div>Proposed Roles</div>
+          <div>Demand Score</div>
+          <div>Status</div>
+          <div>Actions</div>
+        </div>
+
+        <div id="citiesTableBody">
+          <div class="loading" style="padding: 3rem; text-align: center;">Loading cities...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- City Detail Modal -->
+  <div id="cityDetailModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 1200px;">
+      <span class="modal-close" onclick="closeCityDetail()">&times;</span>
+      <div id="cityDetailContent"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/expansion-store.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let allCities = [];
+    let filteredCities = [];
+
+    const user = getUser();
+    if (!user || user.role !== 'super_admin') {
+      window.location.href = 'admin-login.html';
+    }
+    const adminNameEl = document.getElementById('adminName');
+    if (adminNameEl) adminNameEl.textContent = user.full_name;
+
+    // Mock expansion cities data (fallback + baseline)
+    const MOCK_CITIES = [
+      {
+        id: 'city-001',
+        name: 'Hamilton',
+        region: 'ON',
+        population: '550,000',
+        submissions_count: 8,
+        primary_proposer: 'Sarah Chen',
+        proposed_roles: ['Local Admin', 'Contractor Recruiter'],
+        demand_score: 85,
+        status: 'under_review',
+        priority: 'high',
+        trade_coverage: { plumbing: true, electrical: true, hvac: true },
+        created_at: '2025-01-15',
+        notes: 'Strong industrial base, aging housing stock'
+      },
+      {
+        id: 'city-002',
+        name: 'London',
+        region: 'ON',
+        population: '420,000',
+        submissions_count: 5,
+        primary_proposer: 'Mike Thompson',
+        proposed_roles: ['Local Operator', 'Admin Support'],
+        demand_score: 72,
+        status: 'proposed',
+        priority: 'medium',
+        trade_coverage: { plumbing: true, electrical: false, hvac: true },
+        created_at: '2025-01-20',
+        notes: 'University town, steady rental market'
+      },
+      {
+        id: 'city-003',
+        name: 'Kelowna',
+        region: 'BC',
+        population: '145,000',
+        submissions_count: 12,
+        primary_proposer: 'David Park',
+        proposed_roles: ['Local Lead', 'Quality Control'],
+        demand_score: 90,
+        status: 'team_recruiting',
+        priority: 'high',
+        trade_coverage: { plumbing: true, electrical: true, hvac: true },
+        created_at: '2025-01-10',
+        notes: 'Booming market, high new construction'
+      },
+      {
+        id: 'city-004',
+        name: 'Toronto',
+        region: 'ON',
+        population: '2,930,000',
+        submissions_count: 45,
+        primary_proposer: 'N/A',
+        proposed_roles: [],
+        demand_score: 95,
+        status: 'live',
+        priority: null,
+        trade_coverage: { plumbing: true, electrical: true, hvac: true },
+        created_at: '2024-01-01',
+        notes: 'Flagship market'
+      },
+      {
+        id: 'city-005',
+        name: 'Thunder Bay',
+        region: 'ON',
+        population: '110,000',
+        submissions_count: 2,
+        primary_proposer: 'John Wilson',
+        proposed_roles: ['Contractor'],
+        demand_score: 45,
+        status: 'rejected',
+        priority: 'low',
+        trade_coverage: { plumbing: false, electrical: false, hvac: false },
+        created_at: '2025-01-22',
+        notes: 'Low density, seasonal challenges, insufficient trade coverage'
+      }
+    ];
+
+    async function loadExpansionData() {
+      try {
+        const response = await api.get('/admin/expansion/proposals');
+        const apiProposals = response.proposals || [];
+        const proposals = expansionStore ? expansionStore.mergeProposals(apiProposals) : apiProposals;
+        const proposalCities = buildCitiesFromProposals(proposals);
+        allCities = mergeCities(MOCK_CITIES, proposalCities);
+        filteredCities = [...allCities];
+        updateWidgets();
+        renderCities();
+      } catch (error) {
+        console.error('Error loading expansion proposals:', error);
+        allCities = [...MOCK_CITIES];
+        filteredCities = [...allCities];
+        updateWidgets();
+        renderCities();
+      }
+    }
+
+    function normalizeCityKey(city, region) {
+      return `${String(city || '').trim().toLowerCase()}__${String(region || '').trim().toLowerCase()}`;
+    }
+
+    function uniqueValues(values) {
+      return Array.from(new Set(values.filter(Boolean)));
+    }
+
+    function buildCitiesFromProposals(proposals) {
+      const grouped = new Map();
+
+      proposals.forEach(proposal => {
+        const city = proposal.location?.city || proposal.city_name || proposal.city || 'Unknown';
+        const region = proposal.location?.region || proposal.region || '';
+        const key = normalizeCityKey(city, region);
+        const existing = grouped.get(key) || {
+          id: key,
+          name: city,
+          region: region,
+          population: proposal.location?.population || proposal.population || 'N/A',
+          submissions_count: 0,
+          primary_proposer: proposal.contact?.name || proposal.contact_name || proposal.name || 'N/A',
+          proposed_roles: [],
+          demand_score: 0,
+          status: proposal.status || 'proposed',
+          priority: null,
+          trade_coverage: {},
+          created_at: proposal.created_at || proposal.submitted_at || new Date().toISOString(),
+          notes: proposal.market_insights?.why_broken || proposal.notes || ''
+        };
+
+        existing.submissions_count += 1;
+        existing.proposed_roles = uniqueValues(existing.proposed_roles.concat(proposal.roles || []));
+        const trades = proposal.trades_in_demand || [];
+        trades.forEach(trade => {
+          existing.trade_coverage[trade] = true;
+        });
+        existing.notes = existing.notes || proposal.market_insights?.why_broken || '';
+
+        grouped.set(key, existing);
+      });
+
+      const cities = Array.from(grouped.values());
+      cities.forEach(city => {
+        const score = Math.min(100, 40 + city.submissions_count * 10);
+        city.demand_score = score;
+      });
+
+      return cities;
+    }
+
+    function mergeCities(baseCities, proposalCities) {
+      const merged = new Map();
+      baseCities.forEach(city => {
+        merged.set(normalizeCityKey(city.name, city.region), { ...city });
+      });
+      proposalCities.forEach(city => {
+        const key = normalizeCityKey(city.name, city.region);
+        if (!merged.has(key)) {
+          merged.set(key, { ...city });
+          return;
+        }
+        const existing = merged.get(key);
+        existing.submissions_count = (existing.submissions_count || 0) + (city.submissions_count || 0);
+        existing.primary_proposer = existing.primary_proposer || city.primary_proposer;
+        existing.proposed_roles = uniqueValues([...(existing.proposed_roles || []), ...(city.proposed_roles || [])]);
+        existing.trade_coverage = { ...(existing.trade_coverage || {}), ...(city.trade_coverage || {}) };
+        existing.notes = existing.notes || city.notes;
+        existing.population = existing.population || city.population;
+        merged.set(key, existing);
+      });
+      return Array.from(merged.values());
+    }
+
+    function updateWidgets() {
+      document.getElementById('widgetProposed').textContent = 
+        allCities.filter(c => c.status === 'proposed').length;
+      document.getElementById('widgetUnderReview').textContent = 
+        allCities.filter(c => c.status === 'under_review').length;
+      document.getElementById('widgetRecruiting').textContent = 
+        allCities.filter(c => c.status === 'team_recruiting').length;
+      document.getElementById('widgetReady').textContent = 
+        allCities.filter(c => c.status === 'soft_launch').length;
+      document.getElementById('widgetLive').textContent = 
+        allCities.filter(c => c.status === 'live').length;
+      document.getElementById('widgetRejected').textContent = 
+        allCities.filter(c => ['rejected', 'paused'].includes(c.status)).length;
+    }
+
+    function renderCities() {
+      const tbody = document.getElementById('citiesTableBody');
+      const badge = document.getElementById('citiesCountBadge');
+      const headerTotal = document.getElementById('citiesTotalHeader');
+      if (badge) {
+        badge.textContent = `${filteredCities.length} Total`;
+      }
+      if (headerTotal) {
+        headerTotal.textContent = filteredCities.length;
+      }
+      
+      if (filteredCities.length === 0) {
+        tbody.innerHTML = '<div class="empty-state"><p>No cities match the current filters</p></div>';
+        return;
+      }
+
+      tbody.innerHTML = filteredCities.map(city => `
+        <div class="city-row" onclick="viewCityDetail('${city.id}')">
+          <div>
+            <div class="city-name">${city.name}, ${city.region}</div>
+            <div class="muted-text muted-small">Pop: ${city.population}</div>
+          </div>
+          <div>
+            <span class="submission-count">${city.submissions_count}</span>
+          </div>
+          <div class="muted-text" style="font-size: 0.875rem;">
+            ${city.primary_proposer}
+          </div>
+          <div class="muted-text muted-small">
+            ${city.proposed_roles.slice(0, 2).join(', ')}${city.proposed_roles.length > 2 ? '...' : ''}
+          </div>
+          <div class="demand-score">
+            <div class="score-bar">
+              <div class="score-fill" style="width: ${city.demand_score}%"></div>
+            </div>
+            <span style="font-size: 0.875rem; font-weight: 700;">${city.demand_score}</span>
+          </div>
+          <div>
+            <span class="city-status-badge status-${city.status}" onclick="event.stopPropagation(); openCityDetail('${city.id}')">
+              ${formatStatus(city.status)}
+            </span>
+          </div>
+          <div class="action-btns" onclick="event.stopPropagation()">
+            <div class="priority-flag ${city.priority || ''}" 
+                 onclick="togglePriority('${city.id}')" 
+                 title="Priority: ${city.priority || 'none'}">
+            </div>
+            ${city.status === 'proposed' ? `
+              <button onclick="advanceCity('${city.id}', 'under_review')" class="btn btn-primary btn-small">
+                Review
+              </button>
+            ` : ''}
+            ${city.status === 'under_review' ? `
+              <button onclick="advanceCity('${city.id}', 'team_recruiting')" class="btn btn-primary btn-small">
+                Start Recruiting
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterByStatus(statuses) {
+      const statusList = statuses.split(',');
+      document.getElementById('filterStatus').value = statusList[0];
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const region = document.getElementById('filterRegion').value;
+      const population = document.getElementById('filterPopulation').value;
+      const status = document.getElementById('filterStatus').value;
+      const priority = document.getElementById('filterPriority').value;
+
+      filteredCities = allCities.filter(city => {
+        if (region && city.region !== region) return false;
+        if (status && city.status !== status) return false;
+        if (priority && city.priority !== priority) return false;
+        // Population filter would need parsing
+        return true;
+      });
+
+      renderCities();
+    }
+
+    function clearFilters() {
+      document.getElementById('filterRegion').value = '';
+      document.getElementById('filterPopulation').value = '';
+      document.getElementById('filterStatus').value = '';
+      document.getElementById('filterPriority').value = '';
+      filteredCities = [...allCities];
+      renderCities();
+    }
+
+    function togglePriority(cityId) {
+      const city = allCities.find(c => c.id === cityId);
+      const priorities = [null, 'low', 'medium', 'high'];
+      const currentIndex = priorities.indexOf(city.priority);
+      city.priority = priorities[(currentIndex + 1) % priorities.length];
+      
+      console.log(`City ${city.name} priority set to: ${city.priority || 'none'}`);
+      renderCities();
+    }
+
+    async function advanceCity(cityId, newStatus) {
+      if (!confirm(`Advance city to "${formatStatus(newStatus)}"?`)) return;
+      
+      const city = allCities.find(c => c.id === cityId);
+      city.status = newStatus;
+      
+      console.log(`City ${city.name} advanced to: ${newStatus}`);
+      updateWidgets();
+      renderCities();
+    }
+
+    function viewCityDetail(cityId) {
+      const city = allCities.find(c => c.id === cityId);
+      if (!city) return;
+      try {
+        sessionStorage.setItem('expansion_city_profile', JSON.stringify(city));
+      } catch (error) {
+        console.warn('Unable to store city profile in sessionStorage.', error);
+      }
+      const params = new URLSearchParams({
+        city: city.name,
+        region: city.region
+      });
+      window.location.href = `admin-city-profile.html?${params.toString()}`;
+    }
+
+    function openCityDetail(cityId) {
+      const city = allCities.find(c => c.id === cityId);
+      if (!city) return;
+      const modal = document.getElementById('cityDetailModal');
+      const content = document.getElementById('cityDetailContent');
+
+      content.innerHTML = `
+        <h2>${city.name}, ${city.region}</h2>
+        <p style="color: #6b7280; margin-bottom: 2rem;">Population: ${city.population}</p>
+
+        <div class="form-subsection">
+          <h3>📊 City Status</h3>
+          <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <span class="city-status-badge status-${city.status}" style="font-size: 1rem; padding: 0.75rem 1.5rem;">
+              ${formatStatus(city.status)}
+            </span>
+            ${getCityStatusActions(city)}
+          </div>
+          <div class="status-timeline">
+            ${renderStatusTimeline(city)}
+          </div>
+        </div>
+
+        <div class="form-subsection">
+          <h3>👥 Submissions (${city.submissions_count})</h3>
+          <p style="color: #6b7280; margin-bottom: 1rem;">Primary proposer: <strong>${city.primary_proposer}</strong></p>
+          <p style="font-size: 0.875rem; color: #6b7280;">Roles: ${(city.proposed_roles || []).join(', ') || 'N/A'}</p>
+        </div>
+
+        <div class="form-subsection">
+          <h3>📈 Market Assessment</h3>
+          <div class="job-details" style="grid-template-columns: 1fr 1fr;">
+            <div class="detail-item">
+              <span class="detail-label">Demand Score</span>
+              <span class="detail-value">${city.demand_score}/100</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Priority</span>
+              <span class="detail-value">${city.priority || 'Not set'}</span>
+            </div>
+          </div>
+          <p style="margin-top: 1rem; color: #6b7280;"><strong>Notes:</strong> ${city.notes || 'N/A'}</p>
+        </div>
+
+        <div class="form-subsection">
+          <h3>🔧 Trade Coverage</h3>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            ${Object.entries(city.trade_coverage || {}).map(([trade, available]) => `
+              <span class="status-badge ${available ? 'status-completed' : 'status-cancelled'}">
+                ${trade}: ${available ? '✓' : '✗'}
+              </span>
+            `).join('')}
+          </div>
+        </div>
+
+        <button onclick="closeCityDetail()" class="btn btn-secondary" style="margin-top: 1.5rem;">Close</button>
+      `;
+
+      modal.style.display = 'flex';
+    }
+
+    function closeCityDetail() {
+      document.getElementById('cityDetailModal').style.display = 'none';
+    }
+
+    function getCityStatusActions(city) {
+      const statusFlow = {
+        'proposed': 'under_review',
+        'under_review': 'market_validated',
+        'market_validated': 'team_recruiting',
+        'team_recruiting': 'contractor_onboarding',
+        'contractor_onboarding': 'soft_launch',
+        'soft_launch': 'live'
+      };
+
+      const nextStatus = statusFlow[city.status];
+      if (!nextStatus) return '';
+
+      return `
+        <button onclick="advanceCity('${city.id}', '${nextStatus}')" class="btn btn-primary btn-small">
+          Advance to ${formatStatus(nextStatus)} →
+        </button>
+      `;
+    }
+
+    function renderStatusTimeline(city) {
+      const allStatuses = ['proposed', 'under_review', 'market_validated', 'team_recruiting', 'contractor_onboarding', 'soft_launch', 'live'];
+      const currentIndex = allStatuses.indexOf(city.status);
+
+      return `
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+          ${allStatuses.map((status, idx) => `
+            <div style="flex: 1; height: 0.5rem; background: ${idx <= currentIndex ? '#10b981' : '#e5e7eb'}; border-radius: 0.25rem;"></div>
+          `).join('')}
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">
+          ${allStatuses.map(status => `<span>${formatStatus(status)}</span>`).join('')}
+        </div>
+      `;
+    }
+
+    function viewTeamApplications() {
+      window.location.href = '../superadmin/superadmin-team-applications.html';
+    }
+
+    function formatStatus(status) {
+      const map = {
+        'proposed': 'Proposed',
+        'under_review': 'Under Review',
+        'market_validated': 'Market Validated',
+        'team_recruiting': 'Recruiting Team',
+        'contractor_onboarding': 'Onboarding Contractors',
+        'soft_launch': 'Soft Launch',
+        'live': 'Live',
+        'paused': 'Paused',
+        'rejected': 'Rejected'
+      };
+      return map[status] || status;
+    }
+
+    // Initialize
+    loadExpansionData();
+  </script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance | FirstClick Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;600;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Financial Dashboard Color System */
+            --slate-950: #0f172a;
+            --slate-900: #1e293b;
+            --slate-800: #334155;
+            --slate-700: #475569;
+            --slate-600: #64748b;
+            --slate-400: #94a3b8;
+            --slate-300: #cbd5e1;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+            
+            /* Accent Colors */
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+            --emerald-700: #047857;
+            --amber-500: #f59e0b;
+            --amber-600: #d97706;
+            --red-500: #ef4444;
+            --red-600: #dc2626;
+            --blue-500: #3b82f6;
+            --blue-600: #2563eb;
+            
+            /* Typography */
+            --font-display: 'Manrope', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --text-h1: clamp(22px, 5vw, 40px);
+            --text-h2: clamp(18px, 4vw, 30px);
+            --text-h3: clamp(16px, 3.5vw, 24px);
+            --text-body: clamp(14px, 2.5vw, 16px);
+            --text-small: clamp(12px, 2vw, 14px);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Effects */
+            --border-radius: 8px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-display);
+            background: linear-gradient(135deg, var(--slate-950) 0%, var(--slate-900) 100%);
+            color: var(--slate-100);
+            min-height: 100vh;
+            line-height: 1.6;
+            font-size: var(--text-body);
+        }
+
+        /* Header */
+        .header {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--slate-700);
+            padding: 35px 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.4s ease-out;
+            font-family: 'Space Grotesk', var(--font-display);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: inherit;
+        }
+
+        .logo-img {
+            height: clamp(36px, 4vw, 52px);
+            width: clamp(36px, 4vw, 52px);
+            object-fit: contain;
+            display: block;
+        }
+
+        .logo-img.logo-light {
+            transform: scale(1.18) scaleX(0.9);
+            transform-origin: left center;
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', var(--font-display);
+            font-weight: 700;
+            font-size: clamp(22px, 2.4vw, 32px);
+            line-height: 1;
+        }
+
+        html.theme-dark .logo-text {
+            color: #21c58c;
+        }
+
+        .header-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .super-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 2.5rem 0 2rem;
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.32em;
+            font-size: 0.7rem;
+            color: #2dd4bf;
+            margin: 0 0 0.75rem;
+        }
+
+        .super-header h1 {
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            margin: 0;
+        }
+
+        .subtext {
+            color: #9aa6c1;
+            font-size: 1rem;
+            margin-top: 0.6rem;
+            max-width: 36rem;
+        }
+
+        .admin-page-select {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.6rem;
+            border: 1px solid var(--slate-700);
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--slate-100);
+            font-weight: 600;
+            font-size: 0.85rem;
+            min-width: 180px;
+        }
+
+        .site-footer {
+            margin-top: 3rem;
+            padding: 1.5rem 2rem 2.5rem;
+            border-top: 1px solid var(--slate-700);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .site-footer .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .site-footer .footer-text {
+            color: var(--slate-400);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .nav {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 0.625rem 1.5rem;
+            border-radius: 999px;
+            background: var(--slate-800);
+            color: var(--slate-100);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid var(--slate-700);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            border-color: var(--emerald-500);
+            color: var(--slate-50);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        h1 {
+            font-size: var(--text-h1);
+            font-weight: 800;
+            color: var(--slate-50);
+            letter-spacing: -0.025em;
+        }
+
+        h2 {
+            font-size: var(--text-h2);
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: var(--text-h3);
+            line-height: 1.25;
+        }
+
+        .small {
+            font-size: var(--text-small);
+        }
+
+        .header-meta {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: var(--slate-400);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--emerald-500);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Headings */
+        .section-header {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: var(--text-h2);
+            font-weight: 700;
+            color: var(--slate-50);
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-badge {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--slate-800);
+            border-radius: 4px;
+            color: var(--slate-300);
+            font-weight: 500;
+        }
+
+        .finance-nav {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1rem 0 2rem;
+        }
+
+        .finance-nav a {
+            text-decoration: none;
+            padding: 0.45rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid var(--slate-700);
+            color: var(--slate-200);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .finance-nav a.active {
+            background: var(--emerald-600);
+            border-color: var(--emerald-600);
+            color: white;
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+            animation: staggerIn 0.8s ease-out;
+        }
+
+        @keyframes staggerIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .kpi-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--emerald-500), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .kpi-card:hover {
+            border-color: var(--slate-600);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .kpi-card:hover::before {
+            opacity: 1;
+        }
+
+        .kpi-label {
+            font-size: 0.875rem;
+            color: var(--slate-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-value {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--slate-50);
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+        }
+
+        .kpi-subtitle {
+            font-size: 0.75rem;
+            color: var(--slate-500);
+            font-family: var(--font-mono);
+        }
+
+        /* Payouts Panel */
+        .payouts-panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .payouts-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-box {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 6px;
+            border: 1px solid var(--slate-800);
+        }
+
+        .metric-value {
+            font-family: var(--font-mono);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--amber-500);
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ============================================================================
+           LIGHT MODE OVERRIDES (match main site theme)
+           ============================================================================ */
+
+        html:not(.theme-dark) body {
+            background: linear-gradient(to bottom right, #fffbeb, #fed7aa, #fecaca);
+            color: #1f2937;
+        }
+
+        html:not(.theme-dark) .header {
+            background: rgba(255, 255, 255, 0.75);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        html:not(.theme-dark) .header-icon {
+            background: linear-gradient(135deg, #f97316, #dc2626);
+        }
+
+        html:not(.theme-dark) h1,
+        html:not(.theme-dark) .section-title {
+            color: #111827;
+        }
+
+        html:not(.theme-dark) .header-meta,
+        html:not(.theme-dark) .section-badge {
+            color: #6b7280;
+            background: #f3f4f6;
+        }
+
+        html:not(.theme-dark) .nav-link {
+            background: white;
+            color: #111827;
+            border-color: #e5e7eb;
+        }
+
+        html:not(.theme-dark) .nav-link:hover {
+            border-color: #059669;
+            color: #111827;
+        }
+
+        html:not(.theme-dark) .site-footer {
+            background: rgba(255, 255, 255, 0.8);
+            border-top-color: #e5e7eb;
+        }
+
+        html:not(.theme-dark) .site-footer .footer-text {
+            color: #6b7280;
+        }
+
+        html:not(.theme-dark) .admin-page-select {
+            background: white;
+            color: #1f2937;
+            border-color: #e5e7eb;
+        }
+
+        html:not(.theme-dark) .kpi-card,
+        html:not(.theme-dark) .payouts-panel,
+        html:not(.theme-dark) .metric-box,
+        html:not(.theme-dark) .table-container,
+        html:not(.theme-dark) .data-card,
+        html:not(.theme-dark) .exceptions-panel,
+        html:not(.theme-dark) .batch-actions {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        html:not(.theme-dark) .kpi-label,
+        html:not(.theme-dark) .metric-label,
+        html:not(.theme-dark) .table-header,
+        html:not(.theme-dark) .filter-label,
+        html:not(.theme-dark) .kpi-subtitle,
+        html:not(.theme-dark) .data-card .card-meta,
+        html:not(.theme-dark) .data-card .card-kv span,
+        html:not(.theme-dark) .card-actions label {
+            color: #6b7280;
+        }
+
+        html:not(.theme-dark) .kpi-value {
+            color: #111827;
+        }
+
+        html:not(.theme-dark) .finance-nav a {
+            border-color: #e5e7eb;
+            color: #1f2937;
+            background: white;
+        }
+
+        html:not(.theme-dark) .finance-nav a.active {
+            background: #059669;
+            border-color: #059669;
+            color: white;
+        }
+
+        html:not(.theme-dark) .table-container table {
+            color: #111827;
+        }
+
+        html:not(.theme-dark) .table-container th {
+            background: #f9fafb;
+            color: #111827;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        html:not(.theme-dark) .table-container td {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        html:not(.theme-dark) .filter-input,
+        html:not(.theme-dark) .filter-select {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #111827;
+        }
+
+        html:not(.theme-dark) .btn {
+            box-shadow: none;
+        }
+
+        html:not(.theme-dark) .btn-primary {
+            background: linear-gradient(to right, #f97316, #dc2626);
+            color: white;
+        }
+
+        html:not(.theme-dark) .btn-secondary {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        html:not(.theme-dark) .theme-toggle {
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+        }
+
+        html:not(.theme-dark) .theme-toggle-text {
+            color: #1f2937;
+        }
+
+        html:not(.theme-dark) .theme-toggle-slider {
+            background: linear-gradient(135deg, #fbbf24, #f97316);
+        }
+
+        /* Batch Actions Bar */
+        .batch-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 6px;
+            border: 1px solid var(--slate-800);
+            align-items: center;
+        }
+
+        .batch-info {
+            font-size: 0.875rem;
+            color: var(--slate-400);
+            font-family: var(--font-mono);
+        }
+
+        .batch-actions .btn {
+            margin-left: auto;
+        }
+
+        /* Tables */
+        .table-container {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+        }
+
+        .payouts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--slate-700);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select, .filter-input {
+            padding: 0.5rem 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--slate-700);
+            border-radius: 6px;
+            color: var(--slate-200);
+            font-size: 0.875rem;
+            font-family: var(--font-mono);
+            transition: var(--transition);
+        }
+
+        .filter-select:hover, .filter-input:hover {
+            border-color: var(--slate-600);
+        }
+
+        .filter-select:focus, .filter-input:focus {
+            outline: none;
+            border-color: var(--emerald-500);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--slate-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--slate-700);
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        th:hover {
+            color: var(--slate-200);
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--slate-800);
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        /* Badges & Status */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .status-paid { background: rgba(16, 185, 129, 0.2); color: var(--emerald-500); border: 1px solid var(--emerald-700); }
+        .status-unpaid { background: rgba(245, 158, 11, 0.2); color: var(--amber-500); border: 1px solid var(--amber-600); }
+        .status-refunded { background: rgba(239, 68, 68, 0.2); color: var(--red-500); border: 1px solid var(--red-600); }
+        .status-ready { background: rgba(16, 185, 129, 0.2); color: var(--emerald-500); border: 1px solid var(--emerald-700); }
+        .status-processing { background: rgba(59, 130, 246, 0.2); color: var(--blue-500); border: 1px solid var(--blue-600); }
+        .status-not-ready { background: rgba(100, 116, 139, 0.2); color: var(--slate-400); border: 1px solid var(--slate-600); }
+
+        /* Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: var(--font-display);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--slate-700);
+            color: var(--slate-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--slate-600);
+        }
+
+        /* Theme Toggle Switch */
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--slate-700);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .theme-toggle-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .theme-toggle-slider {
+            width: 38px;
+            height: 20px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #0ea5e9, #10b981);
+            position: relative;
+            transition: background 0.2s ease;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+        }
+
+        .theme-toggle-slider::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .theme-toggle-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--slate-100);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .theme-toggle-input:checked + .theme-toggle-slider {
+            background: linear-gradient(135deg, #0ea5e9, #10b981);
+        }
+
+        .theme-toggle-input:checked + .theme-toggle-slider::after {
+            transform: translateX(18px);
+        }
+
+        .btn-danger {
+            background: var(--red-600);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: var(--red-500);
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        /* Exceptions Panel */
+        .exceptions-panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .exception-item {
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid var(--red-500);
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exception-text {
+            color: var(--slate-300);
+        }
+
+        .exception-count {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--red-500);
+        }
+
+        /* Money Values */
+        .money {
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        .money-positive {
+            color: var(--emerald-500);
+        }
+
+        .money-neutral {
+            color: var(--slate-200);
+        }
+
+        .money-negative {
+            color: var(--red-500);
+        }
+
+        /* Export Actions */
+        .export-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--slate-700);
+        }
+
+        /* Checkbox */
+        .checkbox-cell {
+            width: 40px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--emerald-500);
+        }
+
+        .hide-mobile {
+            display: block !important;
+        }
+
+        .show-mobile {
+            display: none !important;
+        }
+
+        .card-list {
+            display: grid;
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+
+        .data-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--border-radius);
+            padding: 1rem 1.25rem;
+        }
+
+        .data-card .card-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .data-card .card-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .data-card .card-meta {
+            color: var(--slate-400);
+            font-size: 0.8rem;
+            margin-top: 0.35rem;
+        }
+
+        .card-kv {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.9rem;
+        }
+
+        .card-kv span {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--slate-400);
+        }
+
+        .card-kv b {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-top: 0.2rem;
+        }
+
+        .card-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.9rem;
+            font-size: 0.8rem;
+        }
+
+        .card-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-actions label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            color: var(--slate-300);
+        }
+
+        .card-actions input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--slate-400);
+            font-family: var(--font-mono);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--slate-700);
+            border-top-color: var(--emerald-500);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 1rem 1.25rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .admin-page-select {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .site-footer .footer-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions .btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+                border-radius: 0.6rem;
+            }
+
+            h1 {
+                font-size: 1.35rem;
+            }
+
+            .table-header {
+                align-items: flex-start;
+            }
+
+            .filters {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .filter-select,
+            .filter-input {
+                width: 100%;
+            }
+
+            .hide-mobile {
+                display: none !important;
+            }
+
+            .show-mobile {
+                display: block !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .show-mobile {
+                display: none !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../css/admin-unified.css">
+</head>
+<body class="compact-header admin-theme">
+    <div class="container admin-header-shell">
+        <header class="super-header">
+            <div>
+                <p class="eyebrow">Admin Command Center</p>
+                <h1>Finance Overview</h1>
+                <p class="subtext">Month: <span id="current-month">January 2026</span> | Live finance metrics.</p>
+            </div>
+            <div class="header-actions">
+                <a href="admin-dashboard.html" class="btn btn-secondary btn-small">← Back to Admin</a>
+                <select class="admin-page-select" aria-label="Admin pages">
+                    <option value="">Admin Pages</option>
+                    <option value="admin-dashboard.html">Dashboard</option>
+                    <option value="admin-jobs.html">Jobs</option>
+                    <option value="admin-contractors.html">Contractors</option>
+                    <option value="admin-revenue.html">Finance Overview</option>
+                    <option value="admin-payouts.html">Payouts</option>
+                    <option value="admin-payments-history.html">Payments History</option>
+                    <option value="admin-contractor-profile.html">Contractor Profile</option>
+                    <option value="admin-login.html">Admin Login</option>
+                </select>
+                <button onclick="logout()" class="btn btn-small">Logout</button>
+            </div>
+        </header>
+    </div>
+
+    <main class="container">
+        <nav class="finance-nav" aria-label="Finance">
+            <a href="admin-revenue.html" class="active">Overview</a>
+            <a href="admin-payouts.html">Payouts</a>
+            <a href="admin-payments-history.html">Payments History</a>
+        </nav>
+        <!-- MTD Financial Overview -->
+        <section>
+            <div class="section-header">
+                <div class="section-title">
+                    Month-to-Date Financial Overview
+                    <span class="section-badge" id="mtd-badge">LOADING...</span>
+                </div>
+            </div>
+
+            <div class="kpi-grid" id="kpi-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div>Loading financial data...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payouts Pending -->
+        <section>
+            <div class="payouts-grid">
+                <div class="payouts-panel">
+                    <div class="section-header" style="margin-bottom: 1rem;">
+                        <div class="section-title">
+                            Payouts Pending
+                            <span class="section-badge" id="payouts-badge">LOADING...</span>
+                        </div>
+                    </div>
+                    <div class="payouts-metrics" id="payouts-metrics">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+
+                    <div class="batch-actions" id="batch-actions" style="display: none;">
+                        <div class="batch-info">
+                            <span id="selected-count">0</span> jobs selected
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="batchProcessPayouts()">
+                            Process Selected Payouts
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="clearSelection()">
+                            Clear Selection
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="hide-mobile">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="checkbox-cell">
+                                            <input type="checkbox" id="select-all" onchange="toggleSelectAll()">
+                                        </th>
+                                        <th onclick="sortTable('job_id')">Job ID</th>
+                                        <th onclick="sortTable('contractor')">Contractor</th>
+                                        <th onclick="sortTable('contractor_tier')">Tier</th>
+                                        <th onclick="sortTable('location')">City / Category</th>
+                                        <th onclick="sortTable('final_price')">Final Price</th>
+                                        <th onclick="sortTable('material_fees')">Materials</th>
+                                        <th onclick="sortTable('stripe_fee')">Stripe Fee</th>
+                                        <th onclick="sortTable('platform_fee')">Platform Fee</th>
+                                        <th onclick="sortTable('contractor_payout')">Contractor Payout</th>
+                                        <th onclick="sortTable('completed_at')">Completed</th>
+                                        <th onclick="sortTable('payment_status')">Payment</th>
+                                        <th onclick="sortTable('payout_status')">Payout</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payouts-table">
+                                    <tr>
+                                        <td colspan="13" class="loading">
+                                            <div class="spinner"></div>
+                                            <div>Loading payouts...</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="payouts-cards" class="card-list show-mobile"></div>
+                    </div>
+                </div>
+
+                <div class="payouts-panel">
+                    <div class="section-header" style="margin-bottom: 1rem;">
+                        <div class="section-title">
+                            <a href="admin-payments-history.html" style="text-decoration: none; color: inherit;">Payments History</a>
+                            <span class="section-badge" id="payments-history-badge">LOADING...</span>
+                        </div>
+                    </div>
+
+                    <div class="payouts-metrics" id="payments-history-metrics">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="hide-mobile">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Job ID</th>
+                                        <th>Contractor</th>
+                                        <th>Tier</th>
+                                        <th>City / Category</th>
+                                        <th>Final Price</th>
+                                        <th>Materials</th>
+                                        <th>Platform Fee</th>
+                                        <th>Contractor Payout</th>
+                                        <th>Completed</th>
+                                        <th>Payout Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payments-history-table">
+                                    <tr>
+                                        <td colspan="10" class="loading">
+                                            <div class="spinner"></div>
+                                            <div>Loading payments history...</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="payments-history-cards" class="card-list show-mobile"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Revenue MTD Line Items -->
+        <section>
+            <div class="section-header">
+                <div class="section-title">
+                    Revenue MTD — All Completed Jobs
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="filters">
+                        <input type="date" class="filter-input" id="filter-date-start" onchange="applyFilters()">
+                        <input type="date" class="filter-input" id="filter-date-end" onchange="applyFilters()">
+                        <select class="filter-select" id="filter-city" onchange="applyFilters()">
+                            <option value="">All Cities</option>
+                        </select>
+                        <select class="filter-select" id="filter-category" onchange="applyFilters()">
+                            <option value="">All Categories</option>
+                        </select>
+                        <select class="filter-select" id="filter-payment-status" onchange="applyFilters()">
+                            <option value="">All Payment Status</option>
+                            <option value="paid">Paid</option>
+                            <option value="unpaid">Unpaid</option>
+                            <option value="refunded">Refunded</option>
+                        </select>
+                        <select class="filter-select" id="filter-payout-status" onchange="applyFilters()">
+                            <option value="">All Payout Status</option>
+                            <option value="ready">Ready</option>
+                            <option value="processing">Processing</option>
+                            <option value="paid">Paid</option>
+                            <option value="not_ready">Not Ready</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="resetFilters()">Reset Filters</button>
+                </div>
+
+                <div class="hide-mobile">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortRevenueTable('job_id')">Job ID</th>
+                                <th onclick="sortRevenueTable('contractor_tier')">Tier</th>
+                                <th onclick="sortRevenueTable('city')">City</th>
+                                <th onclick="sortRevenueTable('category')">Category</th>
+                                <th onclick="sortRevenueTable('final_price')">Final Price</th>
+                                <th onclick="sortRevenueTable('material_fees')">Materials</th>
+                                <th onclick="sortRevenueTable('stripe_fee')">Stripe Fee</th>
+                                <th onclick="sortRevenueTable('platform_fee')">Platform Fee</th>
+                                <th onclick="sortRevenueTable('contractor_payout')">Contractor Payout</th>
+                                <th onclick="sortRevenueTable('payment_status')">Payment</th>
+                                <th onclick="sortRevenueTable('payout_status')">Payout</th>
+                                <th onclick="sortRevenueTable('completed_at')">Completed</th>
+                            </tr>
+                        </thead>
+                        <tbody id="revenue-table">
+                            <tr>
+                                <td colspan="11" class="loading">
+                                    <div class="spinner"></div>
+                                    <div>Loading revenue data...</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="revenue-cards" class="card-list show-mobile"></div>
+            </div>
+        </section>
+
+        <!-- Exceptions & Alerts -->
+        <section>
+            <div class="section-header">
+                <div class="section-title">
+                    Exceptions & Alerts
+                </div>
+            </div>
+
+            <div class="exceptions-panel" id="exceptions-panel">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Export & Reporting -->
+        <section>
+            <div class="export-actions">
+                <button class="btn btn-primary" onclick="exportRevenueMTD()">
+                    Export Revenue MTD (CSV)
+                </button>
+                <button class="btn btn-primary" onclick="exportPayoutsPending()">
+                    Export Payouts Pending (CSV)
+                </button>
+                <button class="btn btn-secondary" onclick="exportKPISnapshot()">
+                    Export KPI Snapshot
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/admin-nav.js"></script>
+    <script src="../js/admin-revenue.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

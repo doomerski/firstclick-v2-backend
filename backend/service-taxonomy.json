@@ -1,0 +1,153 @@
+{
+  "version": "1.0",
+  "source": "FirstClick/ServiceHub taxonomy seed",
+  "categories": [
+    {
+      "id": 1,
+      "name": "Plumbing",
+      "slug": "plumbing",
+      "icon": "🔧",
+      "description": "Professional plumbing services for residential and commercial properties",
+      "sort_order": 1,
+      "is_active": true
+    },
+    {
+      "id": 2,
+      "name": "Electrical",
+      "slug": "electrical",
+      "icon": "⚡",
+      "description": "Licensed electrical services and installations",
+      "sort_order": 2,
+      "is_active": true
+    },
+    {
+      "id": 3,
+      "name": "HVAC",
+      "slug": "hvac",
+      "icon": "❄️",
+      "description": "Heating, ventilation, and air conditioning services",
+      "sort_order": 3,
+      "is_active": true
+    },
+    {
+      "id": 4,
+      "name": "Appliance Repair",
+      "slug": "appliance-repair",
+      "icon": "🔨",
+      "description": "Repair and maintenance for home appliances",
+      "sort_order": 4,
+      "is_active": true
+    },
+    {
+      "id": 5,
+      "name": "Construction & Renovation",
+      "slug": "construction-renovation",
+      "icon": "🏗️",
+      "description": "General contracting and renovation services",
+      "sort_order": 5,
+      "is_active": true
+    },
+    {
+      "id": 6,
+      "name": "Roofing & Exterior",
+      "slug": "roofing-exterior",
+      "icon": "🏠",
+      "description": "Roofing, siding, and exterior work",
+      "sort_order": 6,
+      "is_active": true
+    },
+    {
+      "id": 7,
+      "name": "Outdoor & Property Services",
+      "slug": "outdoor-property",
+      "icon": "🌳",
+      "description": "Landscaping, tree services, and outdoor maintenance",
+      "sort_order": 7,
+      "is_active": true
+    },
+    {
+      "id": 8,
+      "name": "Security & Smart Systems",
+      "slug": "security-smart-systems",
+      "icon": "🔒",
+      "description": "Security systems and smart home installations",
+      "sort_order": 8,
+      "is_active": true
+    },
+    {
+      "id": 9,
+      "name": "Cleaning & Restoration",
+      "slug": "cleaning-restoration",
+      "icon": "🧹",
+      "description": "Professional cleaning and damage restoration",
+      "sort_order": 9,
+      "is_active": true
+    },
+    {
+      "id": 10,
+      "name": "Pest & Wildlife Control",
+      "slug": "pest-wildlife-control",
+      "icon": "🐛",
+      "description": "Pest control and wildlife removal services",
+      "sort_order": 10,
+      "is_active": true
+    },
+    {
+      "id": 11,
+      "name": "Moving & Junk Removal",
+      "slug": "moving-junk-removal",
+      "icon": "📦",
+      "description": "Moving services and junk hauling",
+      "sort_order": 11,
+      "is_active": true
+    },
+    {
+      "id": 12,
+      "name": "Handyman & Specialty",
+      "slug": "handyman-specialty",
+      "icon": "🔧",
+      "description": "General handyman and specialty services",
+      "sort_order": 12,
+      "is_active": true
+    }
+  ],
+  "serviceTypes": [
+    {"id": 1, "category_id": 1, "name": "Emergency plumbing", "slug": "emergency-plumbing", "short_desc": "24/7 emergency plumbing repairs", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["urgent", "burst pipe", "no water"], "sort_order": 1, "is_active": true},
+    {"id": 2, "category_id": 1, "name": "Leak detection & repair", "slug": "leak-detection-repair", "short_desc": "Find and fix water leaks", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["leak", "water leak", "pipe leak"], "sort_order": 2, "is_active": true},
+    {"id": 3, "category_id": 1, "name": "Drain cleaning & unclogging", "slug": "drain-cleaning-unclogging", "short_desc": "Clear clogged drains", "is_emergency_supported": true, "requires_license": false, "is_quote_only": false, "tags": ["clog", "blocked drain", "snaking"], "sort_order": 3, "is_active": true},
+    {"id": 4, "category_id": 1, "name": "Pipe repair & replacement", "slug": "pipe-repair-replacement", "short_desc": "Fix or replace damaged pipes", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["pipe", "replace pipe"], "sort_order": 4, "is_active": true},
+    {"id": 5, "category_id": 1, "name": "Faucet & fixture installation", "slug": "faucet-fixture-installation", "short_desc": "Install faucets and fixtures", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["faucet", "fixture"], "sort_order": 5, "is_active": true},
+    {"id": 6, "category_id": 1, "name": "Toilet repair & installation", "slug": "toilet-repair-installation", "short_desc": "Fix or install toilets", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["toilet", "install toilet"], "sort_order": 6, "is_active": true},
+    {"id": 7, "category_id": 1, "name": "Water heater (tank) install/repair", "slug": "water-heater-tank-install-repair", "short_desc": "Tank water heater service", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["hot water", "water heater"], "sort_order": 7, "is_active": true},
+    {"id": 8, "category_id": 1, "name": "Tankless water heater install/repair", "slug": "water-heater-tankless-install-repair", "short_desc": "Tankless water heater service", "is_emergency_supported": true, "requires_license": true, "is_quote_only": true, "tags": ["tankless", "on-demand"], "sort_order": 8, "is_active": true},
+    {"id": 9, "category_id": 1, "name": "Sump pump install/repair", "slug": "sump-pump-install-repair", "short_desc": "Sump pump service", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["sump", "basement water"], "sort_order": 9, "is_active": true},
+    {"id": 10, "category_id": 1, "name": "Frozen pipe thawing", "slug": "frozen-pipe-thawing", "short_desc": "Emergency frozen pipe service", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["frozen pipe", "thaw"], "sort_order": 10, "is_active": true},
+    
+    {"id": 20, "category_id": 2, "name": "Emergency electrical repair", "slug": "emergency-electrical-repair", "short_desc": "24/7 electrical emergency", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["power out", "sparking"], "sort_order": 1, "is_active": true},
+    {"id": 21, "category_id": 2, "name": "Panel upgrades & replacements", "slug": "panel-upgrades-replacements", "short_desc": "Upgrade electrical panels", "is_emergency_supported": false, "requires_license": true, "is_quote_only": true, "tags": ["panel", "breaker panel"], "sort_order": 2, "is_active": true},
+    {"id": 22, "category_id": 2, "name": "Circuit breaker repair", "slug": "circuit-breaker-repair", "short_desc": "Fix circuit breakers", "is_emergency_supported": false, "requires_license": true, "is_quote_only": false, "tags": ["breaker", "tripping"], "sort_order": 3, "is_active": true},
+    {"id": 23, "category_id": 2, "name": "Outlet & switch installation", "slug": "outlet-switch-installation", "short_desc": "Install outlets and switches", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["outlet", "switch"], "sort_order": 4, "is_active": true},
+    {"id": 24, "category_id": 2, "name": "Lighting installation", "slug": "lighting-installation", "short_desc": "Install indoor/outdoor lighting", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["light", "fixture"], "sort_order": 5, "is_active": true},
+    {"id": 25, "category_id": 2, "name": "EV charger installation", "slug": "ev-charger-installation", "short_desc": "Install EV chargers", "is_emergency_supported": false, "requires_license": true, "is_quote_only": true, "tags": ["ev", "charger"], "sort_order": 6, "is_active": true},
+    {"id": 26, "category_id": 2, "name": "Smart home wiring", "slug": "smart-home-wiring", "short_desc": "Wire smart home devices", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["smart home", "wiring"], "sort_order": 7, "is_active": true},
+    
+    {"id": 40, "category_id": 3, "name": "Furnace repair", "slug": "furnace-repair", "short_desc": "Emergency furnace repairs", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["no heat", "furnace"], "sort_order": 1, "is_active": true},
+    {"id": 41, "category_id": 3, "name": "Furnace installation", "slug": "furnace-installation", "short_desc": "Install new furnaces", "is_emergency_supported": false, "requires_license": true, "is_quote_only": true, "tags": ["install furnace"], "sort_order": 2, "is_active": true},
+    {"id": 42, "category_id": 3, "name": "Air conditioning repair", "slug": "air-conditioning-repair", "short_desc": "AC emergency repairs", "is_emergency_supported": true, "requires_license": true, "is_quote_only": false, "tags": ["ac", "no cooling"], "sort_order": 3, "is_active": true},
+    {"id": 43, "category_id": 3, "name": "Air conditioning installation", "slug": "air-conditioning-installation", "short_desc": "Install new AC systems", "is_emergency_supported": false, "requires_license": true, "is_quote_only": true, "tags": ["install ac"], "sort_order": 4, "is_active": true},
+    {"id": 44, "category_id": 3, "name": "Duct cleaning", "slug": "duct-cleaning", "short_desc": "Clean HVAC ductwork", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["ducts", "air ducts"], "sort_order": 5, "is_active": true},
+    {"id": 45, "category_id": 3, "name": "Thermostat installation", "slug": "thermostat-installation", "short_desc": "Install smart thermostats", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["thermostat", "smart"], "sort_order": 6, "is_active": true},
+    {"id": 46, "category_id": 3, "name": "HVAC inspections / tune-ups", "slug": "hvac-inspections-tuneups", "short_desc": "Seasonal HVAC maintenance", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["tune up", "inspection"], "sort_order": 7, "is_active": true},
+    
+    {"id": 60, "category_id": 4, "name": "Refrigerator repair", "slug": "refrigerator-repair", "short_desc": "Fix refrigerators", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["fridge", "not cooling"], "sort_order": 1, "is_active": true},
+    {"id": 61, "category_id": 4, "name": "Dishwasher repair", "slug": "dishwasher-repair", "short_desc": "Fix dishwashers", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["dishwasher", "leaking"], "sort_order": 2, "is_active": true},
+    {"id": 62, "category_id": 4, "name": "Washing machine repair", "slug": "washing-machine-repair", "short_desc": "Fix washing machines", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["washer", "not spinning"], "sort_order": 3, "is_active": true},
+    {"id": 63, "category_id": 4, "name": "Dryer repair", "slug": "dryer-repair", "short_desc": "Fix dryers", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["dryer", "not heating"], "sort_order": 4, "is_active": true},
+    {"id": 64, "category_id": 4, "name": "Garbage disposal repair", "slug": "garbage-disposal-repair", "short_desc": "Fix garbage disposals", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["disposal", "jammed"], "sort_order": 5, "is_active": true},
+    
+    {"id": 100, "category_id": 12, "name": "Minor repairs", "slug": "minor-repairs", "short_desc": "General handyman repairs", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["repair", "fix"], "sort_order": 1, "is_active": true},
+    {"id": 101, "category_id": 12, "name": "Furniture assembly", "slug": "furniture-assembly", "short_desc": "Assemble furniture", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["ikea", "assembly"], "sort_order": 2, "is_active": true},
+    {"id": 102, "category_id": 12, "name": "TV mounting", "slug": "tv-mounting", "short_desc": "Mount TVs on walls", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["mount tv", "tv"], "sort_order": 3, "is_active": true},
+    {"id": 103, "category_id": 12, "name": "Door & lock repair", "slug": "door-lock-repair", "short_desc": "Fix doors and locks", "is_emergency_supported": false, "requires_license": false, "is_quote_only": false, "tags": ["door", "lock"], "sort_order": 4, "is_active": true}
+  ]
+}

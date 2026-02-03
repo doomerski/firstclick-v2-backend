@@ -1,0 +1,221 @@
+/* Shared Admin Page Styling (matches admin-dashboard) */
+
+body.admin-theme {
+  background: linear-gradient(to bottom right, #fffbeb, #fed7aa, #fecaca);
+  color: #1f2937;
+}
+
+body.admin-theme .super-header {
+  margin: 2.5rem 0 2rem;
+}
+
+body.admin-theme .eyebrow {
+  color: #2dd4bf;
+  letter-spacing: 0.32em;
+}
+
+body.admin-theme .subtext,
+body.admin-theme .page-subtitle,
+body.admin-theme .muted,
+body.admin-theme .meta,
+body.admin-theme .kpi-subtitle {
+  color: #6b7280;
+}
+
+body.admin-theme .admin-hero,
+body.admin-theme .panel,
+body.admin-theme .data-card,
+body.admin-theme .payouts-panel,
+body.admin-theme .summary-card,
+body.admin-theme .table-container,
+body.admin-theme .exceptions-panel,
+body.admin-theme .activity-feed,
+body.admin-theme .contractor-card-admin,
+body.admin-theme .card,
+body.admin-theme .modal-content,
+body.admin-theme .job-card,
+body.admin-theme .detail-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.admin-theme .kpi-card,
+body.admin-theme .summary-grid > div {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.admin-theme .table-row,
+body.admin-theme .data-row,
+body.admin-theme .table-header,
+body.admin-theme .job-row,
+body.admin-theme .contractor-row,
+body.admin-theme .finance-row,
+body.admin-theme .payout-row {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+}
+
+body.admin-theme .table-row:hover,
+body.admin-theme .data-row:hover {
+  background: #f3f4f6;
+}
+
+body.admin-theme .finance-nav {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+body.admin-theme .finance-nav a {
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+body.admin-theme .finance-nav a.active {
+  background: linear-gradient(to right, #f97316, #dc2626);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+body.admin-theme .quick-filter-btn,
+body.admin-theme .filter-chip {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+body.admin-theme .quick-filter-btn.active {
+  background: linear-gradient(to right, #f97316, #dc2626);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+body.admin-theme .status-badge,
+body.admin-theme .status-pill,
+body.admin-theme .vetting-badge,
+body.admin-theme .urgency-pill {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+body.admin-theme .status-badge {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+body.admin-theme .status-badge.status-completed,
+body.admin-theme .status-badge.status-paid,
+body.admin-theme .status-badge.status-approved,
+body.admin-theme .status-pill.success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+body.admin-theme .status-badge.status-pending,
+body.admin-theme .status-pill.warning,
+body.admin-theme .urgency-pill.urgency-high {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+body.admin-theme .status-badge.status-failed,
+body.admin-theme .status-badge.status-rejected,
+body.admin-theme .status-pill.danger,
+body.admin-theme .urgency-pill.urgency-emergency {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+body.admin-theme .section-badge {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+body.admin-theme .header-meta {
+  color: #6b7280;
+}
+
+html.theme-dark body.admin-theme {
+  background: #0b1016;
+  color: #e2e8f0;
+}
+
+html.theme-dark body.admin-theme .admin-hero,
+html.theme-dark body.admin-theme .panel,
+html.theme-dark body.admin-theme .data-card,
+html.theme-dark body.admin-theme .payouts-panel,
+html.theme-dark body.admin-theme .summary-card,
+html.theme-dark body.admin-theme .table-container,
+html.theme-dark body.admin-theme .exceptions-panel,
+html.theme-dark body.admin-theme .activity-feed,
+html.theme-dark body.admin-theme .contractor-card-admin,
+html.theme-dark body.admin-theme .card,
+html.theme-dark body.admin-theme .kpi-card,
+html.theme-dark body.admin-theme .summary-grid > div,
+html.theme-dark body.admin-theme .modal-content {
+  background: rgba(21, 29, 41, 0.92);
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+html.theme-dark body.admin-theme .table-row,
+html.theme-dark body.admin-theme .data-row,
+html.theme-dark body.admin-theme .table-header {
+  background: rgba(15, 22, 33, 0.9);
+  border-color: #334155;
+}
+
+html.theme-dark body.admin-theme .finance-nav a {
+  background: rgba(21, 29, 41, 0.9);
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+html.theme-dark body.admin-theme .finance-nav a.active,
+html.theme-dark body.admin-theme .quick-filter-btn.active {
+  background: linear-gradient(to right, #f97316, #dc2626);
+  color: #ffffff;
+}
+
+html.theme-dark body.admin-theme .subtext,
+html.theme-dark body.admin-theme .page-subtitle,
+html.theme-dark body.admin-theme .muted,
+html.theme-dark body.admin-theme .meta,
+html.theme-dark body.admin-theme .kpi-subtitle {
+  color: #94a3b8;
+}
+
+html.theme-dark body.admin-theme .section-badge {
+  background: rgba(15, 22, 33, 0.9);
+  color: #94a3b8;
+  border-color: #334155;
+}
+
+html.theme-dark body.admin-theme .quick-filter-btn {
+  background: rgba(21, 29, 41, 0.9);
+  border-color: #334155;
+  color: #e2e8f0;
+}

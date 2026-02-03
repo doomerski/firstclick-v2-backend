@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Dashboard - FirstClick</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="../js/notifications.js"></script>
+</head>
+<body class="has-bottom-nav offset-title">
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="../index.html" class="logo" style="text-decoration: none; color: inherit;">
+          <img class="logo-img logo-light" src="../assets/lightmode-logo.png" alt="FirstClick" loading="eager">
+          <img class="logo-img logo-dark" src="../assets/darkmode-logo.png" alt="FirstClick" loading="eager">
+          <span class="logo-text">FirstClick</span>
+        </a>
+        <nav class="nav">
+          <span id="contractorName" class="nav-text small"></span>
+          <a href="contractor-dashboard.html" class="nav-link">Dashboard</a>
+          <a href="contractor-dashboard.html#my-jobs" class="nav-link">My Jobs</a>
+          <a href="contractor-profile.html" class="nav-link">Profile</a>
+          <button onclick="logout()" class="btn">Logout</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Login Form (shown if not logged in) -->
+  <section id="loginSection" class="login-section">
+    <div class="container">
+      <div class="card" style="max-width: 400px; margin: 0 auto;">
+        <h2 class="card-title">Contractor Portal</h2>
+        <form id="contractorLoginForm" class="form">
+          <div class="form-group">
+            <label class="label">Email</label>
+            <input type="email" id="loginEmail" class="input" required>
+          </div>
+          <div class="form-group">
+            <label class="label">Password</label>
+            <input type="password" id="loginPassword" class="input" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <p class="help-text" style="text-align: center; margin-top: 1rem;">
+          Don't have an account? <a href="contractor-signup.html">Apply here</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard (shown when logged in) -->
+  <section id="dashboardSection" class="dashboard" style="display: none;">
+    <div class="container">
+      <!-- Vetting Status Banner -->
+      <div id="vettingBanner" class="alert" style="display: none;"></div>
+
+      <div id="jobs"></div>
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('my-jobs')">My Jobs</button>
+        <button class="tab" onclick="switchTab('available')">Available Jobs</button>
+        <button class="tab" onclick="switchTab('profile')">Profile</button>
+      </div>
+
+      <!-- My Jobs Tab -->
+      <div id="myJobsTab" class="tab-content active">
+        <h2 class="page-title">My Accepted Jobs</h2>
+        <div id="myJobsList" class="jobs-list"></div>
+        <div id="noMyJobs" class="empty-state" style="display: none;">
+          <p>You haven't accepted any jobs yet.</p>
+        </div>
+      </div>
+
+      <!-- Available Jobs Tab -->
+      <div id="availableTab" class="tab-content">
+        <h2 class="page-title">Available Jobs</h2>
+        <div id="availableJobsList" class="jobs-list"></div>
+        <div id="noAvailableJobs" class="empty-state" style="display: none;">
+          <p>No jobs available at the moment. Check back soon!</p>
+        </div>
+      </div>
+
+      <!-- Profile Tab -->
+      <div id="profileTab" class="tab-content">
+        <h2 class="page-title">My Profile</h2>
+        <div class="card" style="max-width: 720px;">
+          <div style="display: grid; gap: 1rem;">
+            <div>
+              <div class="label">Business Name</div>
+              <div id="profileBusinessName">—</div>
+            </div>
+            <div>
+              <div class="label">Legal Name</div>
+              <div id="profileLegalName">—</div>
+            </div>
+            <div>
+              <div class="label">Email</div>
+              <div id="profileEmail">—</div>
+            </div>
+            <div>
+              <div class="label">Phone</div>
+              <div id="profilePhone">—</div>
+            </div>
+            <div>
+              <div class="label">Primary Trade</div>
+              <div id="profilePrimaryTrade">—</div>
+            </div>
+            <div>
+              <div class="label">Tier</div>
+              <div id="profileTier">—</div>
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <button class="btn btn-secondary" onclick="window.location.href='contractor-profile.html'">Open Full Profile</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- End Job Modal -->
+  <div id="endJobModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeEndJobModal()">&times;</span>
+      <h2 style="margin-bottom: 1.5rem;">End Job</h2>
+      <div id="endJobInfo" style="background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;"></div>
+      
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Reason</label>
+        <select id="endJobCause" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit;">
+          <option value="">-- Select Reason --</option>
+          <option value="customer_unavailable">Customer Unavailable</option>
+          <option value="scope_mismatch">Scope Mismatch</option>
+          <option value="safety_concern">Safety Concern</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Additional Notes</label>
+        <textarea id="endJobNotes" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit;" placeholder="Explain why you're ending this job..." rows="4"></textarea>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Photo (optional)</label>
+        <input type="file" id="endJobPhoto" accept="image/*" style="width: 100%;">
+        <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">
+          Upload a photo if it helps explain the issue.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+        <button onclick="closeEndJobModal()" class="btn btn-secondary">Cancel</button>
+        <button id="endJobSubmit" onclick="confirmEndJob()" class="btn btn-primary" style="background: #dc2626;">End Job</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start Job Modal -->
+  <div id="startJobModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeStartJobModal()">&times;</span>
+      <h2 style="margin-bottom: 1.5rem;">Start Job</h2>
+      <div id="startJobInfo" style="background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;"></div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Before Photos</label>
+        <input type="file" id="startJobPhotos" multiple accept="image/*" style="width: 100%;">
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Notes (optional)</label>
+        <textarea id="startJobNotes" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit;" placeholder="Any notes before starting..." rows="4"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+        <button onclick="closeStartJobModal()" class="btn btn-secondary">Cancel</button>
+        <button onclick="submitStartJob()" class="btn btn-primary">Start Job</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complete Job Modal -->
+  <div id="completeJobModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeCompleteJobModal()">&times;</span>
+      <h2 style="margin-bottom: 1.5rem;">Complete Job</h2>
+      <div id="completeJobInfo" style="background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;"></div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Tasks Performed</label>
+        <textarea id="completeJobTasks" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit;" placeholder="List the tasks completed..." rows="3"></textarea>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Materials Used</label>
+        <textarea id="completeJobMaterials" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit;" placeholder="List materials used..." rows="3"></textarea>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Material Costs</label>
+        <input type="number" id="completeJobMaterialCosts" min="0" step="0.01" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit;" placeholder="0.00" required>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Material Receipts (optional)</label>
+        <input type="file" id="completeJobReceipts" multiple accept="image/*,application/pdf" style="width: 100%;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Finished Photos</label>
+        <input type="file" id="completeJobPhotos" multiple accept="image/*" style="width: 100%;">
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Additional Notes</label>
+        <textarea id="completeJobNotes" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit;" placeholder="Any completion notes..." rows="3"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+        <button onclick="closeCompleteJobModal()" class="btn btn-secondary">Cancel</button>
+        <button onclick="submitCompleteJob()" class="btn btn-success">Complete Job</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let currentTab = 'my-jobs';
+    let availableJobs = [];
+    let myJobs = [];
+    let contractor = null;
+
+    function renderHeaderNav(isLoggedIn) {
+      const nav = document.querySelector('.header .nav');
+      if (!nav) return;
+      if (isLoggedIn) {
+        nav.innerHTML = `
+          <span id="contractorName" class="nav-text small"></span>
+          <a href="contractor-dashboard.html" class="nav-link">Dashboard</a>
+          <a href="contractor-dashboard.html#my-jobs" class="nav-link">My Jobs</a>
+          <a href="contractor-profile.html" class="nav-link">Profile</a>
+          <button onclick="logout()" class="btn">Logout</button>
+        `;
+      } else {
+        nav.innerHTML = `
+          <a href="customer-dashboard.html" class="nav-link">My Tasks</a>
+          <a href="join-team.html" class="nav-link">Join Our Team</a>
+          <a href="contractor-signup.html" class="nav-link">Become a Contractor</a>
+          <a href="contractor-dashboard.html" class="nav-link">Contractor Portal</a>
+          <div class="admin-group">
+            <a href="../admin/admin-login.html" class="nav-link muted">Admin</a>
+          </div>
+        `;
+      }
+    }
+
+    // Check login status on page load
+    const user = getUser();
+    if (user && user.role === 'contractor') {
+      renderHeaderNav(true);
+      showDashboard();
+    } else {
+      renderHeaderNav(false);
+      document.getElementById('loginSection').style.display = 'block';
+    }
+
+    // Handle login
+    document.getElementById('contractorLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const response = await api.post('/auth/contractor/login', { email, password });
+        saveUser(response.user, response.token);
+        showDashboard();
+      } catch (error) {
+        notify.error('Login failed: ' + (error.message || 'Invalid credentials'));
+      }
+    });
+
+    async function showDashboard() {
+      renderHeaderNav(true);
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('dashboardSection').style.display = 'block';
+
+      const user = getUser();
+      contractor = user;
+      await refreshContractorProfile();
+      const nameEl = document.getElementById('contractorName');
+      if (nameEl) nameEl.textContent = contractor.business_name || contractor.legal_name;
+      updateProfileTab();
+
+      // Show vetting status banner
+      showVettingBanner();
+
+      // Load jobs
+      await loadMyJobs();
+      await loadAvailableJobs();
+      switchTab(currentTab);
+    }
+
+    function showVettingBanner() {
+      const banner = document.getElementById('vettingBanner');
+      const status = contractor.vetting_status;
+
+      if (status === 'APPROVED_ACTIVE') {
+        banner.style.display = 'none';
+      } else {
+        banner.style.display = 'block';
+        const isBlocked = ['REJECTED', 'SUSPENDED'].includes(status);
+        banner.className = isBlocked ? 'alert alert-danger' : 'alert alert-warning';
+        
+        const messages = {
+          'APPLIED': '⏳ Your application is under review. You\'ll be able to accept jobs once approved.',
+          'PENDING_DOCUMENTS': '📄 Please upload all required documents to continue the approval process.',
+          'UNDER_REVIEW': '🔍 Your documents are being reviewed. This typically takes 2-3 business days.',
+          'APPROVED_LIMITED': '✅ Your account is approved! Some features may be limited during your probationary period.',
+          'REJECTED': '❌ We\'re sorry to inform you but we can not accept your application at this time, please reach out to support as we can futher assist on a case by case basis.',
+          'SUSPENDED': '⚠️ Your account is suspended. Please contact support for details.'
+        };
+        
+        banner.innerHTML = messages[status] || 'Your account is pending approval.';
+      }
+    }
+
+    async function refreshContractorProfile() {
+      if (!contractor || !contractor.id) return;
+      try {
+        const response = await api.get(`/contractors/${contractor.id}/profile`);
+      if (response.contractor) {
+        contractor = { ...response.contractor, role: contractor.role || 'contractor' };
+        localStorage.setItem('user', JSON.stringify(contractor));
+        updateProfileTab();
+      }
+      } catch (error) {
+        console.error('Error refreshing contractor profile:', error);
+      }
+    }
+
+    async function loadAvailableJobs() {
+      if (contractor.vetting_status !== 'APPROVED_ACTIVE') {
+        document.getElementById('noAvailableJobs').style.display = 'block';
+        document.getElementById('noAvailableJobs').innerHTML = '<p>You must be approved to view available jobs.</p>';
+        return;
+      }
+
+      try {
+        const response = await api.get(`/contractor/available-jobs?contractor_id=${contractor.id}`);
+        const myJobIds = new Set((myJobs || []).map(j => j.id));
+        availableJobs = (response.jobs || []).filter(job => !myJobIds.has(job.id));
+
+        if (availableJobs.length === 0) {
+          document.getElementById('availableJobsList').innerHTML = '';
+          document.getElementById('noAvailableJobs').style.display = 'block';
+        } else {
+          renderAvailableJobs();
+        }
+      } catch (error) {
+        console.error('Error loading available jobs:', error);
+      }
+    }
+
+    async function loadMyJobs() {
+      try {
+        const response = await api.get(`/contractor/jobs/${contractor.id}`);
+        myJobs = response.jobs || [];
+        myJobs.sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0));
+
+        if (myJobs.length === 0) {
+          document.getElementById('noMyJobs').style.display = 'block';
+        } else {
+          renderMyJobs();
+        }
+      } catch (error) {
+        console.error('Error loading my jobs:', error);
+      }
+    }
+
+    function renderAvailableJobs() {
+      const container = document.getElementById('availableJobsList');
+      container.innerHTML = availableJobs.map(job => `
+        <div class="job-card">
+          <div class="job-header">
+            <div>
+              <h3 class="job-title">${job.category_name} - ${job.type_name}</h3>
+              <p class="job-meta">${formatStreetName(job.address_line1)}, ${job.city}, ${job.province}</p>
+            </div>
+            <span class="urgency-badge urgency-${job.urgency}">${formatUrgency(job.urgency)}</span>
+          </div>
+          
+          <p class="job-description">${job.description}</p>
+          
+          <div class="job-footer">
+            <div class="job-details">
+              <span>⏰ ${formatTimeWindow(job.time_window)}</span>
+              <span>📅 ${new Date(job.created_at).toLocaleDateString()}</span>
+              ${job.estimate ? `<span>💰 ${formatEstimate(job.estimate)}</span>` : ''}
+            </div>
+            <button onclick="acceptJob('${job.id}')" class="btn btn-primary">Accept Job</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function formatEstimate(estimate) {
+      if (!estimate || estimate.mode === 'unknown') return 'Estimate unavailable';
+      if (estimate.mode === 'quote_only') return 'Quote required';
+      const min = estimate.min != null ? estimate.min.toLocaleString() : '—';
+      const max = estimate.max != null ? estimate.max.toLocaleString() : '—';
+      return `$${min} - $${max}`;
+    }
+
+    function formatStreetName(addressLine1) {
+      if (!addressLine1) return '';
+      const trimmed = String(addressLine1).trim();
+      const match = trimmed.match(/^(\d+[A-Za-z0-9\-\/]*)\s+(.*)$/);
+      if (match && match[2]) return match[2];
+      return trimmed;
+    }
+
+    function renderMyJobs() {
+      const container = document.getElementById('myJobsList');
+      container.innerHTML = myJobs.map(job => `
+        <div class="job-card">
+          <div class="job-header">
+            <div>
+              <h3 class="job-title">${job.category_name} - ${job.type_name}</h3>
+              <p class="job-meta">${job.address_full || [job.address_line1, job.address_line2].filter(Boolean).join(', ')}, ${job.city}</p>
+            </div>
+            <span class="status-badge status-${job.status}">${formatStatus(job.status)}</span>
+          </div>
+          
+          <p class="job-description">${job.description}</p>
+          
+          <div class="job-details">
+            <div class="detail-item">
+              <span class="detail-label">Status:</span>
+              <span class="detail-value">${formatStatus(job.status)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Assigned:</span>
+              <span class="detail-value">${new Date(job.updated_at).toLocaleString()}</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+            ${job.status === 'assigned' ? `
+              <button onclick="setJobStatus('${job.id}', 'en_route')" class="btn btn-primary">En Route</button>
+            ` : ''}
+            ${job.status === 'en_route' ? `
+              <button onclick="setJobStatus('${job.id}', 'on_site')" class="btn btn-primary">On Site</button>
+            ` : ''}
+            ${job.status === 'on_site' ? `
+              <button onclick="openStartJobModal('${job.id}')" class="btn btn-primary">Start Job</button>
+              <button onclick="openEndJobModal('${job.id}')" class="btn btn-warning">End Job</button>
+            ` : ''}
+            ${job.status === 'in_progress' ? `
+              <button onclick="openCompleteJobModal('${job.id}')" class="btn btn-success">Mark Complete</button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function setJobStatus(jobId, newStatus) {
+      const labels = {
+        en_route: 'En Route',
+        on_site: 'On Site',
+        in_progress: 'Start Job'
+      };
+      if (!confirm(`Update job status to "${labels[newStatus] || newStatus}"?`)) return;
+
+      try {
+        await api.patch(`/jobs/${jobId}/status`, { status: newStatus });
+        notify.info('Job status updated!');
+        await loadMyJobs();
+        await loadAvailableJobs();
+        stayOnMyJobs();
+      } catch (error) {
+        notify.info('Error updating status: ' + error.message);
+      }
+    }
+
+    async function acceptJob(jobId) {
+      if (!confirm('Accept this job?')) return;
+
+      try {
+        await api.post(`/jobs/${jobId}/accept`, { contractor_id: contractor.id });
+        notify.info('Job accepted! Moving to your jobs...');
+        await loadAvailableJobs();
+        await loadMyJobs();
+        stayOnMyJobs();
+      } catch (error) {
+        notify.info('Error accepting job: ' + error.message);
+      }
+    }
+
+    async function startJob(jobId) {
+      openStartJobModal(jobId);
+    }
+
+    async function completeJob(jobId) {
+      openCompleteJobModal(jobId);
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      const tabButton = document.querySelector(`.tab[onclick*="switchTab('${tab}')"]`);
+      if (tabButton) {
+        tabButton.classList.add('active');
+      }
+      
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      if (tab === 'available') {
+        document.getElementById('availableTab').classList.add('active');
+      } else if (tab === 'my-jobs') {
+        document.getElementById('myJobsTab').classList.add('active');
+      } else {
+        document.getElementById('profileTab').classList.add('active');
+      }
+    }
+
+    function stayOnMyJobs() {
+      currentTab = 'my-jobs';
+      switchTab('my-jobs');
+    }
+
+    function updateProfileTab() {
+      if (!contractor) return;
+      const tierLabel = String(contractor.contractor_tier || contractor.contractorTier || 'bronze')
+        .toLowerCase()
+        .replace(/\b\w/g, c => c.toUpperCase());
+      const primaryTrade = contractor.primary_trade || contractor.primaryTrade || '—';
+      const businessName = contractor.business_name || contractor.businessName || '—';
+      const legalName = contractor.legal_name || contractor.legalName || '—';
+      const email = contractor.email || '—';
+      const phone = contractor.phone || '—';
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+
+      setText('profileBusinessName', businessName);
+      setText('profileLegalName', legalName);
+      setText('profileEmail', email);
+      setText('profilePhone', phone);
+      setText('profilePrimaryTrade', String(primaryTrade).replace(/-/g, ' '));
+      setText('profileTier', tierLabel);
+    }
+
+    function formatUrgency(urgency) {
+      const map = {
+        'emergency': '🚨 Emergency',
+        'same-day': '⚡ Same-day',
+        'next-day': '📅 Next-day',
+        'scheduled': '🗓️ Scheduled'
+      };
+      return map[urgency] || urgency;
+    }
+
+    function formatTimeWindow(window) {
+      const map = {
+        'morning': 'Morning',
+        'afternoon': 'Afternoon',
+        'evening': 'Evening',
+        'flexible': 'Flexible'
+      };
+      return map[window] || window;
+    }
+
+    function formatStatus(status) {
+      const map = {
+        'assigned': 'Assigned',
+        'en_route': 'En Route',
+        'on_site': 'On Site',
+        'in_progress': 'In Progress',
+        'completed': 'Completed'
+      };
+      return map[status] || status;
+    }
+
+    // ===== START JOB MODAL =====
+    let currentStartJobId = null;
+
+    function openStartJobModal(jobId) {
+      currentStartJobId = jobId;
+      const job = myJobs.find(j => j.id === jobId);
+      if (!job) return;
+
+      const info = `
+        <div><strong>Job:</strong> ${job.type_name} - ${job.id.substring(0, 8)}...</div>
+        <div><strong>Address:</strong> ${job.address_full || [job.address_line1, job.address_line2].filter(Boolean).join(', ')}, ${job.city}</div>
+        <div><strong>Status:</strong> ${formatStatus(job.status)}</div>
+      `;
+      document.getElementById('startJobInfo').innerHTML = info;
+      document.getElementById('startJobNotes').value = '';
+      document.getElementById('startJobPhotos').value = '';
+      document.getElementById('startJobModal').style.display = 'flex';
+    }
+
+    function closeStartJobModal() {
+      document.getElementById('startJobModal').style.display = 'none';
+      currentStartJobId = null;
+    }
+
+    async function submitStartJob() {
+      const notes = document.getElementById('startJobNotes').value || '';
+      const files = Array.from(document.getElementById('startJobPhotos').files || []);
+      try {
+        const before_photos = await readFilesAsDataUrls(files);
+        await api.post(`/contractor/jobs/${currentStartJobId}/start`, {
+          notes,
+          before_photos,
+          contractorId: contractor.id
+        });
+        notify.info('Job started!');
+        closeStartJobModal();
+        await loadMyJobs();
+        await loadAvailableJobs();
+        stayOnMyJobs();
+      } catch (error) {
+        notify.info('Error starting job: ' + error.message);
+      }
+    }
+
+    // ===== COMPLETE JOB MODAL =====
+    let currentCompleteJobId = null;
+
+    function openCompleteJobModal(jobId) {
+      currentCompleteJobId = jobId;
+      const job = myJobs.find(j => j.id === jobId);
+      if (!job) return;
+
+      const info = `
+        <div><strong>Job:</strong> ${job.type_name} - ${job.id.substring(0, 8)}...</div>
+        <div><strong>Address:</strong> ${job.address_full || [job.address_line1, job.address_line2].filter(Boolean).join(', ')}, ${job.city}</div>
+        <div><strong>Status:</strong> ${formatStatus(job.status)}</div>
+      `;
+      document.getElementById('completeJobInfo').innerHTML = info;
+      document.getElementById('completeJobTasks').value = '';
+      document.getElementById('completeJobMaterials').value = '';
+      document.getElementById('completeJobMaterialCosts').value = '';
+      document.getElementById('completeJobNotes').value = '';
+      document.getElementById('completeJobPhotos').value = '';
+      document.getElementById('completeJobReceipts').value = '';
+      document.getElementById('completeJobModal').style.display = 'flex';
+    }
+
+    function closeCompleteJobModal() {
+      document.getElementById('completeJobModal').style.display = 'none';
+      currentCompleteJobId = null;
+    }
+
+    async function submitCompleteJob() {
+      const tasks = document.getElementById('completeJobTasks').value || '';
+      const materials = document.getElementById('completeJobMaterials').value || '';
+      const rawMaterialCosts = document.getElementById('completeJobMaterialCosts').value;
+      if (rawMaterialCosts === '' || rawMaterialCosts === null || rawMaterialCosts === undefined) {
+        notify.warning('Please enter material costs (use 0 if none).');
+        return;
+      }
+      const material_costs = Number(rawMaterialCosts);
+      if (!Number.isFinite(material_costs) || material_costs < 0) {
+        notify.info('Material costs must be a valid number (0 or higher).');
+        return;
+      }
+      const notes = document.getElementById('completeJobNotes').value || '';
+      const files = Array.from(document.getElementById('completeJobPhotos').files || []);
+      const receiptFiles = Array.from(document.getElementById('completeJobReceipts').files || []);
+      try {
+        const photos = await readFilesAsDataUrls(files);
+        const receipts = await readFilesAsDataUrls(receiptFiles);
+        const response = await api.post(`/contractor/jobs/${currentCompleteJobId}/complete`, {
+          tasks,
+          materials,
+          material_costs,
+          notes,
+          photos,
+          receipts,
+          contractorId: contractor.id
+        });
+        const payout = response.payment || response.job?.completion_report?.payment;
+        if (payout && payout.amount != null) {
+          notify.info(`Job completed! Mock payout issued: $${Number(payout.amount).toLocaleString()} ${payout.currency || ''}`.trim());
+        } else {
+          notify.info('Job completed!');
+        }
+        closeCompleteJobModal();
+        await loadMyJobs();
+        stayOnMyJobs();
+      } catch (error) {
+        notify.info('Error completing job: ' + error.message);
+      }
+    }
+
+    function readFilesAsDataUrls(files) {
+      return Promise.all((files || []).map(file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+          filename: file.name,
+          dataUrl: reader.result,
+          size: file.size,
+          mime: file.type
+        });
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+      })));
+    }
+
+    function readFileAsDataUrl(file) {
+      if (!file) return Promise.resolve(null);
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+          filename: file.name,
+          dataUrl: reader.result,
+          size: file.size,
+          mime: file.type
+        });
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ===== END JOB MODAL =====
+    let currentEndJobId = null;
+
+    function openEndJobModal(jobId) {
+      currentEndJobId = jobId;
+      const job = myJobs.find(j => j.id === jobId);
+      if (!job) return;
+
+      console.log('[EndJob] open modal', { jobId });
+      let info = `
+        <div><strong>Job:</strong> ${job.type_name} - ${job.id.substring(0, 8)}...</div>
+        <div><strong>Address:</strong> ${job.address_line1}, ${job.city}</div>
+        <div><strong>Status:</strong> ${formatStatus(job.status)}</div>
+      `;
+      const modal = document.getElementById('endJobModal');
+      modal.dataset.jobId = jobId;
+      document.getElementById('endJobInfo').innerHTML = info;
+      document.getElementById('endJobCause').value = '';
+      document.getElementById('endJobNotes').value = '';
+      document.getElementById('endJobPhoto').value = '';
+      modal.style.display = 'flex';
+    }
+
+    function closeEndJobModal() {
+      const modal = document.getElementById('endJobModal');
+      modal.style.display = 'none';
+      delete modal.dataset.jobId;
+      currentEndJobId = null;
+    }
+
+    async function confirmEndJob() {
+      const modal = document.getElementById('endJobModal');
+      const jobId = modal.dataset.jobId || currentEndJobId;
+      const causeCode = document.getElementById('endJobCause').value;
+      const notes = document.getElementById('endJobNotes').value;
+      const submitButton = document.getElementById('endJobSubmit');
+
+      if (!jobId) {
+        notify.error('Unable to end job. Please reopen the modal and try again.');
+        return;
+      }
+
+      if (!causeCode) {
+        notify.warning('Please select a reason');
+        return;
+      }
+
+      if (!notes.trim()) {
+        notify.warning('Please provide additional notes');
+        return;
+      }
+
+      try {
+        const user = getUser();
+        if (!user || !user.id) {
+          notify.warning('Please sign in again to end this job.');
+          return;
+        }
+
+        console.log('[EndJob] submit', { jobId, causeCode, notesLength: notes.length });
+        submitButton.disabled = true;
+        const endPhotoFile = document.getElementById('endJobPhoto')?.files?.[0] || null;
+        const end_photo = await readFileAsDataUrl(endPhotoFile);
+        const data = await api.post(`/contractor/jobs/${jobId}/end`, {
+          causeCode,
+          notes,
+          end_photo,
+          contractorId: user.id
+        });
+        console.log('[EndJob] response', data);
+
+        myJobs = myJobs.filter(j => j.id !== jobId);
+        renderMyJobs();
+        closeEndJobModal();
+        stayOnMyJobs();
+        notify.info('✓ Job ended successfully. An admin will review and either relist or reassign it.');
+      } catch (error) {
+        console.error('Error ending job:', error);
+        console.log('[EndJob] error', { status: error.status, message: error.message });
+        if (error.status === 403) {
+          notify.info('You can only end jobs assigned to you while on site.');
+        } else if (error.status === 400) {
+          notify.info(error.message || 'Unable to end this job. Please check the job status and try again.');
+        } else {
+          notify.info(error.message || '✗ Failed to end job. Please try again.');
+        }
+      } finally {
+        submitButton.disabled = false;
+      }
+    }
+  </script>
+  <script src="../js/theme.js"></script>
+
+  <nav class="bottom-nav show-mobile">
+    <a href="contractor-dashboard.html">Home</a>
+    <a href="contractor-dashboard.html#jobs">Jobs</a>
+    <a href="#" class="is-disabled" aria-disabled="true">Messages</a>
+    <a href="contractor-profile.html">Profile</a>
+  </nav>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

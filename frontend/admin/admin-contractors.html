@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractors - Admin - FirstClick</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --blue-500: #3b82f6;
+      --border-radius: 10px;
+      --shadow-md: 0 10px 20px rgba(15, 23, 42, 0.2);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--slate-950), var(--slate-900));
+      color: var(--slate-100);
+    }
+
+    .container {
+      max-width: 1400px;
+    }
+
+    .header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      padding: 35px 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: slideDown 0.4s ease-out;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .admin-hero {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .admin-hero-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #ffffff;
+      box-shadow: 0 10px 18px rgba(14, 165, 233, 0.35);
+    }
+
+    .admin-hero h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .header-meta {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--slate-400);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      color: #22c55e;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    }
+
+    html:not(.theme-dark) .admin-hero {
+      background: #ffffff;
+      border-color: #e2e8f0;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+      color: #0f172a;
+    }
+
+    html:not(.theme-dark) .header-meta {
+      color: #64748b;
+    }
+
+    html:not(.theme-dark) .header-icon {
+      background: linear-gradient(135deg, #60a5fa, #0ea5e9);
+      box-shadow: 0 8px 16px rgba(14, 165, 233, 0.25);
+    }
+    .section-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 999px;
+      color: var(--slate-200);
+      border: 1px solid var(--slate-700);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .panel {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+    }
+
+    .contractors-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .contractor-card-admin {
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      border: 1px solid var(--slate-700);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s;
+    }
+
+    .contractor-card-admin:hover {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    .contractor-header-admin {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1.5rem;
+    }
+
+    .contractor-info h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--slate-100);
+      margin-bottom: 0.25rem;
+    }
+
+    .contractor-info p {
+      color: var(--slate-400);
+      font-size: 0.875rem;
+    }
+
+    .contractor-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 0.75rem;
+      border: 1px solid var(--slate-700);
+    }
+
+    .quick-filters {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .quick-filter-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--slate-700);
+      background: var(--slate-800);
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--slate-200);
+    }
+
+    .quick-filter-btn:hover {
+      border-color: var(--blue-500);
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .quick-filter-btn.active {
+      border-color: var(--blue-500);
+      background: var(--blue-500);
+      color: white;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1 1 320px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--slate-700);
+      border-radius: 0.75rem;
+      font-size: 0.95rem;
+      background: #0f172a;
+      color: var(--slate-100);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--blue-500);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    html:not(.theme-dark) body {
+      background: linear-gradient(to bottom right, #fffbeb, #fed7aa, #fecaca);
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .header {
+      background: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) .panel,
+    html:not(.theme-dark) .contractor-card-admin {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    html:not(.theme-dark) .contractor-info h3 {
+      color: #111827;
+    }
+
+    html:not(.theme-dark) .contractor-info p,
+    html:not(.theme-dark) .section-badge {
+      color: #6b7280;
+    }
+
+    html:not(.theme-dark) .contractor-meta {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    html:not(.theme-dark) .quick-filter-btn {
+      background: white;
+      border: 2px solid #e5e7eb;
+      color: #1f2937;
+    }
+
+    html:not(.theme-dark) .quick-filter-btn:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    html:not(.theme-dark) .search-input {
+      background: white;
+      color: #111827;
+      border: 1px solid #e5e7eb;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 2.5rem 0 2rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: #2dd4bf;
+      margin: 0 0 0.75rem;
+    }
+
+    .super-header h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: #9aa6c1;
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+  </style>
+  <link rel="stylesheet" href="../css/admin-unified.css">
+  <script src="../js/notifications.js"></script>
+</head>
+<body class="compact-header admin-theme">
+  <div class="container admin-header-shell">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Admin Command Center</p>
+        <h1>Contractors</h1>
+        <p class="subtext">Vetting and coverage overview. Total: <strong id="contractorTotalHeader">0</strong></p>
+      </div>
+      <div class="header-actions">
+        <button onclick="showCreateContractorModal()" class="btn btn-primary btn-small">+ Create New Contractor</button>
+        <a href="admin-dashboard.html" class="btn btn-secondary btn-small">← Back to Admin</a>
+        <select class="admin-page-select" aria-label="Admin pages">
+          <option value="">Admin Pages</option>
+          <option value="admin-dashboard.html">Dashboard</option>
+          <option value="admin-jobs.html">Jobs</option>
+          <option value="admin-contractors.html">Contractors</option>
+          <option value="admin-revenue.html">Finance Overview</option>
+          <option value="admin-payouts.html">Payouts</option>
+          <option value="admin-payments-history.html">Payments History</option>
+          <option value="admin-contractor-profile.html">Contractor Profile</option>
+          <option value="admin-login.html">Admin Login</option>
+        </select>
+        <button onclick="logout()" class="btn btn-small">Logout</button>
+      </div>
+    </header>
+  </div>
+
+  <section class="dashboard">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="section-badge" id="contractorCountBadge">Loading…</span>
+        </div>
+        <button onclick="loadContractors()" class="btn btn-primary btn-small">🔄 Refresh</button>
+      </div>
+
+      <!-- Quick Filters -->
+      <div class="panel">
+        <div class="quick-filters">
+          <button class="quick-filter-btn active" onclick="quickFilter('all')">All Contractors</button>
+          <button class="quick-filter-btn" onclick="quickFilter('vetting')">⏳ Vetting Queue</button>
+          <button class="quick-filter-btn" onclick="quickFilter('approved')">✅ Approved</button>
+          <button class="quick-filter-btn" onclick="quickFilter('docs_expiring')">⚠️ Docs Expiring</button>
+          <button class="quick-filter-btn" onclick="quickFilter('rejected')">❌ Rejected</button>
+        </div>
+
+        <div class="search-bar">
+          <input id="contractorSearch" class="search-input" type="search" placeholder="Search by name, city, or trade..." oninput="applySearch()">
+          <button class="btn btn-secondary btn-small" onclick="clearSearch()">Clear</button>
+        </div>
+      </div>
+
+      <!-- Contractors Grid -->
+      <div id="contractorsList" class="contractors-grid">
+        <div class="loading" style="padding: 3rem; text-align: center;">Loading contractors...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Create Contractor Modal -->
+  <div id="createContractorModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 700px;">
+      <span class="modal-close" onclick="closeCreateModal()">&times;</span>
+      <h2 style="margin-bottom: 1.5rem;">Create New Contractor</h2>
+      
+      <form id="createContractorForm" class="form">
+        <div class="form-group">
+          <label class="label">Legal Name *</label>
+          <input type="text" id="newLegalName" class="input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Business Name</label>
+          <input type="text" id="newBusinessName" class="input">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Email *</label>
+          <input type="email" id="newEmail" class="input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Phone *</label>
+          <input type="tel" id="newPhone" class="input" placeholder="+1 416-555-1234" required>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Primary Trade *</label>
+          <select id="newPrimaryTrade" class="input" required>
+            <option value="">Select trade...</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="electrical">Electrical</option>
+            <option value="hvac">HVAC</option>
+            <option value="appliance_repair">Appliance Repair</option>
+            <option value="construction">Construction & Renovation</option>
+            <option value="roofing">Roofing & Exterior</option>
+            <option value="landscaping">Outdoor & Property Services</option>
+            <option value="security">Security & Smart Systems</option>
+            <option value="cleaning">Cleaning & Restoration</option>
+            <option value="pest_control">Pest & Wildlife Control</option>
+            <option value="moving">Moving & Junk Removal</option>
+            <option value="handyman">Handyman & Specialty</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Years of Experience *</label>
+          <input type="number" id="newExperience" class="input" min="0" max="50" required>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Vetting Status *</label>
+          <select id="newVettingStatus" class="input" required>
+            <option value="APPLIED">Applied</option>
+            <option value="UNDER_REVIEW">Under Review</option>
+            <option value="APPROVED_ACTIVE">Approved Active</option>
+            <option value="PENDING_DOCUMENTS">Pending Documents</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+          <button type="submit" class="btn btn-primary">Create Contractor</button>
+          <button type="button" onclick="closeCreateModal()" class="btn btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contractor Detail Modal -->
+  <div id="contractorModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 800px;">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <div id="contractorModalContent"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-nav.js"></script>
+  <script>
+    let allContractors = [];
+    let filteredContractors = [];
+    let searchQuery = '';
+
+    const user = getUser();
+    if (!user || user.role !== 'admin') {
+      window.location.href = 'admin-login.html';
+    }
+    const adminNameEl = document.getElementById('adminName');
+    if (adminNameEl) adminNameEl.textContent = user.full_name;
+
+    async function loadContractors() {
+      try {
+        const response = await api.get('/admin/contractors');
+        allContractors = response.contractors || [];
+        filteredContractors = [...allContractors];
+        applySearch();
+      } catch (error) {
+        console.error('Error loading contractors:', error);
+      }
+    }
+
+    function renderContractors() {
+      const container = document.getElementById('contractorsList');
+      const badge = document.getElementById('contractorCountBadge');
+      const headerTotal = document.getElementById('contractorTotalHeader');
+      if (badge) {
+        badge.textContent = `${filteredContractors.length} Total`;
+      }
+      if (headerTotal) {
+        headerTotal.textContent = filteredContractors.length;
+      }
+      
+      if (filteredContractors.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No contractors match the current filter</p></div>';
+        return;
+      }
+
+      container.innerHTML = filteredContractors.map(c => {
+        const contractorId = c.id || c.contractor_id || c.contractorId;
+        const displayName = c.business_name || c.businessName || c.legal_name || c.legalName || 'Unknown Contractor';
+        
+        if (!contractorId) {
+          console.warn('⚠️ Contractor has no ID:', c);
+        }
+        
+        return `
+        <div class="contractor-card-admin" data-contractor-id="${contractorId || ''}" onclick="viewContractor(this)" style="cursor: pointer;">
+          <div class="contractor-header-admin">
+            <div class="contractor-info">
+              <h3>${displayName}</h3>
+              <p>${c.email} • ${c.phone || 'No phone'}</p>
+            </div>
+            <span class="vetting-badge vetting-${c.vetting_status}">
+              ${formatVettingStatus(c.vetting_status)}
+            </span>
+          </div>
+
+          <div class="contractor-meta">
+            <div class="detail-item">
+              <span class="detail-label">Applied</span>
+              <span class="detail-value">${new Date(c.created_at).toLocaleDateString()}</span>
+            </div>
+            ${c.approved_at ? `
+              <div class="detail-item">
+                <span class="detail-label">Approved</span>
+                <span class="detail-value">${new Date(c.approved_at).toLocaleDateString()}</span>
+              </div>
+            ` : ''}
+          </div>
+
+          ${c.vetting_status !== 'APPROVED_ACTIVE' && c.vetting_status !== 'REJECTED' ? `
+            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+              <button onclick="event.stopPropagation(); approveContractor('${contractorId || ''}')" class="btn btn-success btn-small">
+                Approve
+              </button>
+              <button onclick="event.stopPropagation(); rejectContractor('${contractorId || ''}')" class="btn btn-danger btn-small">
+                Reject
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+      }).join('');
+    }
+
+    function quickFilter(type) {
+      document.querySelectorAll('.quick-filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      switch(type) {
+        case 'all':
+          filteredContractors = [...allContractors];
+          break;
+        case 'vetting':
+          filteredContractors = allContractors.filter(c => 
+            ['APPLIED', 'UNDER_REVIEW', 'PENDING_DOCUMENTS'].includes(c.vetting_status)
+          );
+          break;
+        case 'approved':
+          filteredContractors = allContractors.filter(c => c.vetting_status === 'APPROVED_ACTIVE');
+          break;
+        case 'docs_expiring':
+          // Mock - in production would check actual expiry dates
+          filteredContractors = [];
+          break;
+        case 'rejected':
+          filteredContractors = allContractors.filter(c => c.vetting_status === 'REJECTED');
+          break;
+      }
+
+      applySearch();
+    }
+
+    function applySearch() {
+      const input = document.getElementById('contractorSearch');
+      if (input) searchQuery = input.value.trim().toLowerCase();
+      if (!searchQuery) {
+        renderContractors();
+        return;
+      }
+      const searched = filteredContractors.filter(c => {
+        const name = (c.business_name || c.legal_name || '').toLowerCase();
+        const city = (c.city || c.city_name || c.location || '').toLowerCase();
+        const trade = (c.primary_trade || c.primaryTrade || '').toLowerCase();
+        return name.includes(searchQuery) || city.includes(searchQuery) || trade.includes(searchQuery);
+      });
+      const container = document.getElementById('contractorsList');
+      const badge = document.getElementById('contractorCountBadge');
+      if (badge) {
+        badge.textContent = `${searched.length} Shown`;
+      }
+      if (searched.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No contractors match the search</p></div>';
+        return;
+      }
+      container.innerHTML = searched.map(c => {
+        const contractorId = c.id || c.contractor_id || c.contractorId;
+        const displayName = c.business_name || c.businessName || c.legal_name || c.legalName || 'Unknown Contractor';
+        return `
+        <div class="contractor-card-admin" data-contractor-id="${contractorId || ''}" onclick="viewContractor(this)">
+          <div class="contractor-header-admin">
+            <div class="contractor-info">
+              <h3>${displayName}</h3>
+              <p>${c.email} • ${c.phone || 'No phone'}</p>
+            </div>
+            <span class="vetting-badge vetting-${c.vetting_status}">
+              ${formatVettingStatus(c.vetting_status)}
+            </span>
+          </div>
+
+          <div class="contractor-meta">
+            <div class="detail-item">
+              <span class="detail-label">Applied</span>
+              <span class="detail-value">${new Date(c.created_at).toLocaleDateString()}</span>
+            </div>
+            ${c.approved_at ? `
+              <div class="detail-item">
+                <span class="detail-label">Approved</span>
+                <span class="detail-value">${new Date(c.approved_at).toLocaleDateString()}</span>
+              </div>
+            ` : ''}
+          </div>
+
+          ${c.vetting_status !== 'APPROVED_ACTIVE' && c.vetting_status !== 'REJECTED' ? `
+            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+              <button onclick="event.stopPropagation(); approveContractor('${contractorId || ''}')" class="btn btn-success btn-small">
+                Approve
+              </button>
+              <button onclick="event.stopPropagation(); rejectContractor('${contractorId || ''}')" class="btn btn-danger btn-small">
+                Reject
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+      }).join('');
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('contractorSearch');
+      if (input) input.value = '';
+      searchQuery = '';
+      renderContractors();
+    }
+
+    async function approveContractor(id) {
+      if (!confirm('Approve this contractor?')) return;
+      
+      try {
+        await api.patch(`/admin/contractors/${id}/status`, { vetting_status: 'APPROVED_ACTIVE' });
+        notify.success('Contractor approved!');
+        await loadContractors();
+      } catch (error) {
+        notify.error('Error: ' + error.message);
+      }
+    }
+
+    async function rejectContractor(id) {
+      if (!confirm('Reject this contractor?')) return;
+      
+      try {
+        await api.patch(`/admin/contractors/${id}/status`, { vetting_status: 'REJECTED' });
+        notify.success('Action completed');
+        await loadContractors();
+      } catch (error) {
+        notify.error('Error: ' + error.message);
+      }
+    }
+
+    function viewContractor(target) {
+      const id = typeof target === 'string'
+        ? target
+        : target?.dataset?.contractorId;
+      
+      console.log('🔗 viewContractor() called');
+      console.log('   Target:', target);
+      console.log('   Extracted ID:', id);
+      
+      if (!id) {
+        console.error('❌ Missing contractor ID - target:', target);
+        notify.info('Missing contractor ID.');
+        return;
+      }
+      
+      console.log('✅ Navigating to profile for contractor:', id);
+      // Link to static HTML page with URL parameter
+      const profileUrl = `admin-contractor-profile.html?id=${encodeURIComponent(id)}`;
+      console.log('   URL:', profileUrl);
+      window.location.href = profileUrl;
+    }
+
+    function closeModal() {
+      document.getElementById('contractorModal').style.display = 'none';
+    }
+
+    function formatVettingStatus(status) {
+      const map = {
+        'APPLIED': 'Applied',
+        'PENDING_DOCUMENTS': 'Pending Docs',
+        'UNDER_REVIEW': 'Under Review',
+        'APPROVED_ACTIVE': 'Approved',
+        'REJECTED': 'Rejected'
+      };
+      return map[status] || status;
+    }
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'admin_contractors_updated') {
+        loadContractors();
+      }
+    });
+
+    loadContractors();
+
+    function showCreateContractorModal() {
+      document.getElementById('createContractorModal').style.display = 'flex';
+      document.getElementById('createContractorForm').reset();
+    }
+
+    function closeCreateModal() {
+      document.getElementById('createContractorModal').style.display = 'none';
+    }
+
+    document.getElementById('createContractorForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const newContractor = {
+        legal_name: document.getElementById('newLegalName').value.trim(),
+        business_name: document.getElementById('newBusinessName').value.trim(),
+        email: document.getElementById('newEmail').value.trim(),
+        phone: document.getElementById('newPhone').value.trim(),
+        primary_trade: document.getElementById('newPrimaryTrade').value,
+        experience_years: parseInt(document.getElementById('newExperience').value, 10),
+        vetting_status: document.getElementById('newVettingStatus').value,
+        password: 'tempPassword123' // temporary password
+      };
+
+      try {
+        const response = await api.post('/admin/contractors', newContractor);
+        notify.success('Contractor created successfully! ID: ' + response.contractor.id);
+        closeCreateModal();
+        await loadContractors();
+      } catch (error) {
+        notify.info('Error creating contractor: ' + error.message);
+      }
+    });
+  </script>
+  <!-- API Integration Scripts -->
+  <script src="../backend/admin-contractors-api.js"></script>
+  <script src="../js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

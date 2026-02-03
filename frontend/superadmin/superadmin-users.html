@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users Overview - Super Admin</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0b1016;
+      --surface: #151d29;
+      --surface-2: #1b2635;
+      --border: #2a3a52;
+      --accent: #ff8f1f;
+      --accent-2: #2dd4bf;
+      --accent-3: #f43f5e;
+      --text: #eef2ff;
+      --muted: #9aa6c1;
+      --muted-2: #6b7a93;
+      --shadow: 0 18px 35px rgba(6, 12, 20, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 45%),
+                  radial-gradient(circle at 20% 20%, rgba(255, 143, 31, 0.16), transparent 38%),
+                  radial-gradient(circle at bottom left, rgba(244, 63, 94, 0.14), transparent 40%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2.5rem clamp(1.2rem, 3vw, 3rem) 4rem;
+    }
+
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: var(--accent-2);
+      margin: 0 0 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #0b0f14;
+      background: linear-gradient(120deg, var(--accent), #facc15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 20px rgba(255, 143, 31, 0.3);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .kpi-card {
+      background: linear-gradient(160deg, rgba(21, 29, 41, 0.9), rgba(27, 38, 53, 0.7));
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-value {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .kpi-label {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: rgba(21, 29, 41, 0.85);
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .input,
+    select {
+      padding: 0.7rem 0.9rem;
+      border-radius: 0.8rem;
+      border: 1px solid var(--border);
+      background: rgba(10, 16, 24, 0.8);
+      color: var(--text);
+      font-family: inherit;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .list {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .list-item {
+      padding: 1.1rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 22, 33, 0.9);
+      border: 1px solid rgba(42, 58, 82, 0.6);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .list-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted-2);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .approval-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .approval-approved {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86efac;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .approval-denied {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 0.45rem 0.85rem;
+      font-size: 0.8rem;
+      border-radius: 0.6rem;
+      border: 1px solid var(--border);
+      background: rgba(21, 29, 41, 0.6);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-small:hover {
+      background: rgba(21, 29, 41, 1);
+      border-color: var(--accent-2);
+    }
+
+    .btn-small.danger {
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+      background: rgba(244, 63, 94, 0.1);
+    }
+
+    .btn-small.danger:hover {
+      background: rgba(244, 63, 94, 0.2);
+      border-color: #f43f5e;
+    }
+
+    .btn-small.warning {
+      color: #fcd34d;
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .btn-small.warning:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: #fbbf24;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    .status-active {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86efac;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .status-paused {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .status-terminated {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      border: 1px solid rgba(244, 63, 94, 0.4);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.1rem;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal h3 {
+      margin: 0 0 1rem;
+      color: var(--text);
+    }
+
+    .modal p {
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 0.6rem;
+      border: 1px solid var(--border);
+      background: rgba(10, 16, 24, 0.8);
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      font-family: inherit;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: flex-end;
+    }
+
+    .modal-actions button {
+      padding: 0.65rem 1.4rem;
+      border-radius: 0.6rem;
+      border: 1px solid var(--border);
+      background: rgba(21, 29, 41, 0.6);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .modal-actions button:hover {
+      background: rgba(21, 29, 41, 1);
+    }
+
+    .modal-actions .btn-confirm {
+      background: linear-gradient(120deg, var(--accent), #facc15);
+      color: #0b0f14;
+      border: none;
+    }
+
+    .modal-actions .btn-confirm.danger {
+      background: linear-gradient(120deg, #f43f5e, #ff6b6b);
+    }
+
+    .modal-actions .btn-confirm:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="background-grid"></div>
+  <div class="container">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Super Admin Command Center</p>
+        <h1>Users Overview</h1>
+        <p class="subtext">Review every user across roles and keep admin activity accountable.</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="../../examples/superadmin-dashboard.html">Back to Super Admin</a>
+        <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
+        <button class="btn" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value" id="totalUsers">0</div>
+        <div class="kpi-label">Total Users</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="customerCount">0</div>
+        <div class="kpi-label">Customers</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="contractorCount">0</div>
+        <div class="kpi-label">Contractors</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="adminCount">0</div>
+        <div class="kpi-label">Admins</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>User Directory</h3>
+      <div class="filters">
+        <input class="input" id="userSearch" placeholder="Search by email or name">
+        <select id="userRoleFilter">
+          <option value="">All roles</option>
+          <option value="customer">Customer</option>
+          <option value="contractor">Contractor</option>
+          <option value="admin">Admin</option>
+          <option value="super_admin">Super Admin</option>
+        </select>
+      </div>
+      <div class="list" id="usersList"></div>
+    </section>
+
+    <section class="card">
+      <div class="list-row">
+        <div>
+          <h3>Admin Changes Awaiting Approval</h3>
+          <p class="muted">Review recent admin activity before it is fully accepted.</p>
+        </div>
+        <span class="mono" id="adminApprovalCount">0 total</span>
+      </div>
+      <div class="list" id="adminApprovalList" data-count-id="adminApprovalCount" data-match="/admin/customers|/admin/contractors"></div>
+    </section>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal-overlay" id="pauseModal">
+    <div class="modal">
+      <h3>Pause User Account</h3>
+      <p>This user will be logged out and unable to access the platform.</p>
+      <p id="pauseUserInfo" style="color: var(--accent-2); margin-bottom: 0;"></p>
+      <div class="modal-actions">
+        <button type="button" onclick="closePauseModal()">Cancel</button>
+        <button type="button" class="btn-confirm warning" onclick="confirmPause()">Pause Account</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="resumeModal">
+    <div class="modal">
+      <h3>Resume User Account</h3>
+      <p>This user will be able to access the platform again.</p>
+      <p id="resumeUserInfo" style="color: var(--accent-2); margin-bottom: 0;"></p>
+      <div class="modal-actions">
+        <button type="button" onclick="closeResumeModal()">Cancel</button>
+        <button type="button" class="btn-confirm" onclick="confirmResume()">Resume Account</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="terminateModal">
+    <div class="modal">
+      <h3>Terminate User Account</h3>
+      <p style="color: #fda4af; font-weight: 600;">⚠️ This will freeze the account for 30 days before permanent deletion.</p>
+      <p>The user can contact support to reverse this action during the freeze period. All sessions will be revoked immediately.</p>
+      <p id="terminateUserInfo" style="color: var(--accent-2); margin-bottom: 1rem;"></p>
+      <input type="text" class="modal-input" id="terminationReason" placeholder="Reason for termination (optional)">
+      <div class="modal-actions">
+        <button type="button" onclick="closeTerminateModal()">Cancel</button>
+        <button type="button" class="btn-confirm danger" onclick="confirmTerminate()">Freeze for 30 Days</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="contractorProfileModal">
+    <div class="modal" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3>Contractor Profile</h3>
+        <button type="button" onclick="closeContractorProfile()" style="background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer;">✕</button>
+      </div>
+      <div id="contractorProfileContent" style="color: var(--muted);"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="unfreezeModal">
+    <div class="modal">
+      <h3>Unfreeze Account</h3>
+      <p>Restore this user's account and grant them full access again. All restrictions will be lifted.</p>
+      <p id="unfreezeUserInfo" style="color: var(--accent-2); margin-bottom: 0;"></p>
+      <div class="modal-actions">
+        <button type="button" onclick="closeUnfreezeModal()">Cancel</button>
+        <button type="button" class="btn-confirm" onclick="confirmUnfreeze()">Unfreeze & Restore</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-approvals.js"></script>
+  <script>
+    const user = getUser();
+    if (!user || user.role !== 'super_admin') {
+      window.location.href = '../admin/admin-login.html';
+    }
+
+    const state = {
+      users: []
+    };
+
+    function renderCounts(users) {
+      const counts = users.reduce((acc, item) => {
+        acc[item.role] = (acc[item.role] || 0) + 1;
+        return acc;
+      }, {});
+      document.getElementById('totalUsers').textContent = users.length;
+      document.getElementById('customerCount').textContent = counts.customer || 0;
+      document.getElementById('contractorCount').textContent = counts.contractor || 0;
+      document.getElementById('adminCount').textContent = (counts.admin || 0) + (counts.super_admin || 0);
+    }
+
+    function renderUsers() {
+      const query = document.getElementById('userSearch').value.toLowerCase();
+      const roleFilter = document.getElementById('userRoleFilter').value;
+      const list = document.getElementById('usersList');
+
+      const filtered = state.users.filter(userItem => {
+        const haystack = `${userItem.email || ''} ${userItem.full_name || ''}`.toLowerCase();
+        if (query && !haystack.includes(query)) return false;
+        if (roleFilter && userItem.role !== roleFilter) return false;
+        return true;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = '<div class="empty-state">No users match your filters.</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(userItem => {
+        const status = userItem.status || 'active';
+        let statusClass = status === 'paused' ? 'status-paused' : status === 'terminated' ? 'status-terminated' : status === 'frozen' ? 'status-terminated' : 'status-active';
+        let statusLabel = status === 'frozen' ? 'Frozen (30d)' : (status.charAt(0).toUpperCase() + status.slice(1));
+        
+        let actionButtons = '';
+        if (status === 'active') {
+          actionButtons = `
+            <button class="btn-small warning" onclick="openPauseModal('${userItem.id}', '${userItem.email}')">Pause</button>
+            <button class="btn-small danger" onclick="openTerminateModal('${userItem.id}', '${userItem.email}')">Terminate</button>
+          `;
+        } else if (status === 'paused') {
+          actionButtons = `
+            <button class="btn-small" onclick="openResumeModal('${userItem.id}', '${userItem.email}')">Resume</button>
+            <button class="btn-small danger" onclick="openTerminateModal('${userItem.id}', '${userItem.email}')">Terminate</button>
+          `;
+        } else if (status === 'frozen') {
+          actionButtons = `
+            <button class="btn-small" onclick="openUnfreezeModal('${userItem.id}', '${userItem.email}')">Unfreeze & Restore</button>
+          `;
+        }
+
+        // Add view profile button for contractors
+        if (userItem.role === 'contractor') {
+          actionButtons += `<button class="btn-small" onclick="openContractorProfile('${userItem.id}', '${userItem.email}')">View Profile</button>`;
+        }
+
+        return `
+          <div class="list-item">
+            <div class="list-row">
+              <div>
+                <strong>${userItem.email || 'Unknown email'}</strong>
+                <span class="status-badge ${statusClass}">${statusLabel}</span>
+                <div class="muted" style="margin-top: 0.3rem;">${userItem.full_name || 'No name'}${userItem.phone ? ` • ${userItem.phone}` : ''}</div>
+              </div>
+              <span class="mono">${userItem.role || 'unknown'}</span>
+            </div>
+            <div class="mono">ID: ${userItem.id}</div>
+            <div class="list-actions">
+              ${actionButtons}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadUsers() {
+      try {
+        const response = await api.get('/superadmin/users');
+        state.users = response.users || [];
+        renderCounts(state.users);
+        renderUsers();
+      } catch (error) {
+        document.getElementById('usersList').innerHTML = '<div class="empty-state">Unable to load users.</div>';
+      }
+    }
+
+    document.getElementById('userSearch').addEventListener('input', renderUsers);
+    document.getElementById('userRoleFilter').addEventListener('change', renderUsers);
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      loadUsers();
+      loadAdminApprovals({ listId: 'adminApprovalList', countId: 'adminApprovalCount', match: ['/admin/customers', '/admin/contractors'] });
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => logout());
+
+    // Modal state
+    let currentUserAction = { userId: null, email: null };
+
+    // Pause modal functions
+    function openPauseModal(userId, email) {
+      currentUserAction = { userId, email };
+      document.getElementById('pauseUserInfo').textContent = `Email: ${email}`;
+      document.getElementById('pauseModal').classList.add('active');
+    }
+
+    function closePauseModal() {
+      document.getElementById('pauseModal').classList.remove('active');
+      currentUserAction = { userId: null, email: null };
+    }
+
+    async function confirmPause() {
+      if (!currentUserAction.userId) return;
+      try {
+        await api.post(`/superadmin/users/${currentUserAction.userId}/pause`, {});
+        closePauseModal();
+        loadUsers();
+        alert(`User ${currentUserAction.email} account has been paused.`);
+      } catch (error) {
+        alert('Failed to pause user account: ' + (error.message || 'Unknown error'));
+      }
+    }
+
+    // Resume modal functions
+    function openResumeModal(userId, email) {
+      currentUserAction = { userId, email };
+      document.getElementById('resumeUserInfo').textContent = `Email: ${email}`;
+      document.getElementById('resumeModal').classList.add('active');
+    }
+
+    function closeResumeModal() {
+      document.getElementById('resumeModal').classList.remove('active');
+      currentUserAction = { userId: null, email: null };
+    }
+
+    async function confirmResume() {
+      if (!currentUserAction.userId) return;
+      try {
+        await api.post(`/superadmin/users/${currentUserAction.userId}/resume`, {});
+        closeResumeModal();
+        loadUsers();
+        alert(`User ${currentUserAction.email} account has been resumed.`);
+      } catch (error) {
+        alert('Failed to resume user account: ' + (error.message || 'Unknown error'));
+      }
+    }
+
+    // Terminate modal functions
+    function openTerminateModal(userId, email) {
+      currentUserAction = { userId, email };
+      document.getElementById('terminateUserInfo').textContent = `Email: ${email}`;
+      document.getElementById('terminationReason').value = '';
+      document.getElementById('terminateModal').classList.add('active');
+    }
+
+    function closeTerminateModal() {
+      document.getElementById('terminateModal').classList.remove('active');
+      currentUserAction = { userId: null, email: null };
+    }
+
+    async function confirmTerminate() {
+      if (!currentUserAction.userId) return;
+      const reason = document.getElementById('terminationReason').value;
+      if (!confirm(`Are you sure you want to terminate ${currentUserAction.email}? The account will be frozen for 30 days before permanent deletion. This can be reversed during the freeze period.`)) {
+        return;
+      }
+      try {
+        await api.post(`/superadmin/users/${currentUserAction.userId}/terminate`, { reason: reason || null });
+        closeTerminateModal();
+        loadUsers();
+        alert(`User ${currentUserAction.email} account has been frozen for 30 days.`);
+      } catch (error) {
+        alert('Failed to terminate user account: ' + (error.message || 'Unknown error'));
+      }
+    }
+
+    // Close modals when clicking outside
+    document.getElementById('pauseModal').addEventListener('click', (e) => {
+      if (e.target.id === 'pauseModal') closePauseModal();
+    });
+    document.getElementById('resumeModal').addEventListener('click', (e) => {
+      if (e.target.id === 'resumeModal') closeResumeModal();
+    });
+    document.getElementById('terminateModal').addEventListener('click', (e) => {
+      if (e.target.id === 'terminateModal') closeTerminateModal();
+    });
+    document.getElementById('contractorProfileModal').addEventListener('click', (e) => {
+      if (e.target.id === 'contractorProfileModal') closeContractorProfile();
+    });
+    document.getElementById('unfreezeModal').addEventListener('click', (e) => {
+      if (e.target.id === 'unfreezeModal') closeUnfreezeModal();
+    });
+
+    // Contractor profile functions
+    async function openContractorProfile(contractorId, email) {
+      try {
+        const response = await api.get(`/superadmin/users/${contractorId}`);
+        const contractor = response.user;
+        
+        const tierOptions = ['bronze', 'silver', 'gold', 'platinum', 'elite'];
+        const currentTier = contractor.tier || 'bronze';
+        
+        const tierHtml = tierOptions.map(tier => `
+          <option value="${tier}" ${tier === currentTier ? 'selected' : ''}>${tier.charAt(0).toUpperCase() + tier.slice(1)}</option>
+        `).join('');
+
+        const profileHtml = `
+          <div style="margin-bottom: 1.5rem;">
+            <p><strong>Email:</strong> ${contractor.email}</p>
+            <p><strong>Name:</strong> ${contractor.full_name || contractor.legal_name || 'N/A'}</p>
+            <p><strong>Business:</strong> ${contractor.business_name || 'N/A'}</p>
+            <p><strong>Phone:</strong> ${contractor.phone || 'N/A'}</p>
+            <p><strong>Created:</strong> ${contractor.created_at ? new Date(contractor.created_at).toLocaleDateString() : 'N/A'}</p>
+          </div>
+
+          <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(42, 58, 82, 0.3); border-radius: 0.8rem; border: 1px solid var(--border);">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--accent-2);">Contractor Tier</label>
+            <select id="tierSelect" style="width: 100%; padding: 0.7rem; border-radius: 0.6rem; border: 1px solid var(--border); background: rgba(10, 16, 24, 0.8); color: var(--text); font-family: inherit;">
+              ${tierHtml}
+            </select>
+            <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;">Tier levels affect contractor visibility, priority, and payment rates across the entire system</p>
+          </div>
+
+          <div style="display: flex; gap: 0.8rem;">
+            <button type="button" onclick="closeContractorProfile()" style="flex: 1; padding: 0.65rem 1.4rem; border-radius: 0.6rem; border: 1px solid var(--border); background: rgba(21, 29, 41, 0.6); color: var(--text); cursor: pointer;">Close</button>
+            <button type="button" onclick="updateContractorTier('${contractorId}')" style="flex: 1; padding: 0.65rem 1.4rem; border-radius: 0.6rem; border: none; background: linear-gradient(120deg, var(--accent), #facc15); color: #0b0f14; cursor: pointer; font-weight: 600;">Save Tier</button>
+          </div>
+        `;
+
+        document.getElementById('contractorProfileContent').innerHTML = profileHtml;
+        document.getElementById('contractorProfileModal').classList.add('active');
+      } catch (error) {
+        alert('Failed to load contractor profile: ' + (error.message || 'Unknown error'));
+      }
+    }
+
+    function closeContractorProfile() {
+      document.getElementById('contractorProfileModal').classList.remove('active');
+    }
+
+    async function updateContractorTier(contractorId) {
+      const tier = document.getElementById('tierSelect').value;
+      try {
+        await api.patch(`/superadmin/contractors/${contractorId}/tier`, { tier });
+        loadUsers();
+        closeContractorProfile();
+        alert('Contractor tier updated successfully');
+      } catch (error) {
+        alert('Failed to update tier: ' + (error.message || 'Unknown error'));
+      }
+    }
+
+    // Unfreeze modal functions
+    function openUnfreezeModal(userId, email) {
+      currentUserAction = { userId, email };
+      document.getElementById('unfreezeUserInfo').textContent = `Email: ${email}`;
+      document.getElementById('unfreezeModal').classList.add('active');
+    }
+
+    function closeUnfreezeModal() {
+      document.getElementById('unfreezeModal').classList.remove('active');
+      currentUserAction = { userId: null, email: null };
+    }
+
+    async function confirmUnfreeze() {
+      if (!currentUserAction.userId) return;
+      try {
+        await api.post(`/superadmin/users/${currentUserAction.userId}/unfreeze`, {});
+        closeUnfreezeModal();
+        loadUsers();
+        alert(`User ${currentUserAction.email} account has been unfrozen and restored.`);
+      } catch (error) {
+        alert('Failed to unfreeze user account: ' + (error.message || 'Unknown error'));
+      }
+    }
+
+    attachApprovalHandlers('adminApprovalList');
+    loadUsers();
+    loadAdminApprovals({ listId: 'adminApprovalList', countId: 'adminApprovalCount', match: ['/admin/customers', '/admin/contractors'] });
+  </script>
+</body>
+</html>

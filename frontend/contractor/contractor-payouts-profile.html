@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Payouts Profile | FirstClick Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    :root {
+      --slate-950: #0f172a;
+      --slate-900: #1e293b;
+      --slate-800: #334155;
+      --slate-700: #475569;
+      --slate-600: #64748b;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --amber-500: #f59e0b;
+      --red-500: #ef4444;
+      --blue-500: #3b82f6;
+      --border-radius: 10px;
+      --shadow-md: 0 10px 20px rgba(15, 23, 42, 0.2);
+      --font-display: 'Manrope', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--slate-950), var(--slate-900));
+      color: var(--slate-100);
+      font-family: var(--font-display);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--slate-700);
+      padding: 2rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .header-title h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-meta {
+      font-size: 0.9rem;
+      color: var(--slate-400);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background: var(--emerald-500);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--emerald-600);
+    }
+
+    .btn-secondary {
+      background: var(--slate-800);
+      color: var(--slate-100);
+      border: 1px solid var(--slate-700);
+    }
+
+    .btn-secondary:hover {
+      background: var(--slate-700);
+    }
+
+    main {
+      padding: 2rem 0 4rem;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate-400);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--emerald-500);
+    }
+
+    .card-meta {
+      font-size: 0.85rem;
+      color: var(--slate-400);
+      margin-top: 0.5rem;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .table-container {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead {
+      background: rgba(51, 65, 85, 0.5);
+      border-bottom: 1px solid var(--slate-700);
+    }
+
+    th {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--slate-300);
+      cursor: pointer;
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--slate-800);
+    }
+
+    tbody tr:hover {
+      background: rgba(51, 65, 85, 0.3);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .status-ready {
+      background: var(--emerald-500);
+      color: white;
+    }
+
+    .status-processing {
+      background: var(--amber-500);
+      color: white;
+    }
+
+    .status-paid {
+      background: var(--emerald-500);
+      color: white;
+    }
+
+    .status-unpaid {
+      background: var(--red-500);
+      color: white;
+    }
+
+    .status-not_ready {
+      background: var(--slate-600);
+      color: var(--slate-100);
+    }
+
+    .tier-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .tier-bronze {
+      background: rgba(205, 127, 50, 0.2);
+      color: #cd7f32;
+      border: 1px solid #cd7f32;
+    }
+
+    .tier-silver {
+      background: rgba(192, 192, 192, 0.2);
+      color: #c0c0c0;
+      border: 1px solid #c0c0c0;
+    }
+
+    .tier-gold {
+      background: rgba(255, 215, 0, 0.2);
+      color: #ffd700;
+      border: 1px solid #ffd700;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--slate-400);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--slate-700);
+      border-top-color: var(--emerald-500);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--slate-400);
+    }
+
+    .contractor-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--border-radius);
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate-400);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--slate-100);
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-actions {
+        width: 100%;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 0.8rem;
+      }
+
+      th, td {
+        padding: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="header-title">
+          <h1 id="contractor-name">Loading...</h1>
+          <p class="header-meta" id="contractor-tier">—</p>
+        </div>
+        <div class="header-actions">
+          <a href="../admin/admin-payouts.html" class="btn btn-secondary">← Back to Payouts</a>
+          <button onclick="logout()" class="btn btn-secondary">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Key Metrics -->
+    <div class="dashboard-grid">
+      <div class="card">
+        <div class="card-label">Total Pending Payouts</div>
+        <div class="card-value" id="total-pending">$0.00</div>
+        <div class="card-meta" id="pending-count">0 jobs</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Ready to Pay</div>
+        <div class="card-value" id="ready-count">0</div>
+        <div class="card-meta">Jobs ready for payment</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Total Paid Out</div>
+        <div class="card-value" id="total-paid">$0.00</div>
+        <div class="card-meta" id="paid-count">All time</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Next Payment Date</div>
+        <div class="card-value" id="next-payment">—</div>
+        <div class="card-meta" id="payment-schedule">—</div>
+      </div>
+    </div>
+
+    <!-- Contractor Information -->
+    <div class="section">
+      <div class="section-title">Contractor Information</div>
+      <div class="contractor-info" id="contractor-info">
+        <div class="loading">
+          <div class="spinner"></div>
+          <div>Loading contractor information...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Payouts -->
+    <div class="section">
+      <div class="section-title">Pending Payouts</div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortPendingTable('job_id')">Job ID</th>
+              <th onclick="sortPendingTable('category')">Category</th>
+              <th onclick="sortPendingTable('city')">City</th>
+              <th onclick="sortPendingTable('final_price')">Final Price</th>
+              <th onclick="sortPendingTable('materials')">Materials</th>
+              <th onclick="sortPendingTable('stripe_fee')">Stripe Fee</th>
+              <th onclick="sortPendingTable('platform_fee')">Platform Fee</th>
+              <th onclick="sortPendingTable('payout')">Contractor Payout</th>
+              <th onclick="sortPendingTable('completed_at')">Completed</th>
+              <th onclick="sortPendingTable('status')">Status</th>
+            </tr>
+          </thead>
+          <tbody id="pending-payouts-table">
+            <tr>
+              <td colspan="10" class="loading">
+                <div class="spinner"></div>
+                <div>Loading pending payouts...</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Payout History -->
+    <div class="section">
+      <div class="section-title">Payout History</div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortHistoryTable('job_id')">Job ID</th>
+              <th onclick="sortHistoryTable('category')">Category</th>
+              <th onclick="sortHistoryTable('city')">City</th>
+              <th onclick="sortHistoryTable('final_price')">Final Price</th>
+              <th onclick="sortHistoryTable('materials')">Materials</th>
+              <th onclick="sortHistoryTable('payout')">Contractor Payout</th>
+              <th onclick="sortHistoryTable('completed_at')">Completed</th>
+              <th onclick="sortHistoryTable('paid_at')">Paid At</th>
+              <th onclick="sortHistoryTable('status')">Status</th>
+            </tr>
+          </thead>
+          <tbody id="history-table">
+            <tr>
+              <td colspan="9" class="loading">
+                <div class="spinner"></div>
+                <div>Loading payout history...</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/notifications.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/contractor-payouts-profile.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+</body>
+</html>

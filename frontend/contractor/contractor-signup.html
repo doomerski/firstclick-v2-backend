@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Contractor - FirstClick</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="../index.html" class="logo" style="text-decoration: none; color: inherit;">
+          <img class="logo-img logo-light" src="../assets/lightmode-logo.png" alt="FirstClick" loading="eager">
+          <img class="logo-img logo-dark" src="../assets/darkmode-logo.png" alt="FirstClick" loading="eager">
+          <span class="logo-text">FirstClick</span>
+        </a>
+        <nav class="nav">
+          <a href="customer-dashboard.html" class="nav-link">My Tasks</a>
+          <a href="join-team.html" class="nav-link">Join Our Team</a>
+          <a href="contractor-signup.html" class="nav-link">Become a Contractor</a>
+          <a href="contractor-dashboard.html" class="nav-link">Contractor Portal</a>
+          <div class="admin-group">
+            <a href="../admin/admin-login.html" class="nav-link muted">Admin</a></div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="contractor-signup">
+    <div class="container">
+      <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <h2 class="card-title">Join FirstClick as a Contractor</h2>
+        <p class="card-subtitle">Complete the application below to start receiving service requests</p>
+
+        <form id="contractorSignupForm" class="form">
+          <h3 class="section-title">Business Information</h3>
+
+          <div class="form-group">
+            <label class="label">Legal Name (as appears on license)</label>
+            <input type="text" id="legalName" class="input" required>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Business Name (if applicable)</label>
+            <input type="text" id="businessName" class="input">
+          </div>
+
+          <div class="form-group">
+            <label class="label">Email</label>
+            <input type="email" id="email" class="input" required>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Phone</label>
+            <input type="tel" id="phone" class="input" placeholder="+1 (416) 555-1234" required>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Password</label>
+            <input type="password" id="password" class="input" minlength="8" required>
+          </div>
+
+          <h3 class="section-title">Services You Provide</h3>
+
+          <div class="form-group">
+            <label class="label">Primary Trade</label>
+            <select id="primaryTrade" class="input" required>
+              <option value="">Select your trade...</option>
+              <option value="1">Plumbing</option>
+              <option value="2">Electrical</option>
+              <option value="3">HVAC</option>
+              <option value="4">Appliance Repair</option>
+              <option value="5">Construction & Renovation</option>
+              <option value="6">Roofing & Exterior</option>
+              <option value="7">Outdoor & Property Services</option>
+              <option value="8">Security & Smart Systems</option>
+              <option value="9">Cleaning & Restoration</option>
+              <option value="10">Pest & Wildlife Control</option>
+              <option value="11">Moving & Junk Removal</option>
+              <option value="12">Handyman & Specialty</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Years of Experience</label>
+            <input type="number" id="experience" class="input" min="0" max="50" required>
+          </div>
+
+          <h3 class="section-title">Required Documents</h3>
+          <p class="help-text">Upload clear photos/scans of the following (you can add more documents after signup):</p>
+
+          <div class="form-group">
+            <label class="label">Trade License</label>
+            <input type="file" id="license" class="input" accept="image/*,.pdf" required>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Liability Insurance Certificate</label>
+            <input type="file" id="insurance" class="input" accept="image/*,.pdf" required>
+          </div>
+
+          <div class="form-group">
+            <label class="label">Government-issued ID</label>
+            <input type="file" id="governmentId" class="input" accept="image/*,.pdf" required>
+          </div>
+
+          <h3 class="section-title">Declarations</h3>
+
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="declaration1" required>
+              I confirm that I am applying as an independent contractor, not seeking employment
+            </label>
+          </div>
+
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="declaration2" required>
+              I understand that this is a non-exclusive arrangement and I may work with other platforms
+            </label>
+          </div>
+
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="declaration3" required>
+              I certify that all information provided is accurate and complete
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+        </form>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message" style="display: none;">
+          <h3>✅ Application Submitted!</h3>
+          <p>Thank you for applying. We'll review your application and documents within 2-3 business days.</p>
+          <p>You'll receive an email once your account is approved.</p>
+          <a href="../index.html" class="btn btn-primary">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/contractor.js"></script>
+  <script src="../js/theme.js"></script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span class="footer-text">© 2026 FirstClick</span>
+      <div class="theme-toggle-slot"></div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments Overview - Super Admin</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0b1016;
+      --surface: #151d29;
+      --surface-2: #1b2635;
+      --border: #2a3a52;
+      --accent: #ff8f1f;
+      --accent-2: #2dd4bf;
+      --accent-3: #f43f5e;
+      --text: #eef2ff;
+      --muted: #9aa6c1;
+      --muted-2: #6b7a93;
+      --shadow: 0 18px 35px rgba(6, 12, 20, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 45%),
+                  radial-gradient(circle at 20% 20%, rgba(255, 143, 31, 0.16), transparent 38%),
+                  radial-gradient(circle at bottom left, rgba(244, 63, 94, 0.14), transparent 40%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2.5rem clamp(1.2rem, 3vw, 3rem) 4rem;
+    }
+
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .super-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.7rem;
+      color: var(--accent-2);
+      margin: 0 0 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      max-width: 36rem;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #0b0f14;
+      background: linear-gradient(120deg, var(--accent), #facc15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 20px rgba(255, 143, 31, 0.3);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .kpi-card {
+      background: linear-gradient(160deg, rgba(21, 29, 41, 0.9), rgba(27, 38, 53, 0.7));
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-value {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .kpi-label {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: rgba(21, 29, 41, 0.85);
+      border: 1px solid rgba(42, 58, 82, 0.7);
+      border-radius: 1.1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .input,
+    select {
+      padding: 0.7rem 0.9rem;
+      border-radius: 0.8rem;
+      border: 1px solid var(--border);
+      background: rgba(10, 16, 24, 0.8);
+      color: var(--text);
+      font-family: inherit;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .list {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .list-item {
+      padding: 1.1rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 22, 33, 0.9);
+      border: 1px solid rgba(42, 58, 82, 0.6);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .list-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted-2);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .status-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .approval-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .approval-approved {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86efac;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .approval-denied {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="background-grid"></div>
+  <div class="container">
+    <header class="super-header">
+      <div>
+        <p class="eyebrow">Super Admin Command Center</p>
+        <h1>Payments Overview</h1>
+        <p class="subtext">Track payment status, revenue impact, and admin actions.</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="../../examples/superadmin-dashboard.html">Back to Super Admin</a>
+        <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
+        <button class="btn" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value" id="paymentsTotal">0</div>
+        <div class="kpi-label">Total Payments</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="paymentsPending">0</div>
+        <div class="kpi-label">Pending</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="paymentsCompleted">0</div>
+        <div class="kpi-label">Completed</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="paymentsFailed">0</div>
+        <div class="kpi-label">Failed</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Payment Records</h3>
+      <div class="filters">
+        <input class="input" id="paymentSearch" placeholder="Search by customer, job, or transaction">
+        <select id="paymentStatusFilter">
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+          <option value="failed">Failed</option>
+        </select>
+      </div>
+      <div class="list" id="paymentsList"></div>
+    </section>
+
+    <section class="card">
+      <div class="list-row">
+        <div>
+          <h3>Admin Changes Awaiting Approval</h3>
+          <p class="muted">Payment and payout updates submitted by admins.</p>
+        </div>
+        <span class="mono" id="adminApprovalCount">0 total</span>
+      </div>
+      <div class="list" id="adminApprovalList" data-count-id="adminApprovalCount" data-match="/admin/payments|/admin/payouts"></div>
+    </section>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-approvals.js"></script>
+  <script>
+    const user = getUser();
+    if (!user || user.role !== 'super_admin') {
+      window.location.href = '../admin/admin-login.html';
+    }
+
+    const state = {
+      payments: []
+    };
+
+    function normalizeStatus(status) {
+      const value = String(status || '').toLowerCase();
+      if (['paid', 'completed', 'success'].includes(value)) return 'completed';
+      if (value === 'failed') return 'failed';
+      return 'pending';
+    }
+
+    function renderStats(payments) {
+      const total = payments.length;
+      const pending = payments.filter(p => normalizeStatus(p.status) === 'pending').length;
+      const completed = payments.filter(p => normalizeStatus(p.status) === 'completed').length;
+      const failed = payments.filter(p => normalizeStatus(p.status) === 'failed').length;
+      document.getElementById('paymentsTotal').textContent = total;
+      document.getElementById('paymentsPending').textContent = pending;
+      document.getElementById('paymentsCompleted').textContent = completed;
+      document.getElementById('paymentsFailed').textContent = failed;
+    }
+
+    function formatAmount(amount, currency) {
+      const value = Number(amount || 0);
+      return `${currency || 'USD'} ${value.toFixed(2)}`;
+    }
+
+    function renderPayments() {
+      const query = document.getElementById('paymentSearch').value.toLowerCase();
+      const statusFilter = document.getElementById('paymentStatusFilter').value;
+      const list = document.getElementById('paymentsList');
+
+      const filtered = state.payments.filter(payment => {
+        const haystack = `${payment.customer_id || ''} ${payment.job_id || ''} ${payment.transaction_id || ''}`.toLowerCase();
+        if (query && !haystack.includes(query)) return false;
+        if (statusFilter && normalizeStatus(payment.status) !== statusFilter) return false;
+        return true;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = '<div class="empty-state">No payments match your filters.</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(payment => {
+        const status = normalizeStatus(payment.status);
+        return `
+          <div class="list-item">
+            <div class="list-row">
+              <div>
+                <strong>${formatAmount(payment.amount, payment.currency)}</strong>
+                <div class="muted">Customer: ${payment.customer_id || 'N/A'} • Job: ${payment.job_id || 'N/A'}</div>
+              </div>
+              <span class="status-pill">${status}</span>
+            </div>
+            <div class="list-row">
+              <div class="mono">Method: ${payment.payment_method || 'N/A'} • Tx: ${payment.transaction_id || 'N/A'}</div>
+              <div class="mono">Paid at: ${payment.paid_at || 'Pending'}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadPayments() {
+      try {
+        const response = await api.get('/admin/payments');
+        state.payments = response.payments || [];
+        renderStats(state.payments);
+        renderPayments();
+      } catch (error) {
+        document.getElementById('paymentsList').innerHTML = '<div class="empty-state">Unable to load payments.</div>';
+      }
+    }
+
+    document.getElementById('paymentSearch').addEventListener('input', renderPayments);
+    document.getElementById('paymentStatusFilter').addEventListener('change', renderPayments);
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      loadPayments();
+      loadAdminApprovals({ listId: 'adminApprovalList', countId: 'adminApprovalCount', match: ['/admin/payments', '/admin/payouts'] });
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => logout());
+
+    attachApprovalHandlers('adminApprovalList');
+    loadPayments();
+    loadAdminApprovals({ listId: 'adminApprovalList', countId: 'adminApprovalCount', match: ['/admin/payments', '/admin/payouts'] });
+  </script>
+</body>
+</html>
